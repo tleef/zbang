@@ -1,11 +1,7 @@
 defmodule Bliss.Any do
-  alias Bliss.{Result, Error, Context}
+  alias Bliss.{Result, Error}
 
   use Bliss.Type
-
-  def validate(input, options \\ [], context \\ Context.new()) do
-    Result.new() |> Result.set_value(input) |> check(options, context)
-  end
 
   def check(result, options, context) do
     result
@@ -62,6 +58,27 @@ defmodule Bliss.Any do
 
   def check(result, :equals, value, context) do
     check(result, :equals, {value, []}, context)
+  end
+
+  def check(result, :enum, {value, options}, context) do
+    message = Keyword.get(options, :message, "input is not an allowed value")
+
+    if Enum.member?(value, result.value) do
+      result
+    else
+      result
+      |> Result.add_error(
+        Error.new(
+          Error.Codes.invalid_enum_value(),
+          message,
+          context
+        )
+      )
+    end
+  end
+
+  def check(result, :enum, value, context) do
+    check(result, :enum, {value, []}, context)
   end
 
   def check(result, _, _, _) do

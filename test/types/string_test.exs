@@ -57,19 +57,13 @@ defmodule Bliss.String.Test do
              })
     end
 
-    test "given empty options, when empty string value, returns invalid result with error" do
+    test "given empty options, when empty string value, returns valid result" do
       result =
         Result.new()
         |> Result.set_value("")
         |> String.check(:type, [], Context.new())
 
-      assert result.status == :invalid
-
-      assert Enum.member?(result.errors, %Error{
-               code: Error.Codes.invalid_string(),
-               message: "input is not allowed to be empty",
-               path: []
-             })
+      assert result.status == :valid
     end
 
     test "given :allow_empty, when empty string value, returns valid result" do
@@ -135,6 +129,100 @@ defmodule Bliss.String.Test do
         |> String.check(:length, 7, Context.new())
 
       assert result.status == :valid
+    end
+  end
+
+  describe "Bliss.String.check(_, :min, _, _)/4" do
+    test "given length, when too short, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value("short")
+        |> String.check(:min, 6, Context.new())
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.too_small(),
+               message: "input is too short",
+               path: []
+             })
+    end
+
+    test "given length, when long enough, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value("long enough")
+        |> String.check(:min, 11, Context.new())
+
+      assert result.status == :valid
+    end
+
+    test "given length 1, when empty string, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value("")
+        |> String.check(:min, 1, Context.new())
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.too_small(),
+               message: "input is too short",
+               path: []
+             })
+    end
+  end
+
+  describe "Bliss.String.check(_, :max, _, _)/4" do
+    test "given length, when too long, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value("too long")
+        |> String.check(:max, 7, Context.new())
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.too_big(),
+               message: "input is too long",
+               path: []
+             })
+    end
+
+    test "given length, when short enough, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value("short enough")
+        |> String.check(:max, 12, Context.new())
+
+      assert result.status == :valid
+    end
+  end
+
+  describe "Bliss.String.validate/3" do
+    test "given some padded value, when :trim value, set trimmed value" do
+      result = String.validate(" some ", [:trim])
+
+      assert result.value == "some"
+    end
+
+    test "given long value, when check :length, check length" do
+      result = String.validate("way too long", length: {8, message: "too long"})
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_string(),
+               message: "too long",
+               path: []
+             })
+    end
+
+    test "given some padded value, when :trim and check :length, trim value and check length" do
+      result = String.validate(" some ", [:trim, length: 4])
+
+      assert result.status == :valid
+      assert result.value == "some"
     end
   end
 end

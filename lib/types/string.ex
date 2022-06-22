@@ -1,11 +1,7 @@
 defmodule Bliss.String do
-  alias Bliss.{Result, Context, Error, Any}
+  alias Bliss.{Result, Error, Any}
 
   use Bliss.Type
-
-  def validate(input, options \\ [], context \\ Context.new()) do
-    Result.new() |> Result.set_value(input) |> check(options, context)
-  end
 
   def check(result, options, context) do
     result
@@ -17,6 +13,10 @@ defmodule Bliss.String do
 
   def check(%Result{value: nil} = result, _, _, _) do
     result
+  end
+
+  def check(result, :trim, nil, context) do
+    check(result, :trim, true, context)
   end
 
   def check(result, :trim, true, _) do
@@ -38,25 +38,6 @@ defmodule Bliss.String do
         context
       )
     )
-  end
-
-  def check(result, :type, options, context) when result.value == "" do
-    allow_empty = get_flag_options(options, :allow_empty)
-
-    if allow_empty do
-      result
-    else
-      message = Keyword.get(options, :parts, "input is not allowed to be empty")
-
-      result
-      |> Result.add_error(
-        Error.new(
-          Error.Codes.invalid_string(),
-          message,
-          context
-        )
-      )
-    end
   end
 
   def check(result, :type, options, context) do
@@ -95,6 +76,48 @@ defmodule Bliss.String do
 
   def check(result, :length, value, context) do
     check(result, :length, {value, []}, context)
+  end
+
+  def check(result, :min, {value, options}, context) do
+    message = Keyword.get(options, :message, "input is too short")
+
+    if String.length(result.value) >= value do
+      result
+    else
+      result
+      |> Result.add_error(
+        Error.new(
+          Error.Codes.too_small(),
+          message,
+          context
+        )
+      )
+    end
+  end
+
+  def check(result, :min, value, context) do
+    check(result, :min, {value, []}, context)
+  end
+
+  def check(result, :max, {value, options}, context) do
+    message = Keyword.get(options, :message, "input is too long")
+
+    if String.length(result.value) <= value do
+      result
+    else
+      result
+      |> Result.add_error(
+        Error.new(
+          Error.Codes.too_big(),
+          message,
+          context
+        )
+      )
+    end
+  end
+
+  def check(result, :max, value, context) do
+    check(result, :max, {value, []}, context)
   end
 
   def check(result, _, _, _) do

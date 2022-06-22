@@ -1,6 +1,10 @@
 defmodule Bliss.Type do
   defmacro __using__(_opts) do
     quote do
+      def validate(input, options \\ [], context \\ Bliss.Context.new()) do
+        Bliss.Result.new() |> Bliss.Result.set_value(input) |> check(options, context)
+      end
+
       def get_flag_options(options, flag) do
         Keyword.get(options, flag, Enum.member?(options, flag))
       end
