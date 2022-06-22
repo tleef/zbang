@@ -25,3 +25,6 @@ bliss-*.tar
 
 # Temporary files for e.g. tests
 /tmp
+
+# JetBrains
+.idea
