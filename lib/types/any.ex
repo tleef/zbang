@@ -1,7 +1,7 @@
 defmodule Bliss.Any do
   alias Bliss.{Result, Error}
 
-  use Bliss.Type
+  use Bliss.Type, options: [:default, :required, :equals]
 
   def check(result, options, context) do
     result
