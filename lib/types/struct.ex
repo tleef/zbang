@@ -1,5 +1,78 @@
 defmodule Bliss.Struct do
+  use Bliss.Type, options: Bliss.Any.__bliss__(:options) ++ [:cast, :unknown_keys]
+
   alias Bliss.{Type, Rule, Result}
+
+  @spec __using__(opts :: [rules: [Rule.t()]]) :: any
+  defmacro __using__(opts) do
+    rules = Keyword.get(opts, :rules, [])
+
+    quote do
+      import Bliss.Struct, only: [schema: 1]
+
+      use Bliss.Type, options: unquote(Bliss.Struct.__bliss__(:options))
+
+      def __bliss__(:rules), do: unquote(rules)
+      def check(result, rules, context), do: Bliss.Struct.check(result, rules, context)
+
+      def check(result, rule, options, context),
+        do: Bliss.Struct.check(result, rule, options, context)
+
+      Module.register_attribute(__MODULE__, :bliss_fields, accumulate: true)
+    end
+  end
+
+  def check(result, _options, _context) do
+    result
+  end
+
+  def check(result, _, _, _) do
+    result
+  end
+
+  defmacro schema(do: block) do
+    __schema__(__CALLER__, block)
+  end
+
+  defp __schema__(caller, block) do
+    prelude =
+      quote do
+        if line = Module.get_attribute(__MODULE__, :bliss_schema_defined) do
+          raise "schema already defined for #{inspect(__MODULE__)} on line #{line}"
+        end
+
+        @bliss_schema_defined unquote(caller.line)
+
+        Module.register_attribute(__MODULE__, :bliss_struct_fields, accumulate: true)
+
+        try do
+          import Bliss.Struct, only: [field: 3]
+          unquote(block)
+        after
+          :ok
+        end
+      end
+
+    postlude =
+      quote unquote: false do
+        fields = Macro.escape(@bliss_fields) |> Enum.reverse()
+
+        defstruct Enum.reverse(@bliss_struct_fields)
+
+        def __bliss__(:fields), do: unquote(fields)
+      end
+
+    quote do
+      unquote(prelude)
+      unquote(postlude)
+    end
+  end
+
+  defmacro field(name, type, rules \\ []) do
+    quote do
+      Bliss.Struct.__field__(__MODULE__, unquote(name), unquote(type), unquote(rules))
+    end
+  end
 
   def __field__(mod, name, type, rules) do
     type = check_field_type!(name, type)
@@ -17,7 +90,7 @@ defmodule Bliss.Struct do
         Type.get(type)
 
       Code.ensure_compiled(type) == {:module, type} ->
-        if function_exported?(type, :__type__, 0) do
+        if function_exported?(type, :__bliss__, 1) do
           type
         else
           raise ArgumentError,
@@ -30,7 +103,7 @@ defmodule Bliss.Struct do
   end
 
   defp check_rule!(name, type, rules) do
-    case Enum.find(rules, fn rule -> Rule.rule_name(rule) not in type.__options__() end) do
+    case Enum.find(rules, fn rule -> Rule.rule_name(rule) not in type.__bliss__(:options) end) do
       nil ->
         :ok
 

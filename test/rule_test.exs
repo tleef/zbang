@@ -19,6 +19,40 @@ defmodule Bliss.Rule.Test do
     end
   end
 
+  describe "Bliss.Rule.fetch/2" do
+    test "given a list of rules, when rule in list, fetches rule from list" do
+      rules = [:required, default: "value", max: {8, message: "hello"}]
+
+      assert Rule.fetch(rules, :required) == {:ok, nil}
+      assert Rule.fetch(rules, :default) == {:ok, "value"}
+      assert Rule.fetch(rules, :max) == {:ok, {8, message: "hello"}}
+    end
+
+    test "given a list of rules, when rule not in list, returns :error" do
+      rules = [:required, default: "value", max: {8, message: "hello"}]
+
+      assert Rule.fetch(rules, :other) == :error
+    end
+  end
+
+  describe "Bliss.Rule.fetch!/2" do
+    test "given a list of rules, when rule in list, fetches rule from list" do
+      rules = [:required, default: "value", max: {8, message: "hello"}]
+
+      assert Rule.fetch!(rules, :required) == nil
+      assert Rule.fetch!(rules, :default) == "value"
+      assert Rule.fetch!(rules, :max) == {8, message: "hello"}
+    end
+
+    test "given a list of rules, when rule not in list, raises KeyError" do
+      rules = [:required, default: "value", max: {8, message: "hello"}]
+
+      assert_raise KeyError, fn ->
+        Rule.fetch!(rules, :other)
+      end
+    end
+  end
+
   describe "Bliss.Rule.delete/2" do
     test "given a list of rules, when rule in list, deletes rule from list" do
       rules = [:required, default: "value", max: {8, message: "hello"}]
