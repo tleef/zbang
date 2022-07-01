@@ -3,12 +3,12 @@ defmodule Bliss.String do
 
   use Bliss.Type, options: Bliss.Any.__bliss__(:options) ++ [:trim, :length]
 
-  def check(result, options, context) do
+  def check(result, rules, context) do
     result
-    |> Any.check(options, context)
-    |> maybe_check(:trim, options, context)
-    |> check(:type, options, context)
-    |> maybe_check(:length, options, context)
+    |> Any.check(rules, context)
+    |> maybe_check(:trim, rules, context)
+    |> check(:type, rules, context)
+    |> maybe_check(:length, rules, context)
   end
 
   def check(%Result{value: nil} = result, _, _, _) do
@@ -118,9 +118,5 @@ defmodule Bliss.String do
 
   def check(result, :max, value, context) do
     check(result, :max, {value, []}, context)
-  end
-
-  def check(result, _, _, _) do
-    result
   end
 end

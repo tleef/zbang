@@ -84,7 +84,7 @@ defmodule Bliss.Any.Test do
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_literal(),
-               message: "input does not equal literal",
+               message: "input does not equal \"other\"",
                path: []
              })
     end
