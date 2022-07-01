@@ -73,7 +73,7 @@ defmodule Bliss.Struct do
           message =
             Keyword.get(
               options,
-              :parts,
+              :message,
               "cannot cast #{inspect(result.value)} to a #{inspect(__MODULE__)}"
             )
 
@@ -92,7 +92,7 @@ defmodule Bliss.Struct do
         end
 
         def check(result, :type, options, context) do
-          message = Keyword.get(options, :parts, "input is not a #{inspect(__MODULE__)}")
+          message = Keyword.get(options, :message, "input is not a #{inspect(__MODULE__)}")
 
           result
           |> Bliss.Result.add_error(

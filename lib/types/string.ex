@@ -28,7 +28,7 @@ defmodule Bliss.String do
   end
 
   def check(result, :type, options, context) when not is_binary(result.value) do
-    message = Keyword.get(options, :parts, "input is not a valid string")
+    message = Keyword.get(options, :message, "input is not a valid string")
 
     result
     |> Result.add_error(
@@ -44,7 +44,7 @@ defmodule Bliss.String do
     if String.valid?(result.value) do
       result
     else
-      message = Keyword.get(options, :parts, "input is not a valid string")
+      message = Keyword.get(options, :message, "input is not a valid string")
 
       result
       |> Result.add_error(
