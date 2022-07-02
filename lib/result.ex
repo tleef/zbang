@@ -23,4 +23,12 @@ defmodule Bliss.Result do
     result = set_status(result, :invalid)
     %{result | errors: [error | result.errors]}
   end
+
+  def to_tuple(%Bliss.Result{status: :valid, value: value}) do
+    {:ok, value}
+  end
+
+  def to_tuple(%Bliss.Result{status: :invalid, errors: errors}) do
+    {:error, errors}
+  end
 end

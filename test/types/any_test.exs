@@ -151,17 +151,13 @@ defmodule Bliss.Any.Test do
 
   describe "Bliss.Any.validate/3" do
     test "given nil, when :default value, set default" do
-      result = Any.validate(nil, default: "some")
-
-      assert result.value == "some"
+      {:ok, "some"} = Any.validate(nil, default: "some")
     end
 
     test "given nil, when :required, check required" do
-      result = Any.validate(nil, [:required])
+      {:error, errors} = Any.validate(nil, [:required])
 
-      assert result.status == :invalid
-
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(errors, %Error{
                code: Error.Codes.invalid_type(),
                message: "input is required",
                path: ["."]
@@ -169,24 +165,15 @@ defmodule Bliss.Any.Test do
     end
 
     test "given nil, when :required with :default value, set default value and check required" do
-      result = Any.validate(nil, [:required, default: "some"])
-
-      assert result.status == :valid
-      assert result.value == "some"
+      {:ok, "some"} = Any.validate(nil, [:required, default: "some"])
     end
 
     test "given nil, when :equals some value with :default value, set default and check equals" do
-      result = Any.validate(nil, equals: "some", default: "some")
-
-      assert result.status == :valid
-      assert result.value == "some"
+      {:ok, "some"} = Any.validate(nil, equals: "some", default: "some")
     end
 
     test "given nil, when value in :enum with :default value, set default and check in enum" do
-      result = Any.validate(nil, enum: ["some", "thing", "else"], default: "some")
-
-      assert result.status == :valid
-      assert result.value == "some"
+      {:ok, "some"} = Any.validate(nil, enum: ["some", "thing", "else"], default: "some")
     end
   end
 end

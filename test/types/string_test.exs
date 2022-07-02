@@ -201,17 +201,13 @@ defmodule Bliss.String.Test do
 
   describe "Bliss.String.validate/3" do
     test "given some padded value, when :trim value, set trimmed value" do
-      result = String.validate(" some ", [:trim])
-
-      assert result.value == "some"
+      {:ok, "some"} = String.validate(" some ", [:trim])
     end
 
     test "given long value, when check :length, check length" do
-      result = String.validate("way too long", length: {8, message: "too long"})
+      {:error, errors} = String.validate("way too long", length: {8, message: "too long"})
 
-      assert result.status == :invalid
-
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(errors, %Error{
                code: Error.Codes.invalid_string(),
                message: "too long",
                path: ["."]
@@ -219,10 +215,7 @@ defmodule Bliss.String.Test do
     end
 
     test "given some padded value, when :trim and check :length, trim value and check length" do
-      result = String.validate(" some ", [:trim, length: 4])
-
-      assert result.status == :valid
-      assert result.value == "some"
+      {:ok, "some"} = String.validate(" some ", [:trim, length: 4])
     end
   end
 end
