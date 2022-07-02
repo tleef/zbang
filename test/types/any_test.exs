@@ -181,5 +181,12 @@ defmodule Bliss.Any.Test do
       assert result.status == :valid
       assert result.value == "some"
     end
+
+    test "given nil, when value in :enum with :default value, set default and check in enum" do
+      result = Any.validate(nil, enum: ["some", "thing", "else"], default: "some")
+
+      assert result.status == :valid
+      assert result.value == "some"
+    end
   end
 end
