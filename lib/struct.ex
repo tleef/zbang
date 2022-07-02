@@ -151,8 +151,9 @@ defmodule Bliss.Struct do
   end
 
   def __field__(mod, name, type, rules) do
+    rules = Bliss.Rule.to_keyword_list(rules)
     type = check_field_type!(name, type)
-    check_rule!(name, type, rules)
+    check_rules!(name, type, rules)
     validate_default!(name, type, rules)
     define_field(mod, name, type, rules)
   end
@@ -178,24 +179,22 @@ defmodule Bliss.Struct do
     end
   end
 
-  defp check_rule!(name, type, rules) do
-    case Enum.find(rules, fn rule ->
-           Bliss.Rule.rule_name(rule) not in type.__bliss__(:options)
-         end) do
+  defp check_rules!(name, type, rules) do
+    case Enum.find(rules, fn {rule, _} -> rule not in type.__bliss__(:options) end) do
       nil ->
         :ok
 
-      rule ->
+      {rule, _} ->
         raise ArgumentError,
-              "invalid rule #{inspect(Bliss.Rule.rule_name(rule))} for field #{name}"
+              "invalid rule #{inspect(rule)} for field #{name}"
     end
   end
 
   defp validate_default!(name, type, rules) do
-    if Bliss.Rule.has_rule?(rules, :default) do
-      value = rules[:default]
+    if Keyword.has_key?(rules, :default) do
+      value = Keyword.fetch!(rules, :default)
 
-      case type.validate(value, Bliss.Rule.delete(rules, :default)) do
+      case type.validate(value, Keyword.delete(rules, :default)) do
         %Bliss.Result{status: :valid} ->
           :ok
 

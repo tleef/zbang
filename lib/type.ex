@@ -10,12 +10,14 @@ defmodule Bliss.Type do
       def __bliss__(:options), do: unquote(options)
 
       def validate(input, rules \\ [], context \\ Bliss.Context.new(".")) do
-        Bliss.Result.new() |> Bliss.Result.set_value(input) |> check(rules, context)
+        Bliss.Result.new()
+        |> Bliss.Result.set_value(input)
+        |> check(rules |> Bliss.Rule.to_keyword_list(), context)
       end
 
       def maybe_check(result, rule, rules, context) do
-        if Bliss.Rule.has_rule?(rules, rule) do
-          check(result, rule, Bliss.Rule.fetch!(rules, rule), context)
+        if Keyword.has_key?(rules, rule) do
+          check(result, rule, Keyword.fetch!(rules, rule), context)
         else
           result
         end

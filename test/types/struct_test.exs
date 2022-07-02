@@ -49,18 +49,18 @@ defmodule Bliss.Struct.Test do
                bar:
                  {Bliss.String,
                   [
-                    :required,
-                    :trim,
+                    required: true,
+                    trim: true,
                     length: {5, message: ":one must be length 5"}
                   ]},
                baz:
                  {Bliss.Any,
                   [
-                    :required,
+                    required: true,
                     default: "world",
                     equals: "world"
                   ]},
-               price: {Bliss.Struct.Test.MySubStruct, [:required, :cast]}
+               price: {Bliss.Struct.Test.MySubStruct, [required: true, cast: true]}
              ]
     end
   end
