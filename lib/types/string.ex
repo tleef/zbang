@@ -11,7 +11,7 @@ defmodule Bliss.String do
     |> maybe_check(:length, rules, context)
   end
 
-  def check(%Result{value: nil} = result, _, _, _) do
+  def check(%Result{value: nil} = result, _rule, _options, _context) do
     result
   end
 

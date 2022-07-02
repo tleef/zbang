@@ -8,7 +8,7 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> String.check(:trim, true, Context.new())
+        |> String.check(:trim, true, Context.new("."))
 
       assert result.status == :valid
     end
@@ -17,7 +17,7 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("\n  some\n  ")
-        |> String.check(:trim, true, Context.new())
+        |> String.check(:trim, true, Context.new("."))
 
       assert result.value == "some"
     end
@@ -26,7 +26,7 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("a  some  a")
-        |> String.check(:trim, "a", Context.new())
+        |> String.check(:trim, "a", Context.new("."))
 
       assert result.value == "  some  "
     end
@@ -37,7 +37,7 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> String.check(:type, [], Context.new())
+        |> String.check(:type, [], Context.new("."))
 
       assert result.status == :valid
     end
@@ -46,14 +46,14 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> String.check(:type, [], Context.new())
+        |> String.check(:type, [], Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_type(),
                message: "input is not a valid string",
-               path: []
+               path: ["."]
              })
     end
 
@@ -61,7 +61,7 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("")
-        |> String.check(:type, [], Context.new())
+        |> String.check(:type, [], Context.new("."))
 
       assert result.status == :valid
     end
@@ -70,7 +70,7 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("")
-        |> String.check(:type, [:allow_empty], Context.new())
+        |> String.check(:type, [:allow_empty], Context.new("."))
 
       assert result.status == :valid
     end
@@ -79,14 +79,14 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value(<<0xFFFF::16>>)
-        |> String.check(:type, [], Context.new())
+        |> String.check(:type, [], Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_string(),
                message: "input is not a valid string",
-               path: []
+               path: ["."]
              })
     end
   end
@@ -96,14 +96,14 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("short")
-        |> String.check(:length, 6, Context.new())
+        |> String.check(:length, 6, Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_string(),
                message: "input does not have correct length",
-               path: []
+               path: ["."]
              })
     end
 
@@ -111,14 +111,14 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("too long")
-        |> String.check(:length, 6, Context.new())
+        |> String.check(:length, 6, Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_string(),
                message: "input does not have correct length",
-               path: []
+               path: ["."]
              })
     end
 
@@ -126,7 +126,7 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("correct")
-        |> String.check(:length, 7, Context.new())
+        |> String.check(:length, 7, Context.new("."))
 
       assert result.status == :valid
     end
@@ -137,14 +137,14 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("short")
-        |> String.check(:min, 6, Context.new())
+        |> String.check(:min, 6, Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.too_small(),
                message: "input is too short",
-               path: []
+               path: ["."]
              })
     end
 
@@ -152,7 +152,7 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("long enough")
-        |> String.check(:min, 11, Context.new())
+        |> String.check(:min, 11, Context.new("."))
 
       assert result.status == :valid
     end
@@ -161,14 +161,14 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("")
-        |> String.check(:min, 1, Context.new())
+        |> String.check(:min, 1, Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.too_small(),
                message: "input is too short",
-               path: []
+               path: ["."]
              })
     end
   end
@@ -178,14 +178,14 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("too long")
-        |> String.check(:max, 7, Context.new())
+        |> String.check(:max, 7, Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.too_big(),
                message: "input is too long",
-               path: []
+               path: ["."]
              })
     end
 
@@ -193,7 +193,7 @@ defmodule Bliss.String.Test do
       result =
         Result.new()
         |> Result.set_value("short enough")
-        |> String.check(:max, 12, Context.new())
+        |> String.check(:max, 12, Context.new("."))
 
       assert result.status == :valid
     end
@@ -214,7 +214,7 @@ defmodule Bliss.String.Test do
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_string(),
                message: "too long",
-               path: []
+               path: ["."]
              })
     end
 

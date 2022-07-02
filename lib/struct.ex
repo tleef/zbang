@@ -23,7 +23,7 @@ defmodule Bliss.Struct do
         Module.register_attribute(__MODULE__, :bliss_struct_fields, accumulate: true)
 
         try do
-          import Bliss.Struct, only: [field: 3]
+          import Bliss.Struct, only: [field: 2, field: 3]
           unquote(block)
         after
           :ok
@@ -46,6 +46,10 @@ defmodule Bliss.Struct do
           |> maybe_check(:cast, rules, context)
           |> check(:type, rules, context)
           |> check(:fields, rules, context)
+        end
+
+        def check(%Bliss.Result{value: nil} = result, _rule, _options, _context) do
+          result
         end
 
         def check(result, :cast, false, _context) do
@@ -124,7 +128,7 @@ defmodule Bliss.Struct do
         end
 
         defp check_field(result, name, type, rules, context) do
-          case type.validate(Map.get(result.value, name), rules, context) do
+          case type.validate(Map.get(result.value, name), rules, Bliss.Context.new(name, context)) do
             %Bliss.Result{status: :valid, value: value} ->
               Bliss.Result.set_value(result, Map.replace(result.value, name, value))
 

@@ -11,7 +11,7 @@ defmodule Bliss.Error do
     %Bliss.Error{
       code: code,
       message: message,
-      path: context.path
+      path: context.path |> Enum.reverse()
     }
   end
 

@@ -8,6 +8,7 @@ defmodule Bliss.Any do
     |> maybe_check(:default, rules, context)
     |> maybe_check(:required, rules, context)
     |> maybe_check(:equals, rules, context)
+    |> maybe_check(:enum, rules, context)
   end
 
   def check(%Result{value: nil} = result, :default, value, _) do

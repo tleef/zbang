@@ -9,7 +9,7 @@ defmodule Bliss.Type do
       def __bliss__(:type), do: __MODULE__
       def __bliss__(:options), do: unquote(options)
 
-      def validate(input, rules \\ [], context \\ Bliss.Context.new()) do
+      def validate(input, rules \\ [], context \\ Bliss.Context.new(".")) do
         Bliss.Result.new() |> Bliss.Result.set_value(input) |> check(rules, context)
       end
 
