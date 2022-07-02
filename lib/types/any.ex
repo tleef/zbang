@@ -1,20 +1,25 @@
 defmodule Bliss.Any do
   alias Bliss.{Result, Error}
 
-  use Bliss.Type
+  use Bliss.Type, options: [:default, :required, :equals, :enum]
 
-  def check(result, options, context) do
+  def check(result, rules, context) do
     result
-    |> maybe_check(:default, options, context)
-    |> maybe_check(:required, options, context)
-    |> maybe_check(:equals, options, context)
+    |> maybe_check(:default, rules, context)
+    |> maybe_check(:required, rules, context)
+    |> maybe_check(:equals, rules, context)
+    |> maybe_check(:enum, rules, context)
   end
 
   def check(%Result{value: nil} = result, :default, value, _) do
     result |> Result.set_value(value)
   end
 
-  def check(result, :required, false, _) do
+  def check(result, :default, _value, _context) do
+    result
+  end
+
+  def check(result, :required, false, _context) do
     result
   end
 
@@ -39,8 +44,12 @@ defmodule Bliss.Any do
     )
   end
 
+  def check(result, :required, _options, _context) do
+    result
+  end
+
   def check(result, :equals, {value, options}, context) do
-    message = Keyword.get(options, :message, "input does not equal literal")
+    message = Keyword.get(options, :message, "input does not equal #{inspect(value)}")
 
     if result.value == value do
       result
@@ -79,9 +88,5 @@ defmodule Bliss.Any do
 
   def check(result, :enum, value, context) do
     check(result, :enum, {value, []}, context)
-  end
-
-  def check(result, _, _, _) do
-    result
   end
 end

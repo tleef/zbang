@@ -1,21 +1,60 @@
 defmodule Bliss.Type do
-  defmacro __using__(_opts) do
+  @spec __using__(opts :: [options: [atom]]) :: any
+  defmacro __using__(opts \\ []) do
+    options = Keyword.get(opts, :options, [])
+
     quote do
-      def validate(input, options \\ [], context \\ Bliss.Context.new()) do
-        Bliss.Result.new() |> Bliss.Result.set_value(input) |> check(options, context)
+      @behaviour Bliss.Type
+
+      def __bliss__(:type), do: __MODULE__
+      def __bliss__(:options), do: unquote(options)
+
+      def validate(input, rules \\ [], context \\ Bliss.Context.new(".")) do
+        Bliss.Result.new() |> Bliss.Result.set_value(input) |> check(rules, context)
       end
 
-      def get_flag_options(options, flag) do
-        Keyword.get(options, flag, Enum.member?(options, flag))
-      end
-
-      def maybe_check(result, rule, options, context) do
-        if Enum.member?(options, rule) || Keyword.has_key?(options, rule) do
-          check(result, rule, Keyword.get(options, rule), context)
+      def maybe_check(result, rule, rules, context) do
+        if Bliss.Rule.has_rule?(rules, rule) do
+          check(result, rule, Bliss.Rule.fetch!(rules, rule), context)
         else
           result
         end
       end
     end
+  end
+
+  @typedoc "A Blis type, primitive or custom."
+  @type t :: primitive | custom
+
+  @typedoc "Primitive Bliss types (handled by Bliss)."
+  @type primitive ::
+          :integer
+          | :float
+          | :boolean
+          | :string
+          | :map
+          | :array
+          | :any
+          | :datetime
+          | :date
+          | :time
+
+  @typedoc "Custom types are represented by user-defined modules."
+  @type custom :: module
+
+  @callback check(Bliss.Result.t(), any, Bliss.Context.t()) :: Bliss.Result.t()
+  @callback check(Bliss.Result.t(), atom, any, Bliss.Context.t()) :: Bliss.Result.t()
+
+  @base_types %{
+    :string => Bliss.String,
+    :any => Bliss.Any
+  }
+
+  def base?(type) when is_atom(type) do
+    Map.has_key?(@base_types, type)
+  end
+
+  def get(type) when is_atom(type) do
+    @base_types[type]
   end
 end

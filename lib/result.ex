@@ -1,6 +1,12 @@
 defmodule Bliss.Result do
   defstruct status: :valid, value: nil, errors: []
 
+  @type t :: %Bliss.Result{
+          status: :valid | :invalid,
+          value: any,
+          errors: [Bliss.Error.t()]
+        }
+
   def new do
     %Bliss.Result{}
   end

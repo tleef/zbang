@@ -1,17 +1,17 @@
 defmodule Bliss.String do
   alias Bliss.{Result, Error, Any}
 
-  use Bliss.Type
+  use Bliss.Type, options: Bliss.Any.__bliss__(:options) ++ [:trim, :length]
 
-  def check(result, options, context) do
+  def check(result, rules, context) do
     result
-    |> Any.check(options, context)
-    |> maybe_check(:trim, options, context)
-    |> check(:type, options, context)
-    |> maybe_check(:length, options, context)
+    |> Any.check(rules, context)
+    |> maybe_check(:trim, rules, context)
+    |> check(:type, rules, context)
+    |> maybe_check(:length, rules, context)
   end
 
-  def check(%Result{value: nil} = result, _, _, _) do
+  def check(%Result{value: nil} = result, _rule, _options, _context) do
     result
   end
 
@@ -28,7 +28,7 @@ defmodule Bliss.String do
   end
 
   def check(result, :type, options, context) when not is_binary(result.value) do
-    message = Keyword.get(options, :parts, "input is not a valid string")
+    message = Keyword.get(options, :message, "input is not a valid string")
 
     result
     |> Result.add_error(
@@ -44,7 +44,7 @@ defmodule Bliss.String do
     if String.valid?(result.value) do
       result
     else
-      message = Keyword.get(options, :parts, "input is not a valid string")
+      message = Keyword.get(options, :message, "input is not a valid string")
 
       result
       |> Result.add_error(
@@ -118,9 +118,5 @@ defmodule Bliss.String do
 
   def check(result, :max, value, context) do
     check(result, :max, {value, []}, context)
-  end
-
-  def check(result, _, _, _) do
-    result
   end
 end

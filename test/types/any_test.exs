@@ -8,7 +8,7 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Any.check(:default, "some", Context.new())
+        |> Any.check(:default, "some", Context.new("."))
 
       assert result.value == "some"
     end
@@ -17,7 +17,7 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> Any.check(:default, "other", Context.new())
+        |> Any.check(:default, "other", Context.new("."))
 
       assert result.value == "some"
     end
@@ -28,14 +28,14 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Any.check(:required, [], Context.new())
+        |> Any.check(:required, [], Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_type(),
                message: "input is required",
-               path: []
+               path: ["."]
              })
     end
 
@@ -43,14 +43,14 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Any.check(:required, true, Context.new())
+        |> Any.check(:required, true, Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_type(),
                message: "input is required",
-               path: []
+               path: ["."]
              })
     end
 
@@ -58,7 +58,7 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Any.check(:required, false, Context.new())
+        |> Any.check(:required, false, Context.new("."))
 
       assert result.status == :valid
     end
@@ -67,7 +67,7 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> Any.check(:required, [], Context.new())
+        |> Any.check(:required, [], Context.new("."))
 
       assert result.status == :valid
     end
@@ -78,14 +78,14 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> Any.check(:equals, "other", Context.new())
+        |> Any.check(:equals, "other", Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_literal(),
-               message: "input does not equal literal",
-               path: []
+               message: "input does not equal \"other\"",
+               path: ["."]
              })
     end
 
@@ -93,7 +93,7 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> Any.check(:equals, "some", Context.new())
+        |> Any.check(:equals, "some", Context.new("."))
 
       assert result.status == :valid
     end
@@ -104,14 +104,14 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> Any.check(:enum, ["one", "two", "three"], Context.new())
+        |> Any.check(:enum, ["one", "two", "three"], Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_enum_value(),
                message: "input is not an allowed value",
-               path: []
+               path: ["."]
              })
     end
 
@@ -119,7 +119,7 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value("one")
-        |> Any.check(:enum, ["one", "two", "three"], Context.new())
+        |> Any.check(:enum, ["one", "two", "three"], Context.new("."))
 
       assert result.status == :valid
     end
@@ -128,14 +128,14 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Any.check(:enum, [1, 2, 3], Context.new())
+        |> Any.check(:enum, [1, 2, 3], Context.new("."))
 
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_enum_value(),
                message: "input is not an allowed value",
-               path: []
+               path: ["."]
              })
     end
 
@@ -143,7 +143,7 @@ defmodule Bliss.Any.Test do
       result =
         Result.new()
         |> Result.set_value(1)
-        |> Any.check(:enum, [1, 2, 3], Context.new())
+        |> Any.check(:enum, [1, 2, 3], Context.new("."))
 
       assert result.status == :valid
     end
@@ -164,7 +164,7 @@ defmodule Bliss.Any.Test do
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_type(),
                message: "input is required",
-               path: []
+               path: ["."]
              })
     end
 
@@ -177,6 +177,13 @@ defmodule Bliss.Any.Test do
 
     test "given nil, when :equals some value with :default value, set default and check equals" do
       result = Any.validate(nil, equals: "some", default: "some")
+
+      assert result.status == :valid
+      assert result.value == "some"
+    end
+
+    test "given nil, when value in :enum with :default value, set default and check in enum" do
+      result = Any.validate(nil, enum: ["some", "thing", "else"], default: "some")
 
       assert result.status == :valid
       assert result.value == "some"

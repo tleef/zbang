@@ -1,11 +1,17 @@
 defmodule Bliss.Error do
   defstruct [:code, :message, :path]
 
+  @type t :: %Bliss.Error{
+          code: String.t(),
+          message: String.t(),
+          path: [String.t()]
+        }
+
   def new(code, message, context) do
     %Bliss.Error{
       code: code,
       message: message,
-      path: context.path
+      path: context.path |> Enum.reverse()
     }
   end
 
