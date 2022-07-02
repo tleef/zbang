@@ -1,34 +1,15 @@
 defmodule Bliss.Rule do
   @type t :: atom | Keyword.t()
 
-  def has_rule?(list, name) when is_list(list) and is_atom(name) do
-    Keyword.has_key?(list, name) || Enum.member?(list, name)
+  def to_keyword_list(rules) when is_list(rules) do
+    Enum.map(rules, fn rule -> to_keyword(rule) end)
   end
 
-  def fetch(list, name) when is_list(list) and is_atom(name) do
-    if has_rule?(list, name) do
-      {:ok, Keyword.get(list, name)}
-    else
-      :error
-    end
+  defp to_keyword(rule) when is_atom(rule) do
+    to_keyword({rule, true})
   end
 
-  def fetch!(list, name) when is_list(list) and is_atom(name) do
-    case fetch(list, name) do
-      {:ok, value} -> value
-      :error -> raise KeyError, key: name, term: list
-    end
-  end
-
-  def delete(list, name) when is_list(list) and is_atom(name) do
-    Enum.filter(list, fn rule -> rule_name(rule) != name end)
-  end
-
-  def rule_name({name, _}) do
-    rule_name(name)
-  end
-
-  def rule_name(name) when is_atom(name) do
-    name
+  defp to_keyword({name, _value} = rule) when is_atom(name) do
+    rule
   end
 end
