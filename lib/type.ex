@@ -13,6 +13,7 @@ defmodule Bliss.Type do
         Bliss.Result.new()
         |> Bliss.Result.set_value(input)
         |> check(rules |> Bliss.Rule.to_keyword_list(), context)
+        |> Bliss.Result.to_tuple()
       end
 
       def maybe_check(result, rule, rules, context) do

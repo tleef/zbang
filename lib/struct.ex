@@ -129,10 +129,10 @@ defmodule Bliss.Struct do
 
         defp check_field(result, name, type, rules, context) do
           case type.validate(Map.get(result.value, name), rules, Bliss.Context.new(name, context)) do
-            %Bliss.Result{status: :valid, value: value} ->
+            {:ok, value} ->
               Bliss.Result.set_value(result, Map.replace(result.value, name, value))
 
-            %Bliss.Result{status: :invalid, errors: errors} ->
+            {:error, errors} ->
               Enum.reduce(errors, result, fn err, res -> Bliss.Result.add_error(res, err) end)
           end
         end
@@ -195,7 +195,7 @@ defmodule Bliss.Struct do
       value = Keyword.fetch!(rules, :default)
 
       case type.validate(value, Keyword.delete(rules, :default)) do
-        %Bliss.Result{status: :valid} ->
+        {:ok, _} ->
           :ok
 
         _ ->
