@@ -22,6 +22,15 @@ defmodule Bliss.String.Test do
       assert result.value == "some"
     end
 
+    test "given `false`, when some value, returns result with original value" do
+      result =
+        Result.new()
+        |> Result.set_value("\n  some\n  ")
+        |> String.check(:trim, false, Context.new("."))
+
+      assert result.value == "\n  some\n  "
+    end
+
     test "given to_trim, when some value, returns result with trimmed value" do
       result =
         Result.new()

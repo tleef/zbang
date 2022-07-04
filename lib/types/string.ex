@@ -15,15 +15,15 @@ defmodule Bliss.String do
     result
   end
 
-  def check(result, :trim, nil, context) do
-    check(result, :trim, true, context)
+  def check(result, :trim, false, _context) do
+    result
   end
 
-  def check(result, :trim, true, _) do
+  def check(result, :trim, true, _context) do
     result |> Result.set_value(result.value |> String.trim())
   end
 
-  def check(result, :trim, to_trim, _) when is_binary(to_trim) do
+  def check(result, :trim, to_trim, _context) when is_binary(to_trim) do
     result |> Result.set_value(result.value |> String.trim(to_trim))
   end
 
