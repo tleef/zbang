@@ -3,44 +3,6 @@ defmodule Bliss.String.Test do
 
   alias Bliss.{Result, Error, Context, String}
 
-  describe "Bliss.String.check(_, :trim, _, _)/4" do
-    test "given `true`, when nil, returns valid result" do
-      result =
-        Result.new()
-        |> Result.set_value(nil)
-        |> String.check(:trim, true, Context.new("."))
-
-      assert result.status == :valid
-    end
-
-    test "given `true`, when some value, returns result with trimmed value" do
-      result =
-        Result.new()
-        |> Result.set_value("\n  some\n  ")
-        |> String.check(:trim, true, Context.new("."))
-
-      assert result.value == "some"
-    end
-
-    test "given `false`, when some value, returns result with original value" do
-      result =
-        Result.new()
-        |> Result.set_value("\n  some\n  ")
-        |> String.check(:trim, false, Context.new("."))
-
-      assert result.value == "\n  some\n  "
-    end
-
-    test "given to_trim, when some value, returns result with trimmed value" do
-      result =
-        Result.new()
-        |> Result.set_value("a  some  a")
-        |> String.check(:trim, "a", Context.new("."))
-
-      assert result.value == "  some  "
-    end
-  end
-
   describe "Bliss.String.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
       result =
@@ -91,7 +53,87 @@ defmodule Bliss.String.Test do
     end
   end
 
+  describe "Bliss.String.check(_, :trim, _, _)/4" do
+    test "given `true`, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> String.check(:trim, true, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given `true`, when not a string, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> String.check(:trim, true, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given `true`, when some value, returns result with trimmed value" do
+      result =
+        Result.new()
+        |> Result.set_value("\n  some\n  ")
+        |> String.check(:trim, true, Context.new("."))
+
+      assert result.value == "some"
+    end
+
+    test "given `false`, when some value, returns result with original value" do
+      result =
+        Result.new()
+        |> Result.set_value("\n  some\n  ")
+        |> String.check(:trim, false, Context.new("."))
+
+      assert result.value == "\n  some\n  "
+    end
+
+    test "given to_trim, when some value, returns result with trimmed value" do
+      result =
+        Result.new()
+        |> Result.set_value("a  some  a")
+        |> String.check(:trim, "a", Context.new("."))
+
+      assert result.value == "  some  "
+    end
+
+    test "given invalid to_trim, when some value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value("a  some  a")
+        |> String.check(:trim, 12, Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_arguments(),
+               message: "unable to trim string with to_trim: 12, to_trim must be a string",
+               path: ["."]
+             })
+    end
+  end
+
   describe "Bliss.String.check(_, :length, _, _)/4" do
+    test "given length, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> String.check(:length, 6, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given length, when not a string, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> String.check(:length, 6, Context.new("."))
+
+      assert result.status == :valid
+    end
+
     test "given length, when too short, returns invalid result with error" do
       result =
         Result.new()
@@ -130,9 +172,42 @@ defmodule Bliss.String.Test do
 
       assert result.status == :valid
     end
+
+    test "given invalid length, when some value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value("some")
+        |> String.check(:length, "4", Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_arguments(),
+               message: "unable to check length with length: \"4\", length must be an integer",
+               path: ["."]
+             })
+    end
   end
 
   describe "Bliss.String.check(_, :min, _, _)/4" do
+    test "given length, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> String.check(:min, 6, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given length, when not a string, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> String.check(:min, 6, Context.new("."))
+
+      assert result.status == :valid
+    end
+
     test "given length, when too short, returns invalid result with error" do
       result =
         Result.new()
@@ -171,9 +246,43 @@ defmodule Bliss.String.Test do
                path: ["."]
              })
     end
+
+    test "given invalid length, when some value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value("some")
+        |> String.check(:min, "4", Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_arguments(),
+               message:
+                 "unable to check min length with length: \"4\", length must be an integer",
+               path: ["."]
+             })
+    end
   end
 
   describe "Bliss.String.check(_, :max, _, _)/4" do
+    test "given length, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> String.check(:max, 6, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given length, when not a string, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> String.check(:max, 6, Context.new("."))
+
+      assert result.status == :valid
+    end
+
     test "given length, when too long, returns invalid result with error" do
       result =
         Result.new()
@@ -196,6 +305,22 @@ defmodule Bliss.String.Test do
         |> String.check(:max, 12, Context.new("."))
 
       assert result.status == :valid
+    end
+
+    test "given invalid length, when some value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value("some")
+        |> String.check(:max, "4", Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_arguments(),
+               message:
+                 "unable to check max length with length: \"4\", length must be an integer",
+               path: ["."]
+             })
     end
   end
 
