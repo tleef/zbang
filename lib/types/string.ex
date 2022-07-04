@@ -57,10 +57,10 @@ defmodule Bliss.String do
     end
   end
 
-  def check(result, :length, {value, options}, context) do
+  def check(result, :length, {length, options}, context) when is_integer(length) do
     message = Keyword.get(options, :message, "input does not have correct length")
 
-    if String.length(result.value) == value do
+    if String.length(result.value) == length do
       result
     else
       result
@@ -74,14 +74,14 @@ defmodule Bliss.String do
     end
   end
 
-  def check(result, :length, value, context) do
-    check(result, :length, {value, []}, context)
+  def check(result, :length, length, context) when is_integer(length) do
+    check(result, :length, {length, []}, context)
   end
 
-  def check(result, :min, {value, options}, context) do
+  def check(result, :min, {length, options}, context) when is_integer(length) do
     message = Keyword.get(options, :message, "input is too short")
 
-    if String.length(result.value) >= value do
+    if String.length(result.value) >= length do
       result
     else
       result
@@ -95,14 +95,14 @@ defmodule Bliss.String do
     end
   end
 
-  def check(result, :min, value, context) do
-    check(result, :min, {value, []}, context)
+  def check(result, :min, length, context) when is_integer(length) do
+    check(result, :min, {length, []}, context)
   end
 
-  def check(result, :max, {value, options}, context) do
+  def check(result, :max, {length, options}, context) when is_integer(length) do
     message = Keyword.get(options, :message, "input is too long")
 
-    if String.length(result.value) <= value do
+    if String.length(result.value) <= length do
       result
     else
       result
@@ -116,7 +116,7 @@ defmodule Bliss.String do
     end
   end
 
-  def check(result, :max, value, context) do
-    check(result, :max, {value, []}, context)
+  def check(result, :max, length, context) when is_integer(length) do
+    check(result, :max, {length, []}, context)
   end
 end

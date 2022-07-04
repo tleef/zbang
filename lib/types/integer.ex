@@ -49,4 +49,26 @@ defmodule Bliss.Integer do
   def check(result, :type, _options, _context) do
     result
   end
+
+  def check(result, :min, {value, options}, context)
+      when is_integer(value) and result.value < value do
+    message = Keyword.get(options, :message, "input is too small")
+
+    result
+    |> Result.add_error(
+      Error.new(
+        Error.Codes.too_small(),
+        message,
+        context
+      )
+    )
+  end
+
+  def check(result, :min, {value, _options}, _context) when is_integer(value) do
+    result
+  end
+
+  def check(result, :min, value, context) when is_integer(value) do
+    check(result, :min, {value, []}, context)
+  end
 end

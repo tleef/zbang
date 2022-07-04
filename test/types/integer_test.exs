@@ -49,4 +49,80 @@ defmodule Bliss.Integer.Test do
       assert result.value == 244
     end
   end
+
+  describe "Bliss.Integer.check(_, :type, _, _)/4" do
+    test "given empty options, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> Integer.check(:type, [], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given empty options, when string value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value("123")
+        |> Integer.check(:type, [], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_type(),
+               message: "input is not an integer",
+               path: ["."]
+             })
+    end
+
+    test "given empty options, when integer value, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> Integer.check(:type, [], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given empty options, when float value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(34.5)
+        |> Integer.check(:type, [], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_type(),
+               message: "input is not an integer",
+               path: ["."]
+             })
+    end
+  end
+
+  describe "Bliss.Integer.check(_, :min, _, _)/4" do
+    test "given min value, when too small, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(5)
+        |> Integer.check(:min, 6, Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.too_small(),
+               message: "input is too small",
+               path: ["."]
+             })
+    end
+
+    test "given min value, when great enough, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(11)
+        |> Integer.check(:min, 11, Context.new("."))
+
+      assert result.status == :valid
+    end
+  end
 end

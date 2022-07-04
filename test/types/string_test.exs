@@ -75,15 +75,6 @@ defmodule Bliss.String.Test do
       assert result.status == :valid
     end
 
-    test "given :allow_empty, when empty string value, returns valid result" do
-      result =
-        Result.new()
-        |> Result.set_value("")
-        |> String.check(:type, [:allow_empty], Context.new("."))
-
-      assert result.status == :valid
-    end
-
     test "given empty options, when invalid string value, returns invalid result with error" do
       result =
         Result.new()
