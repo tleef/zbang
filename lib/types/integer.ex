@@ -11,9 +11,8 @@ defmodule Bliss.Integer do
     |> check(:type, rules, context)
     |> maybe_check(:min, rules, context)
     |> maybe_check(:max, rules, context)
-
-    #    |> maybe_check(:greater_than, rules, context)
-    #    |> maybe_check(:less_than, rules, context)
+    |> maybe_check(:greater_than, rules, context)
+    |> maybe_check(:less_than, rules, context)
   end
 
   def check(%Result{value: nil} = result, _rule, _options, _context) do

@@ -203,4 +203,54 @@ defmodule Bliss.Integer.Test do
       assert result.status == :valid
     end
   end
+
+  describe "Bliss.Integer.validate/3" do
+    test "given some integer string value, when :parse value, set parsed value" do
+      {:ok, 10} = Integer.validate("10", [:parse])
+    end
+
+    test "given small value, when check :min, check min" do
+      {:error, errors} = Integer.validate(20, min: {21, message: "too small"})
+
+      assert Enum.member?(errors, %Error{
+               code: Error.Codes.too_small(),
+               message: "too small",
+               path: ["."]
+             })
+    end
+
+    test "given large value, when check :max, check max" do
+      {:error, errors} = Integer.validate(18, max: {17, message: "too great"})
+
+      assert Enum.member?(errors, %Error{
+               code: Error.Codes.too_big(),
+               message: "too great",
+               path: ["."]
+             })
+    end
+
+    test "given small value, when check :greater_than, check greater_than" do
+      {:error, errors} = Integer.validate(21, greater_than: {21, message: "not great enough"})
+
+      assert Enum.member?(errors, %Error{
+               code: Error.Codes.too_small(),
+               message: "not great enough",
+               path: ["."]
+             })
+    end
+
+    test "given large value, when check :less_than, check less_than" do
+      {:error, errors} = Integer.validate(18, less_than: {18, message: "not small enough"})
+
+      assert Enum.member?(errors, %Error{
+               code: Error.Codes.too_big(),
+               message: "not small enough",
+               path: ["."]
+             })
+    end
+
+    test "given some float string, when :parse and check :min & :max, parse value and check min and max" do
+      {:ok, 23} = Integer.validate("23.5", [:parse, min: 0, max: 25])
+    end
+  end
 end
