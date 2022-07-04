@@ -115,4 +115,26 @@ defmodule Bliss.Integer do
   def check(result, :greater_than, value, context) when is_integer(value) do
     check(result, :greater_than, {value, []}, context)
   end
+
+  def check(result, :less_than, {value, options}, context)
+      when is_integer(value) and result.value >= value do
+    message = Keyword.get(options, :message, "input is too big")
+
+    result
+    |> Result.add_error(
+      Error.new(
+        Error.Codes.too_big(),
+        message,
+        context
+      )
+    )
+  end
+
+  def check(result, :less_than, {value, _options}, _context) when is_integer(value) do
+    result
+  end
+
+  def check(result, :less_than, value, context) when is_integer(value) do
+    check(result, :less_than, {value, []}, context)
+  end
 end
