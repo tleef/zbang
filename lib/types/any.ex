@@ -44,21 +44,21 @@ defmodule Bliss.Any do
     result
   end
 
-  def check(result, :equals, {value, options}, context) do
+  def check(result, :equals, {value, options}, context) when result.value != value do
     message = Keyword.get(options, :message, "input does not equal #{inspect(value)}")
 
-    if result.value == value do
-      result
-    else
-      result
-      |> Result.add_error(
-        Error.new(
-          Error.Codes.invalid_literal(),
-          message,
-          context
-        )
+    result
+    |> Result.add_error(
+      Error.new(
+        Error.Codes.invalid_literal(),
+        message,
+        context
       )
-    end
+    )
+  end
+
+  def check(result, :equals, {_value, _options}, _context) do
+    result
   end
 
   def check(result, :equals, value, context) do

@@ -68,7 +68,7 @@ defmodule Bliss.Integer.Test do
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_arguments(),
-               message: "unable to parse integer with base 42, base must be in 2..36",
+               message: "unable to parse integer with base: 42, base must be in 2..36",
                path: ["."]
              })
     end

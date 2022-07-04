@@ -34,7 +34,7 @@ defmodule Bliss.Integer do
   end
 
   def check(result, :parse, base, context) when base not in 2..36 do
-    message = "unable to parse integer with base #{inspect(base)}, base must be in 2..36"
+    message = "unable to parse integer with base: #{inspect(base)}, base must be in 2..36"
 
     result
     |> Result.add_error(
