@@ -151,4 +151,30 @@ defmodule Bliss.Integer.Test do
       assert result.status == :valid
     end
   end
+
+  describe "Bliss.Integer.check(_, :greater_than, _, _)/4" do
+    test "given greater than value, when too small, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(6)
+        |> Integer.check(:greater_than, 6, Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.too_small(),
+               message: "input is too small",
+               path: ["."]
+             })
+    end
+
+    test "given greater than value, when great enough, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(12)
+        |> Integer.check(:greater_than, 11, Context.new("."))
+
+      assert result.status == :valid
+    end
+  end
 end
