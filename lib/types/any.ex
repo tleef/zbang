@@ -23,10 +23,6 @@ defmodule Bliss.Any do
     result
   end
 
-  def check(result, :required, nil, context) do
-    check(result, :required, [], context)
-  end
-
   def check(result, :required, true, context) do
     check(result, :required, [], context)
   end
