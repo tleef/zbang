@@ -125,4 +125,30 @@ defmodule Bliss.Integer.Test do
       assert result.status == :valid
     end
   end
+
+  describe "Bliss.Integer.check(_, :max, _, _)/4" do
+    test "given max value, when too big, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(7)
+        |> Integer.check(:max, 6, Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.too_big(),
+               message: "input is too big",
+               path: ["."]
+             })
+    end
+
+    test "given max value, when small enough, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(11)
+        |> Integer.check(:max, 11, Context.new("."))
+
+      assert result.status == :valid
+    end
+  end
 end
