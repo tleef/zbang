@@ -27,7 +27,7 @@ defmodule Bliss.Any do
     check(result, :required, [], context)
   end
 
-  def check(%Result{value: nil} = result, :required, options, context) do
+  def check(result, :required, options, context) when result.value == nil do
     message = Keyword.get(options, :message, "input is required")
 
     result

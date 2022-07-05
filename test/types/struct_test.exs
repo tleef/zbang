@@ -156,7 +156,7 @@ defmodule Bliss.Struct.Test do
              })
     end
 
-    test "given a map with an invalid keys, when validating with :cast, returns an invalid result with errors" do
+    test "given a map with invalid keys, when validating with :cast, returns an invalid result with errors" do
       {:error, errors} =
         MyStruct.validate(
           %{foo: 123, bar: "hello", baz: "world", price: %{amount: "1.00", currency: "$"}},

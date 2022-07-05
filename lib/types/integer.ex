@@ -17,7 +17,7 @@ defmodule Bliss.Integer do
     |> maybe_check(:less_than, rules, context)
   end
 
-  def check(%Result{value: nil} = result, _rule, _options, _context) do
+  def check(result, _rule, _options, _context) when result.value == nil do
     result
   end
 

@@ -48,7 +48,11 @@ defmodule Bliss.Struct do
           |> check(:fields, rules, context)
         end
 
-        def check(%Bliss.Result{value: nil} = result, _rule, _options, _context) do
+        def check(result, _rule, _options, _context) when result.value == nil do
+          result
+        end
+
+        def check(result, :cast, _enabled, _context) when not is_map(result.value) do
           result
         end
 
@@ -56,46 +60,12 @@ defmodule Bliss.Struct do
           result
         end
 
-        def check(result, :cast, nil, context) do
-          check(result, :cast, [], context)
-        end
-
         def check(result, :cast, true, context) do
-          check(result, :cast, [], context)
-        end
-
-        def check(%Bliss.Result{value: %__MODULE__{}} = result, :cast, _, _) do
-          result
-        end
-
-        def check(result, :cast, _options, _context) when is_map(result.value) do
           result
           |> Bliss.Result.set_value(struct(__MODULE__, result.value))
         end
 
-        def check(result, :cast, options, context) do
-          message =
-            Keyword.get(
-              options,
-              :message,
-              "cannot cast #{inspect(result.value)} to a #{inspect(__MODULE__)}"
-            )
-
-          result
-          |> Bliss.Result.add_error(
-            Bliss.Error.new(
-              Bliss.Error.Codes.invalid_type(),
-              message,
-              context
-            )
-          )
-        end
-
-        def check(%Bliss.Result{value: %__MODULE__{}} = result, :type, _options, _context) do
-          result
-        end
-
-        def check(result, :type, options, context) do
+        def check(result, :type, options, context) when not is_struct(result.value, __MODULE__) do
           message = Keyword.get(options, :message, "input is not a #{inspect(__MODULE__)}")
 
           result
@@ -108,23 +78,19 @@ defmodule Bliss.Struct do
           )
         end
 
-        def check(result, :fields, options, context) when is_map(result.value) do
-          Enum.reduce(__bliss__(:fields), result, fn {name, {type, rules}}, res ->
-            check_field(res, name, type, rules, context)
-          end)
+        def check(result, :type, _options, _context) do
+          result
+        end
+
+        def check(result, _rule, _options, _context)
+            when not is_struct(result.value, __MODULE__) do
+          result
         end
 
         def check(result, :fields, options, context) do
-          message = "cannot check #{inspect(__MODULE__)} fields of #{inspect(result.value)}"
-
-          result
-          |> Bliss.Result.add_error(
-            Bliss.Error.new(
-              Bliss.Error.Codes.invalid_type(),
-              message,
-              context
-            )
-          )
+          Enum.reduce(__bliss__(:fields), result, fn {name, {type, rules}}, res ->
+            check_field(res, name, type, rules, context)
+          end)
         end
 
         defp check_field(result, name, type, rules, context) do
