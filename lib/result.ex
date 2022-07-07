@@ -24,6 +24,10 @@ defmodule Bliss.Result do
     %{result | errors: [error | result.errors]}
   end
 
+  def add_errors(result, errors) do
+    Enum.reduce(errors, result, fn err, res -> add_error(res, err) end)
+  end
+
   def to_tuple(%Bliss.Result{status: :valid, value: value}) do
     {:ok, value}
   end
