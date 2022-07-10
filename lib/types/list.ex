@@ -52,13 +52,26 @@ defmodule Bliss.List do
     )
   end
 
-  def check(result, :length, {length, options}, context) when length(result.value) != length do
+  def check(result, :length, {length, options}, context) when length(result.value) < length do
     message = Keyword.get(options, :message, "input does not have correct length")
 
     result
     |> Result.add_error(
       Error.new(
-        Error.Codes.invalid_string(),
+        Error.Codes.too_small(),
+        message,
+        context
+      )
+    )
+  end
+
+  def check(result, :length, {length, options}, context) when length(result.value) > length do
+    message = Keyword.get(options, :message, "input does not have correct length")
+
+    result
+    |> Result.add_error(
+      Error.new(
+        Error.Codes.too_big(),
         message,
         context
       )
@@ -93,7 +106,7 @@ defmodule Bliss.List do
     result
     |> Result.add_error(
       Error.new(
-        Error.Codes.invalid_string(),
+        Error.Codes.too_small(),
         message,
         context
       )
@@ -128,7 +141,7 @@ defmodule Bliss.List do
     result
     |> Result.add_error(
       Error.new(
-        Error.Codes.invalid_string(),
+        Error.Codes.too_big(),
         message,
         context
       )
@@ -143,23 +156,66 @@ defmodule Bliss.List do
     check(result, :max, {length, []}, context)
   end
 
+  def check(result, :items, {type, _rules}, context) when not is_atom(type) do
+    message = "unable to check items of type: #{inspect(type)}, type must be an atom"
+
+    result
+    |> Result.add_error(
+      Error.new(
+        Error.Codes.invalid_arguments(),
+        message,
+        context
+      )
+    )
+  end
+
   def check(result, :items, {type, rules}, context) do
+    case Bliss.Type.resolve(type) do
+      {:ok, type} ->
+        check_items(result, type, rules, context)
+
+      _ ->
+        message = "unable to check items of type: #{inspect(type)}, unknown type"
+
+        result
+        |> Result.add_error(
+          Error.new(
+            Error.Codes.invalid_arguments(),
+            message,
+            context
+          )
+        )
+    end
+  end
+
+  def check(result, :items, type, context) do
+    check(result, :items, {type, []}, context)
+  end
+
+  defp check_items(result, type, rules, context) do
     {list, result} =
-      Enum.map_reduce(result.value, result, fn item, res ->
-        check_item(res, item, type, rules, context)
+      result.value
+      |> with_indices()
+      |> Enum.map_reduce(result, fn {item, index}, res ->
+        check_item(res, item, index, type, rules, context)
       end)
 
     result
     |> Result.set_value(list)
   end
 
-  def check_item(result, item, type, rules, context) do
-    case type.validate(item, rules, Bliss.Context.new("index", context)) do
+  defp check_item(result, item, index, type, rules, context) do
+    case type.validate(item, rules, Bliss.Context.new(index, context)) do
       {:ok, value} ->
         {value, result}
 
       {:error, errors} ->
         {item, result |> Result.add_errors(errors)}
     end
+  end
+
+  defp with_indices(list) do
+    {list, _} = Enum.map_reduce(list, 0, fn item, index -> {{item, index}, index + 1} end)
+    list
   end
 end

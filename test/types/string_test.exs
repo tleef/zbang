@@ -143,7 +143,7 @@ defmodule Bliss.String.Test do
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
-               code: Error.Codes.invalid_string(),
+               code: Error.Codes.too_small(),
                message: "input does not have correct length",
                path: ["."]
              })
@@ -158,7 +158,7 @@ defmodule Bliss.String.Test do
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
-               code: Error.Codes.invalid_string(),
+               code: Error.Codes.too_big(),
                message: "input does not have correct length",
                path: ["."]
              })
@@ -333,7 +333,7 @@ defmodule Bliss.String.Test do
       {:error, errors} = String.validate("way too long", length: {8, message: "too long"})
 
       assert Enum.member?(errors, %Error{
-               code: Error.Codes.invalid_string(),
+               code: Error.Codes.too_big(),
                message: "too long",
                path: ["."]
              })

@@ -125,23 +125,12 @@ defmodule Bliss.Struct do
   end
 
   defp check_field_type!(name, type) do
-    cond do
-      not is_atom(type) ->
+    case Bliss.Type.resolve(type) do
+      {:ok, type} ->
+        type
+
+      _ ->
         raise ArgumentError, "invalid type #{inspect(type)} for field #{inspect(name)}"
-
-      Bliss.Type.base?(type) ->
-        Bliss.Type.get(type)
-
-      Code.ensure_compiled(type) == {:module, type} ->
-        if function_exported?(type, :__bliss__, 1) do
-          type
-        else
-          raise ArgumentError,
-                "module #{inspect(type)} given as type for field #{inspect(name)} is not a Bliss.Type"
-        end
-
-      true ->
-        raise ArgumentError, "unknown type #{inspect(type)} for field #{inspect(name)}"
     end
   end
 

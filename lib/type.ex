@@ -66,4 +66,25 @@ defmodule Bliss.Type do
   def get(type) when is_atom(type) do
     @base_types[type]
   end
+
+  def resolve(type) when not is_atom(type) do
+    {:error, :not_an_atom}
+  end
+
+  def resolve(type) do
+    cond do
+      base?(type) ->
+        {:ok, get(type)}
+
+      Code.ensure_compiled(type) == {:module, type} ->
+        if function_exported?(type, :__bliss__, 1) do
+          {:ok, type}
+        else
+          {:error, :not_a_bliss_type}
+        end
+
+      true ->
+        {:error, :unknown_type}
+    end
+  end
 end
