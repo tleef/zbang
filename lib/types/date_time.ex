@@ -121,6 +121,65 @@ defmodule Bliss.DateTime do
     result
   end
 
+  def check(result, :shift, zone, context) when not is_binary(zone) do
+    message = "timezone must be a string"
+
+    result
+    |> Result.add_error(
+      Error.new(
+        Error.Codes.invalid_arguments(),
+        message,
+        context
+      )
+    )
+  end
+
+  def check(result, :shift, zone, context) do
+    case DateTime.shift_zone(result.value, zone) do
+      {:ok, datetime} ->
+        result |> Result.set_value(datetime)
+
+      {:error, _} ->
+        message = "unable to shift input to #{inspect(zone)} timezone"
+
+        result
+        |> Result.add_error(
+          Error.new(
+            Error.Codes.invalid_arguments(),
+            message,
+            context
+          )
+        )
+    end
+  end
+
+  def check(result, :trunc, false, _context) do
+    result
+  end
+
+  def check(result, :trunc, true, context) do
+    check(result, :truc, :second, context)
+  end
+
+  def check(result, :trunc, precision, context)
+      when precision not in [:second, :millisecond, :microsecond] do
+    message =
+      "unable to truncate with precision: #{inspect(precision)}, precision must be :second, :millisecond, or :microsecond"
+
+    result
+    |> Result.add_error(
+      Error.new(
+        Error.Codes.invalid_arguments(),
+        message,
+        context
+      )
+    )
+  end
+
+  def check(result, :trunc, precision, _context) do
+    result |> Result.set_value(result.value |> DateTime.truncate(precision))
+  end
+
   defp from_unix(result, context) do
     case DateTime.from_unix(result.value) do
       {:ok, datetime} ->
