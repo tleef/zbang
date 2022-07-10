@@ -26,18 +26,19 @@ defmodule Bliss.Type do
     end
   end
 
-  @typedoc "A Blis type, primitive or custom."
+  @typedoc "A Bliss type, primitive or custom."
   @type t :: primitive | custom
 
   @typedoc "Primitive Bliss types (handled by Bliss)."
   @type primitive ::
-          :integer
-          | :float
+          :any
+          | :atom
           | :boolean
+          | :integer
+          | :float
           | :string
           | :map
-          | :array
-          | :any
+          | :list
           | :datetime
           | :date
           | :time
@@ -49,8 +50,13 @@ defmodule Bliss.Type do
   @callback check(Bliss.Result.t(), atom, any, Bliss.Context.t()) :: Bliss.Result.t()
 
   @base_types %{
+    :any => Bliss.Any,
+    :atom => Bliss.Atom,
+    :boolean => Bliss.Boolean,
+    :interger => Bliss.Integer,
+    :float => Bliss.Float,
     :string => Bliss.String,
-    :any => Bliss.Any
+    :list => Bliss.List
   }
 
   def base?(type) when is_atom(type) do
@@ -59,5 +65,26 @@ defmodule Bliss.Type do
 
   def get(type) when is_atom(type) do
     @base_types[type]
+  end
+
+  def resolve(type) when not is_atom(type) do
+    {:error, :not_an_atom}
+  end
+
+  def resolve(type) do
+    cond do
+      base?(type) ->
+        {:ok, get(type)}
+
+      Code.ensure_compiled(type) == {:module, type} ->
+        if function_exported?(type, :__bliss__, 1) do
+          {:ok, type}
+        else
+          {:error, :not_a_bliss_type}
+        end
+
+      true ->
+        {:error, :unknown_type}
+    end
   end
 end

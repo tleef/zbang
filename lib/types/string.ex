@@ -88,19 +88,33 @@ defmodule Bliss.String do
   end
 
   def check(result, :length, {length, options}, context) do
-    message = Keyword.get(options, :message, "input does not have correct length")
+    cond do
+      String.length(result.value) < length ->
+        message = Keyword.get(options, :message, "input does not have correct length")
 
-    if String.length(result.value) == length do
-      result
-    else
-      result
-      |> Result.add_error(
-        Error.new(
-          Error.Codes.invalid_string(),
-          message,
-          context
+        result
+        |> Result.add_error(
+          Error.new(
+            Error.Codes.too_small(),
+            message,
+            context
+          )
         )
-      )
+
+      String.length(result.value) > length ->
+        message = Keyword.get(options, :message, "input does not have correct length")
+
+        result
+        |> Result.add_error(
+          Error.new(
+            Error.Codes.too_big(),
+            message,
+            context
+          )
+        )
+
+      true ->
+        result
     end
   end
 
