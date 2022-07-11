@@ -180,6 +180,78 @@ defmodule Bliss.DateTime do
     result |> Result.set_value(result.value |> DateTime.truncate(precision))
   end
 
+  def check(result, :min, {value, _options}, context) when not is_struct(value, DateTime) do
+    message = "min value must be a DateTime"
+
+    result
+    |> Result.add_error(
+      Error.new(
+        Error.Codes.invalid_arguments(),
+        message,
+        context
+      )
+    )
+  end
+
+  def check(result, :min, {value, options}, context) do
+    case DateTime.compare(result.value, value) do
+      :lt ->
+        message = Keyword.get(options, :message, "input is too early")
+
+        result
+        |> Result.add_error(
+          Error.new(
+            Error.Codes.too_small(),
+            message,
+            context
+          )
+        )
+
+      _ ->
+        result
+    end
+  end
+
+  def check(result, :min, value, context) do
+    check(result, :min, {value, []}, context)
+  end
+
+  def check(result, :max, {value, _options}, context) when not is_struct(value, DateTime) do
+    message = "max value must be a DateTime"
+
+    result
+    |> Result.add_error(
+      Error.new(
+        Error.Codes.invalid_arguments(),
+        message,
+        context
+      )
+    )
+  end
+
+  def check(result, :max, {value, options}, context) do
+    case DateTime.compare(result.value, value) do
+      :gt ->
+        message = Keyword.get(options, :message, "input is too late")
+
+        result
+        |> Result.add_error(
+          Error.new(
+            Error.Codes.too_big(),
+            message,
+            context
+          )
+        )
+
+      _ ->
+        result
+    end
+  end
+
+  def check(result, :max, value, context) do
+    check(result, :max, {value, []}, context)
+  end
+
   defp from_unix(result, context) do
     case DateTime.from_unix(result.value) do
       {:ok, datetime} ->
