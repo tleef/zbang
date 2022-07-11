@@ -209,4 +209,60 @@ defmodule Bliss.DateTime.Test do
              })
     end
   end
+
+  describe "Bliss.DateTime.check(_, :shift, _, _)/4" do
+    test "given Etc/UTC, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> DateTime.check(:shift, "Etc/UTC", Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given Etc/UTC, when not a DateTime, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> DateTime.check(:shift, "Etc/UTC", Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given Etc/UTC, when some DateTime with offset, returns result with shifted value" do
+      result =
+        Result.new()
+        |> Result.set_value(%Elixir.DateTime{
+          year: 2000,
+          month: 2,
+          day: 29,
+          zone_abbr: "CET",
+          hour: 23,
+          minute: 0,
+          second: 7,
+          microsecond: {0, 0},
+          utc_offset: 3600,
+          std_offset: 0,
+          time_zone: "Europe/Warsaw"
+        })
+        |> DateTime.check(:shift, "Etc/UTC", Context.new("."))
+
+      assert result.value == ~U[2000-02-29 22:00:07Z]
+    end
+
+    test "given invalid timezone, when some DateTime, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(~U[2020-05-01 00:26:31Z])
+        |> DateTime.check(:shift, "Europe/Warsaw", Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_arguments(),
+               message: "unable to shift input to \"Europe/Warsaw\" timezone",
+               path: ["."]
+             })
+    end
+  end
 end
