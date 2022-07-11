@@ -321,4 +321,122 @@ defmodule Bliss.DateTime.Test do
       assert result.value == ~U[2020-05-01 00:26:31.123456Z]
     end
   end
+
+  describe "Bliss.DateTime.check(_, :min, _, _)/4" do
+    test "given min DateTime, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min DateTime, when not a DateTime, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min DateTime, when DateTime late enough, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(~U[2000-01-01 00:00:00Z])
+        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min DateTime, when DateTime too early, returns invalid result with errors" do
+      result =
+        Result.new()
+        |> Result.set_value(~U[1999-12-31 23:59:59Z])
+        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.too_small(),
+               message: "input is too early",
+               path: ["."]
+             })
+    end
+
+    test "given invalid min DateTime, when some DateTime, returns invalid result with errors" do
+      result =
+        Result.new()
+        |> Result.set_value(~U[2000-01-01 00:00:00Z])
+        |> DateTime.check(:min, "2000-01-01 00:00:00Z", Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_arguments(),
+               message: "min value must be a DateTime",
+               path: ["."]
+             })
+    end
+  end
+
+  describe "Bliss.DateTime.check(_, :max, _, _)/4" do
+    test "given min DateTime, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min DateTime, when not a DateTime, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min DateTime, when DateTime early enough, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(~U[2000-01-01 00:00:00Z])
+        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min DateTime, when DateTime too late, returns invalid result with errors" do
+      result =
+        Result.new()
+        |> Result.set_value(~U[2000-01-01 00:00:01Z])
+        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.too_big(),
+               message: "input is too late",
+               path: ["."]
+             })
+    end
+
+    test "given invalid min DateTime, when some DateTime, returns invalid result with errors" do
+      result =
+        Result.new()
+        |> Result.set_value(~U[2000-01-01 00:00:00Z])
+        |> DateTime.check(:max, "2000-01-01 00:00:00Z", Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_arguments(),
+               message: "max value must be a DateTime",
+               path: ["."]
+             })
+    end
+  end
 end
