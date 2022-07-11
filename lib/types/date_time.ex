@@ -158,7 +158,7 @@ defmodule Bliss.DateTime do
   end
 
   def check(result, :trunc, true, context) do
-    check(result, :truc, :second, context)
+    check(result, :trunc, :second, context)
   end
 
   def check(result, :trunc, precision, context)
