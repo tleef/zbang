@@ -135,10 +135,10 @@ defmodule Bliss.DateTime.Test do
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
-        code: Error.Codes.invalid_date(),
-        message: "unable to convert unix input to a DateTime",
-        path: ["."]
-      })
+               code: Error.Codes.invalid_date(),
+               message: "unable to convert unix input to a DateTime",
+               path: ["."]
+             })
     end
 
     test "given :gregorian, when some gregorian timestamp, returns result with converted value" do
@@ -157,6 +157,56 @@ defmodule Bliss.DateTime.Test do
         |> DateTime.check(:allow_int, false, Context.new("."))
 
       assert result.value == 1_464_096_368
+    end
+  end
+
+  describe "Bliss.DateTime.check(_, :type, _, _)/4" do
+    test "given empty options, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> DateTime.check(:type, [], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given empty options, when DateTime value, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(~U[2020-05-01 00:26:31Z])
+        |> DateTime.check(:type, [], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given empty options, when non-DateTime value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> DateTime.check(:type, [], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_type(),
+               message: "input is not a DateTime",
+               path: ["."]
+             })
+    end
+
+    test "given empty options, when NaiveDateTime value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(~N[2000-01-01 23:00:07])
+        |> DateTime.check(:type, [], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_type(),
+               message: "input is not a DateTime",
+               path: ["."]
+             })
     end
   end
 end
