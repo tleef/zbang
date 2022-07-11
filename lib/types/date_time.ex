@@ -73,7 +73,7 @@ defmodule Bliss.DateTime do
   end
 
   def check(result, :allow_int, true, context) do
-    check(result, :parse, :unix, context)
+    check(result, :allow_int, :unix, context)
   end
 
   def check(result, :allow_int, mode, context) when mode not in [:unix, :gregorian] do
@@ -263,7 +263,7 @@ defmodule Bliss.DateTime do
         result
         |> Result.add_error(
           Error.new(
-            Error.Codes.invalid_string(),
+            Error.Codes.invalid_date(),
             message,
             context
           )

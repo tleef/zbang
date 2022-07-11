@@ -88,4 +88,75 @@ defmodule Bliss.DateTime.Test do
              })
     end
   end
+
+  describe "Bliss.DateTime.check(_, :allow_int, _, _)/4" do
+    test "given `true`, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> DateTime.check(:allow_int, true, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given `true`, when some DateTime, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(~U[2016-05-24 13:26:08Z])
+        |> DateTime.check(:allow_int, true, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given `true`, when some unix timestamp, returns result with converted value" do
+      result =
+        Result.new()
+        |> Result.set_value(1_464_096_368)
+        |> DateTime.check(:allow_int, true, Context.new("."))
+
+      assert result.value == ~U[2016-05-24 13:26:08Z]
+    end
+
+    test "given :unix, when some unix timestamp, returns result with converted value" do
+      result =
+        Result.new()
+        |> Result.set_value(1_464_096_368)
+        |> DateTime.check(:allow_int, :unix, Context.new("."))
+
+      assert result.value == ~U[2016-05-24 13:26:08Z]
+    end
+
+    test "given :unix, when some invalid unix timestamp, returns invalid result with errors" do
+      result =
+        Result.new()
+        |> Result.set_value(253_402_300_800)
+        |> DateTime.check(:allow_int, :unix, Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+        code: Error.Codes.invalid_date(),
+        message: "unable to convert unix input to a DateTime",
+        path: ["."]
+      })
+    end
+
+    test "given :gregorian, when some gregorian timestamp, returns result with converted value" do
+      result =
+        Result.new()
+        |> Result.set_value(63_755_511_991)
+        |> DateTime.check(:allow_int, :gregorian, Context.new("."))
+
+      assert result.value == ~U[2020-05-01 00:26:31Z]
+    end
+
+    test "given `false`, when some value, returns result with original value" do
+      result =
+        Result.new()
+        |> Result.set_value(1_464_096_368)
+        |> DateTime.check(:allow_int, false, Context.new("."))
+
+      assert result.value == 1_464_096_368
+    end
+  end
 end
