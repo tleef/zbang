@@ -428,7 +428,7 @@ defmodule Bliss.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2000-01-01 00:00:00Z])
-        |> DateTime.check(:max, "2000-01-01 00:00:00Z", Context.new("."))
+        |> DateTime.check(:max, "2000-01-01T00:00:00Z", Context.new("."))
 
       assert result.status == :invalid
 
@@ -437,6 +437,55 @@ defmodule Bliss.DateTime.Test do
                message: "max value must be a DateTime",
                path: ["."]
              })
+    end
+  end
+
+  describe "Bliss.DateTime.validate/3" do
+    test "given some valid string, when :parse and other rules, set parsed value" do
+      {:ok, ~U[2000-01-01 00:00:00Z]} = DateTime.validate("2000-01-01T00:00:00Z", [:parse])
+
+      {:ok, ~U[2000-01-01 00:00:00Z]} =
+        DateTime.validate("2000-01-01T00:00:00Z", [:required, :parse])
+
+      {:ok, ~U[2000-01-01 00:00:00Z]} =
+        DateTime.validate("2000-01-01T00:00:00Z", [
+          :required,
+          :parse,
+          min: ~U[2000-01-01 00:00:00Z],
+          max: ~U[2000-01-01 00:00:00Z]
+        ])
+
+      {:ok, ~U[2000-01-01 00:00:00Z]} =
+        DateTime.validate("2000-01-01T00:00:00.123456Z", [
+          :required,
+          :parse,
+          :trunc
+        ])
+    end
+
+    test "given some valid int, when :allow_int, set converted value" do
+      {:ok, ~U[2000-01-01 00:00:00Z]} = DateTime.validate(946_684_800, [:allow_int])
+      {:ok, ~U[2000-01-01 00:00:00Z]} = DateTime.validate(63_113_904_000, allow_int: :gregorian)
+    end
+
+    test "given some valid DateTime, when :shift, set shifted value" do
+      {:ok, ~U[2000-01-01 00:00:00Z]} =
+        DateTime.validate(
+          %Elixir.DateTime{
+            year: 2000,
+            month: 1,
+            day: 1,
+            zone_abbr: "CET",
+            hour: 1,
+            minute: 0,
+            second: 0,
+            microsecond: {0, 0},
+            utc_offset: 3600,
+            std_offset: 0,
+            time_zone: "Europe/Warsaw"
+          },
+          shift: "Etc/UTC"
+        )
     end
   end
 end
