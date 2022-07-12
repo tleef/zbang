@@ -176,4 +176,63 @@ defmodule Bliss.Date.Test do
              })
     end
   end
+
+  describe "Bliss.Date.check(_, :min, _, _)/4" do
+    test "given min Date, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> Date.check(:min, ~D[2000-01-01], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min Date, when not a Date, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> Date.check(:min, ~D[2000-01-01], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min Date, when Date late enough, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(~D[2000-01-01])
+        |> Date.check(:min, ~D[2000-01-01], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min Date, when Date too early, returns invalid result with errors" do
+      result =
+        Result.new()
+        |> Result.set_value(~D[1999-12-31])
+        |> Date.check(:min, ~D[2000-01-01], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.too_small(),
+               message: "input is too early",
+               path: ["."]
+             })
+    end
+
+    test "given invalid min Date, when some Date, returns invalid result with errors" do
+      result =
+        Result.new()
+        |> Result.set_value(~D[2000-01-01])
+        |> Date.check(:min, "2000-01-01", Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_arguments(),
+               message: "min value must be a Date",
+               path: ["."]
+             })
+    end
+  end
 end
