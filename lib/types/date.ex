@@ -44,7 +44,7 @@ defmodule Bliss.Date do
   end
 
   def check(result, :parse, _format, context) do
-    case DateTime.from_iso8601(result.value) do
+    case Date.from_iso8601(result.value) do
       {:ok, date} ->
         result |> Result.set_value(date)
 
@@ -113,7 +113,7 @@ defmodule Bliss.Date do
   end
 
   def check(result, :min, {value, options}, context) do
-    case DateTime.compare(result.value, value) do
+    case Date.compare(result.value, value) do
       :lt ->
         message = Keyword.get(options, :message, "input is too early")
 
@@ -149,7 +149,7 @@ defmodule Bliss.Date do
   end
 
   def check(result, :max, {value, options}, context) do
-    case DateTime.compare(result.value, value) do
+    case Date.compare(result.value, value) do
       :gt ->
         message = Keyword.get(options, :message, "input is too late")
 
