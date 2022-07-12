@@ -146,7 +146,7 @@ defmodule Bliss.Map do
   end
 
   def check(result, :min, {size, options}, context) when map_size(result.value) < size do
-    message = Keyword.get(options, :message, "input is too short")
+    message = Keyword.get(options, :message, "input is too small")
 
     result
     |> Result.add_error(
@@ -180,7 +180,7 @@ defmodule Bliss.Map do
   end
 
   def check(result, :max, {size, options}, context) when map_size(result.value) > size do
-    message = Keyword.get(options, :message, "input is too long")
+    message = Keyword.get(options, :message, "input is too big")
 
     result
     |> Result.add_error(

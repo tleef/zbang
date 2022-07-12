@@ -200,4 +200,63 @@ defmodule Bliss.Map.Test do
              })
     end
   end
+
+  describe "Bliss.Map.check(_, :min, _, _)/4" do
+    test "given length, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> Map.check(:min, 6, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given size, when not a map, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> Map.check(:min, 6, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given size, when too small, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
+        |> Map.check(:min, 4, Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.too_small(),
+               message: "input is too small",
+               path: ["."]
+             })
+    end
+
+    test "given size, when big enough, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
+        |> Map.check(:min, 3, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given invalid size, when some value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
+        |> Map.check(:min, "1", Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_arguments(),
+               message: "unable to check min size with size: \"1\", size must be an integer",
+               path: ["."]
+             })
+    end
+  end
 end
