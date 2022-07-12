@@ -126,4 +126,54 @@ defmodule Bliss.Date.Test do
       assert result.value == ~N[2016-04-16 01:23:45]
     end
   end
+
+  describe "Bliss.Date.check(_, :type, _, _)/4" do
+    test "given empty options, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> Date.check(:type, [], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given empty options, when Date value, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(~D[2018-07-16])
+        |> Date.check(:type, [], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given empty options, when non-Date value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> Date.check(:type, [], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_type(),
+               message: "input is not a Date",
+               path: ["."]
+             })
+    end
+
+    test "given empty options, when NaiveDateTime value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(~N[2000-01-01 23:00:07])
+        |> Date.check(:type, [], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_type(),
+               message: "input is not a Date",
+               path: ["."]
+             })
+    end
+  end
 end
