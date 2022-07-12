@@ -288,10 +288,10 @@ defmodule Bliss.Map.Test do
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
-        code: Error.Codes.too_big(),
-        message: "input is too big",
-        path: ["."]
-      })
+               code: Error.Codes.too_big(),
+               message: "input is too big",
+               path: ["."]
+             })
     end
 
     test "given size, when small enough, returns valid result" do
@@ -312,11 +312,20 @@ defmodule Bliss.Map.Test do
       assert result.status == :invalid
 
       assert Enum.member?(result.errors, %Error{
-        code: Error.Codes.invalid_arguments(),
-        message:
-          "unable to check max size with size: \"3\", size must be an integer",
-        path: ["."]
-      })
+               code: Error.Codes.invalid_arguments(),
+               message: "unable to check max size with size: \"3\", size must be an integer",
+               path: ["."]
+             })
+    end
+  end
+
+  describe "Bliss.Map.validate/3" do
+    test "given a map with mixed keys, when :atomize_keys with :size, set atomized keys and assert size" do
+      {:ok, %{2 => "two", foo: "one", baz: "three"}} =
+        Map.validate(
+          %{"foo" => "one", 2 => "two", baz: "three"},
+          [:atomize_keys, size: 3]
+        )
     end
   end
 end
