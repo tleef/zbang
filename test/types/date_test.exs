@@ -294,4 +294,25 @@ defmodule Bliss.Date.Test do
              })
     end
   end
+
+  describe "Bliss.Date.validate/3" do
+    test "given some valid string, when :parse and other rules, set parsed value" do
+      {:ok, ~D[2000-01-01]} = Date.validate("2000-01-01", [:parse])
+
+      {:ok, ~D[2000-01-01]} = Date.validate("2000-01-01", [:required, :parse])
+
+      {:ok, ~D[2000-01-01]} =
+        Date.validate("2000-01-01", [
+          :required,
+          :parse,
+          min: ~D[2000-01-01],
+          max: ~D[2000-01-01]
+        ])
+    end
+
+    test "given some DateTime or NaiveDateTime, when :trunc, set Date value" do
+      {:ok, ~D[2000-01-01]} = Date.validate(~U[2000-01-01 23:00:07Z], [:trunc])
+      {:ok, ~D[2000-01-01]} = Date.validate(~N[2000-01-01 23:00:07], [:trunc])
+    end
+  end
 end
