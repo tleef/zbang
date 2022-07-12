@@ -128,7 +128,7 @@ defmodule Bliss.Map.Test do
   end
 
   describe "Bliss.Map.check(_, :size, _, _)/4" do
-    test "given length, when nil, returns valid result" do
+    test "given size, when nil, returns valid result" do
       result =
         Result.new()
         |> Result.set_value(nil)
@@ -137,7 +137,7 @@ defmodule Bliss.Map.Test do
       assert result.status == :valid
     end
 
-    test "given length, when not a map, returns valid result" do
+    test "given size, when not a map, returns valid result" do
       result =
         Result.new()
         |> Result.set_value("Im a map")
@@ -202,7 +202,7 @@ defmodule Bliss.Map.Test do
   end
 
   describe "Bliss.Map.check(_, :min, _, _)/4" do
-    test "given length, when nil, returns valid result" do
+    test "given size, when nil, returns valid result" do
       result =
         Result.new()
         |> Result.set_value(nil)
@@ -257,6 +257,66 @@ defmodule Bliss.Map.Test do
                message: "unable to check min size with size: \"1\", size must be an integer",
                path: ["."]
              })
+    end
+  end
+
+  describe "Bliss.Map.check(_, :max, _, _)/4" do
+    test "given size, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> Map.check(:max, 6, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given size, when not a map, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> Map.check(:max, 6, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given size, when too big, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
+        |> Map.check(:max, 2, Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+        code: Error.Codes.too_big(),
+        message: "input is too big",
+        path: ["."]
+      })
+    end
+
+    test "given size, when small enough, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
+        |> Map.check(:max, 3, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given invalid size, when some value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
+        |> Map.check(:max, "3", Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+        code: Error.Codes.invalid_arguments(),
+        message:
+          "unable to check max size with size: \"3\", size must be an integer",
+        path: ["."]
+      })
     end
   end
 end
