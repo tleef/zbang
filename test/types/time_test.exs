@@ -138,4 +138,60 @@ defmodule Bliss.Time.Test do
              })
     end
   end
+
+  describe "Bliss.Time.check(_, :trunc, _, _)/4" do
+    test "given `true`, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> Time.check(:trunc, true, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given `true`, when not a Time, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> Time.check(:trunc, true, Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given `true`, when some Time, returns result with value truncated to seconds" do
+      result =
+        Result.new()
+        |> Result.set_value(~T[00:26:31.123456Z])
+        |> Time.check(:trunc, true, Context.new("."))
+
+      assert result.value == ~T[00:26:31Z]
+    end
+
+    test "given :second, when some Time, returns result with value truncated to seconds" do
+      result =
+        Result.new()
+        |> Result.set_value(~T[00:26:31.123456Z])
+        |> Time.check(:trunc, :second, Context.new("."))
+
+      assert result.value == ~T[00:26:31Z]
+    end
+
+    test "given :millisecond, when some Time, returns result with value truncated to milliseconds" do
+      result =
+        Result.new()
+        |> Result.set_value(~T[00:26:31.123456Z])
+        |> Time.check(:trunc, :millisecond, Context.new("."))
+
+      assert result.value == ~T[00:26:31.123Z]
+    end
+
+    test "given :microsecond, when some Time, returns result with value truncated to microseconds" do
+      result =
+        Result.new()
+        |> Result.set_value(~T[00:26:31.123456789Z])
+        |> Time.check(:trunc, :microsecond, Context.new("."))
+
+      assert result.value == ~T[00:26:31.123456Z]
+    end
+  end
 end
