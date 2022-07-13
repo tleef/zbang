@@ -6,12 +6,12 @@ Z! helps you describe schemas for your structs and validate their data at runtim
 
 ## Installation
 
-This package can be installed by adding `z!` to your list of dependencies in `mix.exs`:
+This package can be installed by adding `z_bang` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:z!, "~> 1.0.0"}
+    {:z_bang, "~> 1.0.0"}
   ]
 end
 ```
