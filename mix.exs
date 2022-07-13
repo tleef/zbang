@@ -43,8 +43,11 @@ defmodule Bliss.MixProject do
 
   defp docs do
     [
-      main: "Bliss",
-      source_ref: "#{@version}"
+      main: "readme",
+      source_ref: "#{@version}",
+      extras: [
+        "README.md"
+      ]
     ]
   end
 end
