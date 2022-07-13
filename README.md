@@ -134,3 +134,76 @@ _Shorthand:_ `:time`
 - `:trunc` - Truncates the microsecond field of the input to the given precision
 - `:min` - Asserts that the input is at least the given Time or after
 - `:max` - Asserts that the input is at most the given Time or before
+
+## Describing Schemas
+
+_Example_
+```elixir
+defmodule Money do
+  use Bliss.Struct
+
+  schema do
+    field :amount, :float, [:required, :parse, min: 0.0]
+    field :currency, :string, [:required, default: "USD", enum: ["USD", "EUR", "BTC"]]
+  end
+end
+
+defmodule Book do
+  use Bliss.Struct
+
+  schema do
+    field :title, :string, [:required]
+    field :author, :string, [:required, default: "Unknown"]
+    field :description, :string
+    field :price, Money, [:required, :cast]
+  end
+end
+```
+
+In the above example, we are defining two structs by employing `use Bliss.Struct` with a `schema` block where `fields` are defined. When you define a struct in this way, `Bliss.Struct` will call `defstruct` for you and create an Elixir struct with defaults when given. In addition, it will define a `validate` function on your struct module that can be used to validate values at runtime.
+
+The `validate` function uses the fields defined in the `schema` block to automatically assert the type of each value as well as assert that the given rules are being followed.
+
+Each `field` takes a `name`, `type` and optional `rules`. The `name` must be an atom. The `type` must also be an atom and can either be a built-in type or a custom type e.g. the `Money` type used by the `:price` field in the example above. The `rules` vary depending on the `type` given. See [here](#types) for a list of all rules per type.
+
+## Validation
+
+Validating data is as simple as calling `validate` on the type that you would like to assert and passing in optional rules. The validate function will return either `{:ok, value}` or `{:error, errors}`.
+
+_Examples_
+```elixir
+Bliss.String.validate("hello world")
+{:ok, "hello world"}
+
+Bliss.String.validate("oops", length: 5)
+{:error,
+ [
+   %Bliss.Error{
+     code: "invalid_string",
+     message: "input does not have correct length",
+     path: ["."]
+   }
+ ]}
+ 
+Bliss.String.validate(nil, [:required, default: "sleepy bear"])
+{:ok, "sleepy bear"}
+
+Book.validate(%{title: "I <3 Elixir", price: %{amount: "1.00"}})
+{:error,
+ [
+   %Bliss.Error{
+     code: "invalid_type",
+     message: "input is not a Book",
+     path: ["."]
+   }
+ ]}
+ 
+Book.validate(%{title: "I <3 Elixir", price: %{amount: "1.00"}}, [:cast])
+{:ok,
+ %Book{
+   author: "Unknown",
+   description: nil,
+   price: %Money{amount: 1.0, currency: "USD"},
+   title: "I <3 Elixir"
+ }}
+```
