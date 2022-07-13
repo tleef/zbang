@@ -1,9 +1,9 @@
-defmodule Bliss.Float.Test do
+defmodule Z.Float.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Result, Error, Context, Float}
+  alias Z.{Result, Error, Context, Float}
 
-  describe "Bliss.Float.check(_, :parse, _, _)/4" do
+  describe "Z.Float.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -65,7 +65,7 @@ defmodule Bliss.Float.Test do
     end
   end
 
-  describe "Bliss.Float.check(_, :allow_int, _, _)/4" do
+  describe "Z.Float.check(_, :allow_int, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -103,7 +103,7 @@ defmodule Bliss.Float.Test do
     end
   end
 
-  describe "Bliss.Float.check(_, :type, _, _)/4" do
+  describe "Z.Float.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
       result =
         Result.new()
@@ -153,7 +153,7 @@ defmodule Bliss.Float.Test do
     end
   end
 
-  describe "Bliss.Float.check(_, :min, _, _)/4" do
+  describe "Z.Float.check(_, :min, _, _)/4" do
     test "given min value, when not a float, returns valid result" do
       result =
         Result.new()
@@ -188,7 +188,7 @@ defmodule Bliss.Float.Test do
     end
   end
 
-  describe "Bliss.Float.check(_, :max, _, _)/4" do
+  describe "Z.Float.check(_, :max, _, _)/4" do
     test "given max value, when not a float, returns valid result" do
       result =
         Result.new()
@@ -223,7 +223,7 @@ defmodule Bliss.Float.Test do
     end
   end
 
-  describe "Bliss.Float.check(_, :greater_than, _, _)/4" do
+  describe "Z.Float.check(_, :greater_than, _, _)/4" do
     test "given greater than value, when not a float, returns valid result" do
       result =
         Result.new()
@@ -258,7 +258,7 @@ defmodule Bliss.Float.Test do
     end
   end
 
-  describe "Bliss.Float.check(_, :less_than, _, _)/4" do
+  describe "Z.Float.check(_, :less_than, _, _)/4" do
     test "given less than value, when not a float, returns valid result" do
       result =
         Result.new()
@@ -293,7 +293,7 @@ defmodule Bliss.Float.Test do
     end
   end
 
-  describe "Bliss.Float.validate/3" do
+  describe "Z.Float.validate/3" do
     test "given some float string value, when :parse, set parsed value" do
       {:ok, 10.5} = Float.validate("10.5", [:parse])
     end

@@ -1,12 +1,12 @@
-defmodule Bliss.Map do
+defmodule Z.Map do
   @moduledoc """
   A module for validating a Map
   """
 
-  alias Bliss.{Result, Error, Any}
+  alias Z.{Result, Error, Any}
 
-  use Bliss.Type,
-    options: Bliss.Any.__bliss__(:options) ++ [:atomize_keys, :size, :min, :max]
+  use Z.Type,
+    options: Z.Any.__z__(:options) ++ [:atomize_keys, :size, :min, :max]
 
   def check(result, :conversions, rules, context) do
     result
@@ -227,7 +227,7 @@ defmodule Bliss.Map do
             Error.new(
               Error.Codes.invalid_string(),
               message,
-              Bliss.Context.new(k, context)
+              Z.Context.new(k, context)
             )
           )
 

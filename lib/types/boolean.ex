@@ -1,12 +1,12 @@
-defmodule Bliss.Boolean do
+defmodule Z.Boolean do
   @moduledoc """
   A module for validating a boolean
   """
 
-  alias Bliss.{Result, Error, Any}
+  alias Z.{Result, Error, Any}
 
-  use Bliss.Type,
-    options: Bliss.Any.__bliss__(:options) ++ [:parse]
+  use Z.Type,
+    options: Z.Any.__z__(:options) ++ [:parse]
 
   def check(result, :conversions, rules, context) do
     result

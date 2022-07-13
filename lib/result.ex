@@ -1,18 +1,18 @@
-defmodule Bliss.Result do
+defmodule Z.Result do
   @moduledoc """
   The Result struct
   """
 
   defstruct status: :valid, value: nil, errors: []
 
-  @type t :: %Bliss.Result{
+  @type t :: %Z.Result{
           status: :valid | :invalid,
           value: any,
-          errors: [Bliss.Error.t()]
+          errors: [Z.Error.t()]
         }
 
   def new do
-    %Bliss.Result{}
+    %Z.Result{}
   end
 
   def set_status(result, status) when status in [:valid, :invalid] do
@@ -32,11 +32,11 @@ defmodule Bliss.Result do
     Enum.reduce(errors, result, fn err, res -> add_error(res, err) end)
   end
 
-  def to_tuple(%Bliss.Result{status: :valid, value: value}) do
+  def to_tuple(%Z.Result{status: :valid, value: value}) do
     {:ok, value}
   end
 
-  def to_tuple(%Bliss.Result{status: :invalid, errors: errors}) do
+  def to_tuple(%Z.Result{status: :invalid, errors: errors}) do
     {:error, errors}
   end
 end

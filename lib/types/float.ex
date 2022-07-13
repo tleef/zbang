@@ -1,13 +1,13 @@
-defmodule Bliss.Float do
+defmodule Z.Float do
   @moduledoc """
   A module for validating a float
   """
 
-  alias Bliss.{Result, Error, Any}
+  alias Z.{Result, Error, Any}
 
-  use Bliss.Type,
+  use Z.Type,
     options:
-      Bliss.Any.__bliss__(:options) ++ [:parse, :allow_int, :min, :max, :greater_than, :less_than]
+      Z.Any.__z__(:options) ++ [:parse, :allow_int, :min, :max, :greater_than, :less_than]
 
   def check(result, :conversions, rules, context) do
     result

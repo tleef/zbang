@@ -1,4 +1,4 @@
-defmodule Bliss.Rule do
+defmodule Z.Rule do
   @moduledoc """
   A module for Rule helpers
   """

@@ -1,11 +1,11 @@
-defmodule Bliss.String do
+defmodule Z.String do
   @moduledoc """
   A module for validating a string
   """
 
-  alias Bliss.{Result, Error, Any}
+  alias Z.{Result, Error, Any}
 
-  use Bliss.Type, options: Bliss.Any.__bliss__(:options) ++ [:trim, :length]
+  use Z.Type, options: Z.Any.__z__(:options) ++ [:trim, :length]
 
   def check(result, :conversions, rules, context) do
     result

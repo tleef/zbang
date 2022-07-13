@@ -1,10 +1,10 @@
-defmodule Bliss.List.Test do
+defmodule Z.List.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Result, Error, Context, List}
+  alias Z.{Result, Error, Context, List}
 
   defmodule Book do
-    use Bliss.Struct
+    use Z.Struct
 
     schema do
       field(:title, :string, [:required])
@@ -12,7 +12,7 @@ defmodule Bliss.List.Test do
     end
   end
 
-  describe "Bliss.List.check(_, :type, _, _)/4" do
+  describe "Z.List.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
       result =
         Result.new()
@@ -74,7 +74,7 @@ defmodule Bliss.List.Test do
     end
   end
 
-  describe "Bliss.List.check(_, :length, _, _)/4" do
+  describe "Z.List.check(_, :length, _, _)/4" do
     test "given length, when nil, returns valid result" do
       result =
         Result.new()
@@ -148,7 +148,7 @@ defmodule Bliss.List.Test do
     end
   end
 
-  describe "Bliss.List.check(_, :min, _, _)/4" do
+  describe "Z.List.check(_, :min, _, _)/4" do
     test "given length, when nil, returns valid result" do
       result =
         Result.new()
@@ -208,7 +208,7 @@ defmodule Bliss.List.Test do
     end
   end
 
-  describe "Bliss.List.check(_, :max, _, _)/4" do
+  describe "Z.List.check(_, :max, _, _)/4" do
     test "given length, when nil, returns valid result" do
       result =
         Result.new()
@@ -268,7 +268,7 @@ defmodule Bliss.List.Test do
     end
   end
 
-  describe "Bliss.List.check(_, :items, _, _)/4" do
+  describe "Z.List.check(_, :items, _, _)/4" do
     test "given string type, when nil, returns valid result" do
       result =
         Result.new()
@@ -359,7 +359,7 @@ defmodule Bliss.List.Test do
 
       assert Enum.member?(result.errors, %Error{
                code: Error.Codes.invalid_type(),
-               message: "input is not a Bliss.List.Test.Book",
+               message: "input is not a Z.List.Test.Book",
                path: [".", 2]
              })
     end
@@ -414,7 +414,7 @@ defmodule Bliss.List.Test do
     end
   end
 
-  describe "Bliss.List.validate/3" do
+  describe "Z.List.validate/3" do
     test "given a padded string list with nils, when :trim items with :default, set trimmed and defaulted list" do
       {:ok, ["foo", "bar", "baz", "buzz"]} =
         List.validate([" foo ", "bar", nil, "buzz"],

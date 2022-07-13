@@ -1,13 +1,13 @@
-defmodule Bliss.Integer do
+defmodule Z.Integer do
   @moduledoc """
   A module for validating an integer
   """
 
-  alias Bliss.{Result, Error, Any}
+  alias Z.{Result, Error, Any}
 
-  use Bliss.Type,
+  use Z.Type,
     options:
-      Bliss.Any.__bliss__(:options) ++ [:parse, :trunc, :min, :max, :greater_than, :less_than]
+      Z.Any.__z__(:options) ++ [:parse, :trunc, :min, :max, :greater_than, :less_than]
 
   def check(result, :conversions, rules, context) do
     result

@@ -1,9 +1,9 @@
-defmodule Bliss.DateTime.Test do
+defmodule Z.DateTime.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Result, Error, Context, DateTime}
+  alias Z.{Result, Error, Context, DateTime}
 
-  describe "Bliss.DateTime.check(_, :parse, _, _)/4" do
+  describe "Z.DateTime.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -89,7 +89,7 @@ defmodule Bliss.DateTime.Test do
     end
   end
 
-  describe "Bliss.DateTime.check(_, :allow_int, _, _)/4" do
+  describe "Z.DateTime.check(_, :allow_int, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -160,7 +160,7 @@ defmodule Bliss.DateTime.Test do
     end
   end
 
-  describe "Bliss.DateTime.check(_, :type, _, _)/4" do
+  describe "Z.DateTime.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
       result =
         Result.new()
@@ -210,7 +210,7 @@ defmodule Bliss.DateTime.Test do
     end
   end
 
-  describe "Bliss.DateTime.check(_, :shift, _, _)/4" do
+  describe "Z.DateTime.check(_, :shift, _, _)/4" do
     test "given Etc/UTC, when nil, returns valid result" do
       result =
         Result.new()
@@ -266,7 +266,7 @@ defmodule Bliss.DateTime.Test do
     end
   end
 
-  describe "Bliss.DateTime.check(_, :trunc, _, _)/4" do
+  describe "Z.DateTime.check(_, :trunc, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -322,7 +322,7 @@ defmodule Bliss.DateTime.Test do
     end
   end
 
-  describe "Bliss.DateTime.check(_, :min, _, _)/4" do
+  describe "Z.DateTime.check(_, :min, _, _)/4" do
     test "given min DateTime, when nil, returns valid result" do
       result =
         Result.new()
@@ -381,7 +381,7 @@ defmodule Bliss.DateTime.Test do
     end
   end
 
-  describe "Bliss.DateTime.check(_, :max, _, _)/4" do
+  describe "Z.DateTime.check(_, :max, _, _)/4" do
     test "given min DateTime, when nil, returns valid result" do
       result =
         Result.new()
@@ -440,7 +440,7 @@ defmodule Bliss.DateTime.Test do
     end
   end
 
-  describe "Bliss.DateTime.validate/3" do
+  describe "Z.DateTime.validate/3" do
     test "given some valid string, when :parse and other rules, set parsed value" do
       {:ok, ~U[2000-01-01 00:00:00Z]} = DateTime.validate("2000-01-01T00:00:00Z", [:parse])
 

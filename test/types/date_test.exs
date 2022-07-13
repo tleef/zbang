@@ -1,9 +1,9 @@
-defmodule Bliss.Date.Test do
+defmodule Z.Date.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Result, Error, Context, Date}
+  alias Z.{Result, Error, Context, Date}
 
-  describe "Bliss.Date.check(_, :parse, _, _)/4" do
+  describe "Z.Date.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -80,7 +80,7 @@ defmodule Bliss.Date.Test do
     end
   end
 
-  describe "Bliss.Date.check(_, :trunc, _, _)/4" do
+  describe "Z.Date.check(_, :trunc, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -127,7 +127,7 @@ defmodule Bliss.Date.Test do
     end
   end
 
-  describe "Bliss.Date.check(_, :type, _, _)/4" do
+  describe "Z.Date.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
       result =
         Result.new()
@@ -177,7 +177,7 @@ defmodule Bliss.Date.Test do
     end
   end
 
-  describe "Bliss.Date.check(_, :min, _, _)/4" do
+  describe "Z.Date.check(_, :min, _, _)/4" do
     test "given min Date, when nil, returns valid result" do
       result =
         Result.new()
@@ -236,7 +236,7 @@ defmodule Bliss.Date.Test do
     end
   end
 
-  describe "Bliss.Date.check(_, :max, _, _)/4" do
+  describe "Z.Date.check(_, :max, _, _)/4" do
     test "given min Date, when nil, returns valid result" do
       result =
         Result.new()
@@ -295,7 +295,7 @@ defmodule Bliss.Date.Test do
     end
   end
 
-  describe "Bliss.Date.validate/3" do
+  describe "Z.Date.validate/3" do
     test "given some valid string, when :parse and other rules, set parsed value" do
       {:ok, ~D[2000-01-01]} = Date.validate("2000-01-01", [:parse])
 

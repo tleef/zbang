@@ -1,6 +1,6 @@
-defmodule Bliss.Type do
+defmodule Z.Type do
   @moduledoc """
-  A module for defining Bliss types
+  A module for defining Z types
   """
 
   @spec __using__(opts :: [options: [atom]]) :: any
@@ -8,16 +8,16 @@ defmodule Bliss.Type do
     options = Keyword.get(opts, :options, [])
 
     quote do
-      @behaviour Bliss.Type
+      @behaviour Z.Type
 
-      def __bliss__(:type), do: __MODULE__
-      def __bliss__(:options), do: unquote(options)
+      def __z__(:type), do: __MODULE__
+      def __z__(:options), do: unquote(options)
 
-      def validate(input, rules \\ [], context \\ Bliss.Context.new(".")) do
-        Bliss.Result.new()
-        |> Bliss.Result.set_value(input)
-        |> check(rules |> Bliss.Rule.to_keyword_list(), context)
-        |> Bliss.Result.to_tuple()
+      def validate(input, rules \\ [], context \\ Z.Context.new(".")) do
+        Z.Result.new()
+        |> Z.Result.set_value(input)
+        |> check(rules |> Z.Rule.to_keyword_list(), context)
+        |> Z.Result.to_tuple()
       end
 
       defp check(result, rules, context) do
@@ -38,10 +38,10 @@ defmodule Bliss.Type do
     end
   end
 
-  @typedoc "A Bliss type, primitive or custom."
+  @typedoc "A Z type, primitive or custom."
   @type t :: primitive | custom
 
-  @typedoc "Primitive Bliss types (handled by Bliss)."
+  @typedoc "Primitive Z types (handled by Z)."
   @type primitive ::
           :any
           | :atom
@@ -58,20 +58,20 @@ defmodule Bliss.Type do
   @typedoc "Custom types are represented by user-defined modules."
   @type custom :: module
 
-  @callback check(Bliss.Result.t(), atom, any, Bliss.Context.t()) :: Bliss.Result.t()
+  @callback check(Z.Result.t(), atom, any, Z.Context.t()) :: Z.Result.t()
 
   @base_types %{
-    :any => Bliss.Any,
-    :atom => Bliss.Atom,
-    :boolean => Bliss.Boolean,
-    :integer => Bliss.Integer,
-    :float => Bliss.Float,
-    :string => Bliss.String,
-    :map => Bliss.Map,
-    :list => Bliss.List,
-    :datetime => Bliss.DateTime,
-    :date => Bliss.Date,
-    :time => Bliss.Time
+    :any => Z.Any,
+    :atom => Z.Atom,
+    :boolean => Z.Boolean,
+    :integer => Z.Integer,
+    :float => Z.Float,
+    :string => Z.String,
+    :map => Z.Map,
+    :list => Z.List,
+    :datetime => Z.DateTime,
+    :date => Z.Date,
+    :time => Z.Time
   }
 
   def base?(type) when is_atom(type) do
@@ -92,10 +92,10 @@ defmodule Bliss.Type do
         {:ok, get(type)}
 
       Code.ensure_compiled(type) == {:module, type} ->
-        if function_exported?(type, :__bliss__, 1) do
+        if function_exported?(type, :__z__, 1) do
           {:ok, type}
         else
-          {:error, :not_a_bliss_type}
+          {:error, :not_a_z_type}
         end
 
       true ->

@@ -1,9 +1,9 @@
-defmodule Bliss.String.Test do
+defmodule Z.String.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Result, Error, Context, String}
+  alias Z.{Result, Error, Context, String}
 
-  describe "Bliss.String.check(_, :type, _, _)/4" do
+  describe "Z.String.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
       result =
         Result.new()
@@ -53,7 +53,7 @@ defmodule Bliss.String.Test do
     end
   end
 
-  describe "Bliss.String.check(_, :trim, _, _)/4" do
+  describe "Z.String.check(_, :trim, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -115,7 +115,7 @@ defmodule Bliss.String.Test do
     end
   end
 
-  describe "Bliss.String.check(_, :length, _, _)/4" do
+  describe "Z.String.check(_, :length, _, _)/4" do
     test "given length, when nil, returns valid result" do
       result =
         Result.new()
@@ -189,7 +189,7 @@ defmodule Bliss.String.Test do
     end
   end
 
-  describe "Bliss.String.check(_, :min, _, _)/4" do
+  describe "Z.String.check(_, :min, _, _)/4" do
     test "given length, when nil, returns valid result" do
       result =
         Result.new()
@@ -264,7 +264,7 @@ defmodule Bliss.String.Test do
     end
   end
 
-  describe "Bliss.String.check(_, :max, _, _)/4" do
+  describe "Z.String.check(_, :max, _, _)/4" do
     test "given length, when nil, returns valid result" do
       result =
         Result.new()
@@ -324,7 +324,7 @@ defmodule Bliss.String.Test do
     end
   end
 
-  describe "Bliss.String.validate/3" do
+  describe "Z.String.validate/3" do
     test "given some padded value, when :trim value, set trimmed value" do
       {:ok, "some"} = String.validate(" some ", [:trim])
     end

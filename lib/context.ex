@@ -1,17 +1,17 @@
-defmodule Bliss.Context do
+defmodule Z.Context do
   @moduledoc """
   The Context struct
   """
 
   defstruct parent: nil, path: ["."]
 
-  @type t :: %Bliss.Context{
-          parent: Bliss.Context.t(),
+  @type t :: %Z.Context{
+          parent: Z.Context.t(),
           path: [String.t()]
         }
 
   def new(path_segment, parent \\ nil) do
-    %Bliss.Context{
+    %Z.Context{
       parent: parent,
       path: path(path_segment, parent)
     }

@@ -1,9 +1,9 @@
-defmodule Bliss.Atom.Test do
+defmodule Z.Atom.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Result, Error, Context, Atom}
+  alias Z.{Result, Error, Context, Atom}
 
-  describe "Bliss.Atom.check(_, :parse, _, _)/4" do
+  describe "Z.Atom.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -67,7 +67,7 @@ defmodule Bliss.Atom.Test do
     end
   end
 
-  describe "Bliss.Atom.check(_, :type, _, _)/4" do
+  describe "Z.Atom.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
       result =
         Result.new()
@@ -102,7 +102,7 @@ defmodule Bliss.Atom.Test do
     end
   end
 
-  describe "Bliss.Atom.validate/3" do
+  describe "Z.Atom.validate/3" do
     test "given some boolean string value, when :parse, set parsed value" do
       {:ok, :hello} = Atom.validate(:hello, [])
       {:ok, :hello} = Atom.validate("hello", [:parse])

@@ -1,10 +1,10 @@
-defmodule Bliss.Map.Test do
+defmodule Z.Map.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Result, Error, Context, Map}
+  alias Z.{Result, Error, Context, Map}
 
   defmodule Book do
-    use Bliss.Struct
+    use Z.Struct
 
     schema do
       field(:title, :string)
@@ -12,7 +12,7 @@ defmodule Bliss.Map.Test do
     end
   end
 
-  describe "Bliss.Map.check(_, :type, _, _)/4" do
+  describe "Z.Map.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
       result =
         Result.new()
@@ -65,7 +65,7 @@ defmodule Bliss.Map.Test do
     end
   end
 
-  describe "Bliss.Map.check(_, :atomize_keys, _, _)/4" do
+  describe "Z.Map.check(_, :atomize_keys, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -127,7 +127,7 @@ defmodule Bliss.Map.Test do
     end
   end
 
-  describe "Bliss.Map.check(_, :size, _, _)/4" do
+  describe "Z.Map.check(_, :size, _, _)/4" do
     test "given size, when nil, returns valid result" do
       result =
         Result.new()
@@ -201,7 +201,7 @@ defmodule Bliss.Map.Test do
     end
   end
 
-  describe "Bliss.Map.check(_, :min, _, _)/4" do
+  describe "Z.Map.check(_, :min, _, _)/4" do
     test "given size, when nil, returns valid result" do
       result =
         Result.new()
@@ -260,7 +260,7 @@ defmodule Bliss.Map.Test do
     end
   end
 
-  describe "Bliss.Map.check(_, :max, _, _)/4" do
+  describe "Z.Map.check(_, :max, _, _)/4" do
     test "given size, when nil, returns valid result" do
       result =
         Result.new()
@@ -319,7 +319,7 @@ defmodule Bliss.Map.Test do
     end
   end
 
-  describe "Bliss.Map.validate/3" do
+  describe "Z.Map.validate/3" do
     test "given a map with mixed keys, when :atomize_keys with :size, set atomized keys and assert size" do
       {:ok, %{2 => "two", foo: "one", baz: "three"}} =
         Map.validate(

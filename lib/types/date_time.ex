@@ -1,12 +1,12 @@
-defmodule Bliss.DateTime do
+defmodule Z.DateTime do
   @moduledoc """
   A module for validating a DateTime
   """
 
-  alias Bliss.{Result, Error, Any}
+  alias Z.{Result, Error, Any}
 
-  use Bliss.Type,
-    options: Bliss.Any.__bliss__(:options) ++ [:parse, :allow_int, :shift, :trunc, :min, :max]
+  use Z.Type,
+    options: Z.Any.__z__(:options) ++ [:parse, :allow_int, :shift, :trunc, :min, :max]
 
   def check(result, :conversions, rules, context) do
     result
@@ -117,9 +117,9 @@ defmodule Bliss.DateTime do
     message = Keyword.get(options, :message, "input is not a DateTime")
 
     result
-    |> Bliss.Result.add_error(
-      Bliss.Error.new(
-        Bliss.Error.Codes.invalid_type(),
+    |> Z.Result.add_error(
+      Z.Error.new(
+        Z.Error.Codes.invalid_type(),
         message,
         context
       )

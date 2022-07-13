@@ -1,12 +1,12 @@
-defmodule Bliss.List do
+defmodule Z.List do
   @moduledoc """
   A module for validating a List
   """
 
-  alias Bliss.{Result, Error, Any}
+  alias Z.{Result, Error, Any}
 
-  use Bliss.Type,
-    options: Bliss.Any.__bliss__(:options) ++ [:length, :min, :max, :items]
+  use Z.Type,
+    options: Z.Any.__z__(:options) ++ [:length, :min, :max, :items]
 
   def check(result, :conversions, rules, context) do
     result
@@ -183,7 +183,7 @@ defmodule Bliss.List do
   end
 
   def check(result, :items, {type, rules}, context) do
-    case Bliss.Type.resolve(type) do
+    case Z.Type.resolve(type) do
       {:ok, type} ->
         check_items(result, type, rules, context)
 
@@ -218,7 +218,7 @@ defmodule Bliss.List do
   end
 
   defp check_item(result, item, index, type, rules, context) do
-    case type.validate(item, rules, Bliss.Context.new(index, context)) do
+    case type.validate(item, rules, Z.Context.new(index, context)) do
       {:ok, value} ->
         {value, result}
 
