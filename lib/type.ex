@@ -53,10 +53,14 @@ defmodule Bliss.Type do
     :any => Bliss.Any,
     :atom => Bliss.Atom,
     :boolean => Bliss.Boolean,
-    :interger => Bliss.Integer,
+    :integer => Bliss.Integer,
     :float => Bliss.Float,
     :string => Bliss.String,
-    :list => Bliss.List
+    :map => Bliss.Map,
+    :list => Bliss.List,
+    :datetime => Bliss.DateTime,
+    :date => Bliss.Date,
+    :time => Bliss.Time
   }
 
   def base?(type) when is_atom(type) do
