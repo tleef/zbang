@@ -312,4 +312,27 @@ defmodule Bliss.Time.Test do
              })
     end
   end
+
+  describe "Bliss.Time.validate/3" do
+    test "given some valid string, when :parse and other rules, set parsed value" do
+      {:ok, ~T[00:00:00Z]} = Time.validate("00:00:00Z", [:parse])
+
+      {:ok, ~T[00:00:00Z]} = Time.validate("00:00:00Z", [:required, :parse])
+
+      {:ok, ~T[00:00:00Z]} =
+        Time.validate("00:00:00Z", [
+          :required,
+          :parse,
+          min: ~T[00:00:00Z],
+          max: ~T[00:00:00Z]
+        ])
+
+      {:ok, ~T[00:00:00Z]} =
+        Time.validate("00:00:00.123456Z", [
+          :required,
+          :parse,
+          :trunc
+        ])
+    end
+  end
 end
