@@ -125,6 +125,14 @@ _Shorthand:_ `:string`
 - `:min` - Asserts that input length is at least the given length
 - `:max` - Asserts that input length is at most the given length
 
+### Struct
+_Module_: `Bliss.Struct`
+
+**Rules**
+- `:cast` - If the input is a Map, try to cast it to the given struct
+
+> Note: Don't use `Bliss.Struct` directly. Instead, define your own struct with `use Bliss.Struct` and a `schema` block
+
 ### Time
 _Module_: `Bliss.Time`
 _Shorthand:_ `:time`
