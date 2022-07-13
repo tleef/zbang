@@ -88,4 +88,54 @@ defmodule Bliss.Time.Test do
              })
     end
   end
+
+  describe "Bliss.Time.check(_, :type, _, _)/4" do
+    test "given empty options, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> Time.check(:type, [], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given empty options, when Time value, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(~T[23:50:07.123])
+        |> Time.check(:type, [], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given empty options, when non-Time value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> Time.check(:type, [], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_type(),
+               message: "input is not a Time",
+               path: ["."]
+             })
+    end
+
+    test "given empty options, when NaiveDateTime value, returns invalid result with error" do
+      result =
+        Result.new()
+        |> Result.set_value(~N[2000-01-01 23:00:07])
+        |> Time.check(:type, [], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_type(),
+               message: "input is not a Time",
+               path: ["."]
+             })
+    end
+  end
 end
