@@ -6,8 +6,7 @@ defmodule Z.Float do
   alias Z.{Result, Error, Any}
 
   use Z.Type,
-    options:
-      Z.Any.__z__(:options) ++ [:parse, :allow_int, :min, :max, :greater_than, :less_than]
+    options: Z.Any.__z__(:options) ++ [:parse, :allow_int, :min, :max, :greater_than, :less_than]
 
   def check(result, :conversions, rules, context) do
     result
