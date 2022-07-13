@@ -5,7 +5,22 @@ defmodule Bliss.Any do
 
   def check(result, rules, context) do
     result
+    |> check(:conversions, rules, context)
+    |> check(:mutations, rules, context)
+    |> check(:assertions, rules, context)
+  end
+
+  def check(result, :conversions, rules, context) do
+    result
     |> maybe_check(:default, rules, context)
+  end
+
+  def check(result, :mutations, _rules, _context) do
+    result
+  end
+
+  def check(result, :assertions, rules, context) do
+    result
     |> maybe_check(:required, rules, context)
     |> maybe_check(:equals, rules, context)
     |> maybe_check(:enum, rules, context)
