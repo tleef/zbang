@@ -16,7 +16,8 @@ defmodule Bliss.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       dialyzer: dialyzer(),
-      docs: docs()
+      docs: docs(),
+      package: package()
     ]
   end
 
@@ -48,6 +49,23 @@ defmodule Bliss.MixProject do
       extras: [
         "README.md"
       ]
+    ]
+  end
+
+  defp package do
+    [
+      files: [
+        "lib",
+        ".formatter.exs",
+        "mix.exs",
+        "README*",
+        "LICENSE*"
+      ],
+      maintainers: ["Thomas Lee"],
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => @source_url
+      }
     ]
   end
 end
