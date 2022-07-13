@@ -1,4 +1,8 @@
 defmodule Bliss.Result do
+  @moduledoc """
+  The Result struct
+  """
+
   defstruct status: :valid, value: nil, errors: []
 
   @type t :: %Bliss.Result{

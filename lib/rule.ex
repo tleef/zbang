@@ -1,4 +1,8 @@
 defmodule Bliss.Rule do
+  @moduledoc """
+  A module for Rule helpers
+  """
+
   @type t :: atom | Keyword.t()
 
   def to_keyword_list(rules) when is_list(rules) do

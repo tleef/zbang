@@ -1,4 +1,8 @@
 defmodule Bliss.String do
+  @moduledoc """
+  A module for validating a string
+  """
+
   alias Bliss.{Result, Error, Any}
 
   use Bliss.Type, options: Bliss.Any.__bliss__(:options) ++ [:trim, :length]

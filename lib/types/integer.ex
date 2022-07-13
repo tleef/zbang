@@ -1,4 +1,8 @@
 defmodule Bliss.Integer do
+  @moduledoc """
+  A module for validating an integer
+  """
+
   alias Bliss.{Result, Error, Any}
 
   use Bliss.Type,

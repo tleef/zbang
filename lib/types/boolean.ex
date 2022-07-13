@@ -1,4 +1,8 @@
 defmodule Bliss.Boolean do
+  @moduledoc """
+  A module for validating a boolean
+  """
+
   alias Bliss.{Result, Error, Any}
 
   use Bliss.Type,

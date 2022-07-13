@@ -28,3 +28,7 @@ bliss-*.tar
 
 # JetBrains
 .idea
+
+# Dialyxir
+/priv/plts/*.plt
+/priv/plts/*.plt.hash

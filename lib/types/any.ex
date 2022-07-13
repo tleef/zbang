@@ -1,4 +1,8 @@
 defmodule Bliss.Any do
+  @moduledoc """
+  A module for validating any type
+  """
+
   alias Bliss.{Result, Error}
 
   use Bliss.Type, options: [:default, :required, :equals, :enum]

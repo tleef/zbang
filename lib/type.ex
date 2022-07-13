@@ -1,4 +1,8 @@
 defmodule Bliss.Type do
+  @moduledoc """
+  A module for defining Bliss types
+  """
+
   @spec __using__(opts :: [options: [atom]]) :: any
   defmacro __using__(opts \\ []) do
     options = Keyword.get(opts, :options, [])

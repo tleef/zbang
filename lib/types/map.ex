@@ -1,4 +1,8 @@
 defmodule Bliss.Map do
+  @moduledoc """
+  A module for validating a Map
+  """
+
   alias Bliss.{Result, Error, Any}
 
   use Bliss.Type,
