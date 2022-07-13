@@ -16,7 +16,7 @@ def deps do
 end
 ```
 
-The docs can be found at [https://hexdocs.pm/z!](https://hexdocs.pm/z!)
+The docs can be found at [https://hexdocs.pm/z_bang](https://hexdocs.pm/z_bang)
 
 ## Types
 
