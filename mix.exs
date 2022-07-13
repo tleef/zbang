@@ -10,6 +10,7 @@ defmodule Bliss.MixProject do
     [
       app: @app,
       name: "Bliss",
+      description: "A schema description and data validation library for Elixir",
       version: @version,
       elixir: @elixir_version,
       source_url: @source_url,
