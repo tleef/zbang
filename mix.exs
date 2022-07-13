@@ -54,7 +54,6 @@ defmodule Bliss.MixProject do
 
   defp package do
     [
-      name: @app,
       files: [
         "lib",
         ".formatter.exs",
