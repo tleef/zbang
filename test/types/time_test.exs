@@ -253,4 +253,63 @@ defmodule Bliss.Time.Test do
              })
     end
   end
+
+  describe "Bliss.Time.check(_, :max, _, _)/4" do
+    test "given min Time, when nil, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> Time.check(:max, ~T[00:00:00Z], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min Time, when not a Time, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(123)
+        |> Time.check(:max, ~T[00:00:00Z], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min Time, when Time early enough, returns valid result" do
+      result =
+        Result.new()
+        |> Result.set_value(~T[00:00:00Z])
+        |> Time.check(:max, ~T[00:00:00Z], Context.new("."))
+
+      assert result.status == :valid
+    end
+
+    test "given min Time, when Time too late, returns invalid result with errors" do
+      result =
+        Result.new()
+        |> Result.set_value(~T[00:00:01Z])
+        |> Time.check(:max, ~T[00:00:00Z], Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.too_big(),
+               message: "input is too late",
+               path: ["."]
+             })
+    end
+
+    test "given invalid min Time, when some Time, returns invalid result with errors" do
+      result =
+        Result.new()
+        |> Result.set_value(~T[00:00:00Z])
+        |> Time.check(:max, "00:00:00Z", Context.new("."))
+
+      assert result.status == :invalid
+
+      assert Enum.member?(result.errors, %Error{
+               code: Error.Codes.invalid_arguments(),
+               message: "max value must be a Time",
+               path: ["."]
+             })
+    end
+  end
 end
