@@ -40,15 +40,6 @@ defmodule Bliss.Struct do
 
         def __bliss__(:fields), do: unquote(fields)
 
-        def check(result, rules, context) do
-          result
-          |> check(:conversions, rules, context)
-          |> check(:type, rules, context)
-          |> check(:mutations, rules, context)
-          |> check(:assertions, rules, context)
-          |> check(:fields, rules, context)
-        end
-
         def check(result, :conversions, rules, context) do
           result
           |> Bliss.Any.check(:conversions, rules, context)
@@ -63,6 +54,7 @@ defmodule Bliss.Struct do
         def check(result, :assertions, rules, context) do
           result
           |> Bliss.Any.check(:assertions, rules, context)
+          |> check(:fields, rules, context)
         end
 
         def check(result, _rule, _options, _context) when result.value == nil do

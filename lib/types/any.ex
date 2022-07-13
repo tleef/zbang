@@ -3,13 +3,6 @@ defmodule Bliss.Any do
 
   use Bliss.Type, options: [:default, :required, :equals, :enum]
 
-  def check(result, rules, context) do
-    result
-    |> check(:conversions, rules, context)
-    |> check(:mutations, rules, context)
-    |> check(:assertions, rules, context)
-  end
-
   def check(result, :conversions, rules, context) do
     result
     |> maybe_check(:default, rules, context)
@@ -31,6 +24,10 @@ defmodule Bliss.Any do
   end
 
   def check(result, :default, _value, _context) do
+    result
+  end
+
+  def check(result, :type, _options, _context) do
     result
   end
 

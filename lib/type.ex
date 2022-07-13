@@ -16,6 +16,14 @@ defmodule Bliss.Type do
         |> Bliss.Result.to_tuple()
       end
 
+      def check(result, rules, context) do
+        result
+        |> check(:conversions, rules, context)
+        |> check(:type, rules, context)
+        |> check(:mutations, rules, context)
+        |> check(:assertions, rules, context)
+      end
+
       def maybe_check(result, rule, rules, context) do
         if Keyword.has_key?(rules, rule) do
           check(result, rule, Keyword.fetch!(rules, rule), context)
@@ -46,7 +54,6 @@ defmodule Bliss.Type do
   @typedoc "Custom types are represented by user-defined modules."
   @type custom :: module
 
-  @callback check(Bliss.Result.t(), any, Bliss.Context.t()) :: Bliss.Result.t()
   @callback check(Bliss.Result.t(), atom, any, Bliss.Context.t()) :: Bliss.Result.t()
 
   @base_types %{

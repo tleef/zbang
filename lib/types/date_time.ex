@@ -4,14 +4,6 @@ defmodule Bliss.DateTime do
   use Bliss.Type,
     options: Bliss.Any.__bliss__(:options) ++ [:parse, :allow_int, :shift, :trunc, :min, :max]
 
-  def check(result, rules, context) do
-    result
-    |> check(:conversions, rules, context)
-    |> check(:type, rules, context)
-    |> check(:mutations, rules, context)
-    |> check(:assertions, rules, context)
-  end
-
   def check(result, :conversions, rules, context) do
     result
     |> Any.check(:conversions, rules, context)
