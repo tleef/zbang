@@ -20,7 +20,7 @@ defmodule Bliss.Type do
         |> Bliss.Result.to_tuple()
       end
 
-      def check(result, rules, context) do
+      defp check(result, rules, context) do
         result
         |> check(:conversions, rules, context)
         |> check(:type, rules, context)
@@ -28,7 +28,7 @@ defmodule Bliss.Type do
         |> check(:assertions, rules, context)
       end
 
-      def maybe_check(result, rule, rules, context) do
+      defp maybe_check(result, rule, rules, context) do
         if Keyword.has_key?(rules, rule) do
           check(result, rule, Keyword.fetch!(rules, rule), context)
         else

@@ -23,7 +23,7 @@ defmodule Bliss.Any do
     |> maybe_check(:enum, rules, context)
   end
 
-  def check(%Result{value: nil} = result, :default, value, _) do
+  def check(result, :default, value, _) when result.value == nil do
     result |> Result.set_value(value)
   end
 
