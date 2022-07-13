@@ -1,7 +1,7 @@
 defmodule Z.MixProject do
   use Mix.Project
 
-  @app :z_bang
+  @app :zbang
   @version "1.0.0"
   @elixir_version "~> 1.13"
   @source_url "https://github.com/tleef/z-elixir"
