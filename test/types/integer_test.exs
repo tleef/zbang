@@ -1,9 +1,9 @@
-defmodule Bliss.Integer.Test do
+defmodule Z.Integer.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Result, Error, Context, Integer}
+  alias Z.{Result, Error, Context, Integer}
 
-  describe "Bliss.Integer.check(_, :parse, _, _)/4" do
+  describe "Z.Integer.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -89,7 +89,7 @@ defmodule Bliss.Integer.Test do
     end
   end
 
-  describe "Bliss.Integer.check(_, :trunc, _, _)/4" do
+  describe "Z.Integer.check(_, :trunc, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -127,7 +127,7 @@ defmodule Bliss.Integer.Test do
     end
   end
 
-  describe "Bliss.Integer.check(_, :type, _, _)/4" do
+  describe "Z.Integer.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
       result =
         Result.new()
@@ -177,7 +177,7 @@ defmodule Bliss.Integer.Test do
     end
   end
 
-  describe "Bliss.Integer.check(_, :min, _, _)/4" do
+  describe "Z.Integer.check(_, :min, _, _)/4" do
     test "given min value, when not an int, returns valid result" do
       result =
         Result.new()
@@ -212,7 +212,7 @@ defmodule Bliss.Integer.Test do
     end
   end
 
-  describe "Bliss.Integer.check(_, :max, _, _)/4" do
+  describe "Z.Integer.check(_, :max, _, _)/4" do
     test "given max value, when not an int, returns valid result" do
       result =
         Result.new()
@@ -247,7 +247,7 @@ defmodule Bliss.Integer.Test do
     end
   end
 
-  describe "Bliss.Integer.check(_, :greater_than, _, _)/4" do
+  describe "Z.Integer.check(_, :greater_than, _, _)/4" do
     test "given greater than value, when not an int, returns valid result" do
       result =
         Result.new()
@@ -282,7 +282,7 @@ defmodule Bliss.Integer.Test do
     end
   end
 
-  describe "Bliss.Integer.check(_, :less_than, _, _)/4" do
+  describe "Z.Integer.check(_, :less_than, _, _)/4" do
     test "given less than value, when not an int, returns valid result" do
       result =
         Result.new()
@@ -317,7 +317,7 @@ defmodule Bliss.Integer.Test do
     end
   end
 
-  describe "Bliss.Integer.validate/3" do
+  describe "Z.Integer.validate/3" do
     test "given some integer string value, when :parse, set parsed value" do
       {:ok, 10} = Integer.validate("10", [:parse])
     end

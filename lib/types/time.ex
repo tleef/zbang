@@ -1,12 +1,12 @@
-defmodule Bliss.Time do
+defmodule Z.Time do
   @moduledoc """
   A module for validating a Time
   """
 
-  alias Bliss.{Result, Error, Any}
+  alias Z.{Result, Error, Any}
 
-  use Bliss.Type,
-    options: Bliss.Any.__bliss__(:options) ++ [:parse, :trunc, :min, :max]
+  use Z.Type,
+    options: Z.Any.__z__(:options) ++ [:parse, :trunc, :min, :max]
 
   def check(result, :conversions, rules, context) do
     result
@@ -79,9 +79,9 @@ defmodule Bliss.Time do
     message = Keyword.get(options, :message, "input is not a Time")
 
     result
-    |> Bliss.Result.add_error(
-      Bliss.Error.new(
-        Bliss.Error.Codes.invalid_type(),
+    |> Z.Result.add_error(
+      Z.Error.new(
+        Z.Error.Codes.invalid_type(),
         message,
         context
       )

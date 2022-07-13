@@ -1,11 +1,11 @@
-defmodule Bliss.Any do
+defmodule Z.Any do
   @moduledoc """
   A module for validating any type
   """
 
-  alias Bliss.{Result, Error}
+  alias Z.{Result, Error}
 
-  use Bliss.Type, options: [:default, :required, :equals, :enum]
+  use Z.Type, options: [:default, :required, :equals, :enum]
 
   def check(result, :conversions, rules, context) do
     result

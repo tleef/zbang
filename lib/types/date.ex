@@ -1,12 +1,12 @@
-defmodule Bliss.Date do
+defmodule Z.Date do
   @moduledoc """
   A module for validating a Date
   """
 
-  alias Bliss.{Result, Error, Any}
+  alias Z.{Result, Error, Any}
 
-  use Bliss.Type,
-    options: Bliss.Any.__bliss__(:options) ++ [:parse, :trunc, :min, :max]
+  use Z.Type,
+    options: Z.Any.__z__(:options) ++ [:parse, :trunc, :min, :max]
 
   def check(result, :conversions, rules, context) do
     result
@@ -95,9 +95,9 @@ defmodule Bliss.Date do
     message = Keyword.get(options, :message, "input is not a Date")
 
     result
-    |> Bliss.Result.add_error(
-      Bliss.Error.new(
-        Bliss.Error.Codes.invalid_type(),
+    |> Z.Result.add_error(
+      Z.Error.new(
+        Z.Error.Codes.invalid_type(),
         message,
         context
       )

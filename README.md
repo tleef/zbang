@@ -1,30 +1,30 @@
-# Bliss
+# Z
 
-Bliss is a schema description and data validation library. 
+Z is a schema description and data validation library. 
 Inspired by libraries like [Joi](https://joi.dev/), [Yup](https://github.com/jquense/yup), and [Zod](https://zod.dev/) from the JavaScript community, 
-Bliss helps you describe schemas for your structs and validate their data at runtime.
+Z helps you describe schemas for your structs and validate their data at runtime.
 
 ## Installation
 
-This package can be installed by adding `bliss` to your list of dependencies in `mix.exs`:
+This package can be installed by adding `z` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:bliss, "~> 1.0.0"}
+    {:z, "~> 1.0.0"}
   ]
 end
 ```
 
-The docs can be found at [https://hexdocs.pm/bliss](https://hexdocs.pm/bliss)
+The docs can be found at [https://hexdocs.pm/z](https://hexdocs.pm/z)
 
 ## Types
 
-Many types can be validated with Bliss. Below is a list of built-in primitive types, 
+Many types can be validated with Z. Below is a list of built-in primitive types, 
 but you can also define custom types of your own.
 
 ### Any
-_Module_: `Bliss.Any`
+_Module_: `Z.Any`
 _Shorthand:_ `:any`
 
 **Rules**
@@ -33,24 +33,24 @@ _Shorthand:_ `:any`
 - `:equals` - Asserts that input is equal to given value
 - `:enum` - Asserts that input is in list of given values
 
-> Note: The rules for `Bliss.Any` may be used for all other types as well since every type is implicitly a `Bliss.Any`
+> Note: The rules for `Z.Any` may be used for all other types as well since every type is implicitly a `Z.Any`
 
 ### Atom
-_Module_: `Bliss.Atom`
+_Module_: `Z.Atom`
 _Shorthand:_ `:atom`
 
 **Rules**
 - `:parse` - If input is a string, try to parse it to an atom
 
 ### Boolean
-_Module_: `Bliss.Boolean`
+_Module_: `Z.Boolean`
 _Shorthand:_ `:boolean`
 
 **Rules**
 - `:parse` - if input is a string, try to parse it to a boolean
 
 ### Date
-_Module_: `Bliss.Date`
+_Module_: `Z.Date`
 _Shorthand:_ `:date`
 
 **Rules**
@@ -60,7 +60,7 @@ _Shorthand:_ `:date`
 - `:max` - Asserts that the input is at most the given Date or before
 
 ### DateTime
-_Module_: `Bliss.DateTime`
+_Module_: `Z.DateTime`
 _Shorthand:_ `:date_time`
 
 **Rules**
@@ -72,7 +72,7 @@ _Shorthand:_ `:date_time`
 - `:max` - Asserts that the input is at most the given DateTime or before
 
 ### Float
-_Module_: `Bliss.Float`
+_Module_: `Z.Float`
 _Shorthand:_ `:float`
 
 **Rules**
@@ -84,7 +84,7 @@ _Shorthand:_ `:float`
 - `:less_than` - Asserts that input is less than given value
 
 ### Integer
-_Module_: `Bliss.Integer`
+_Module_: `Z.Integer`
 _Shorthand:_ `:integer`
 
 **Rules**
@@ -96,7 +96,7 @@ _Shorthand:_ `:integer`
 - `:less_than` - Asserts that input is less than given value
 
 ### List
-_Module_: `Bliss.List`
+_Module_: `Z.List`
 _Shorthand:_ `:list`
 
 **Rules**
@@ -106,7 +106,7 @@ _Shorthand:_ `:list`
 - `:max` - Asserts that input length is at most the given length
 
 ### Map
-_Module_: `Bliss.Map`
+_Module_: `Z.Map`
 _Shorthand:_ `:map`
 
 **Rules**
@@ -116,7 +116,7 @@ _Shorthand:_ `:map`
 - `:max` - Asserts that the input size is at most the given value
 
 ### String
-_Module_: `Bliss.String`
+_Module_: `Z.String`
 _Shorthand:_ `:string`
 
 **Rules**
@@ -126,15 +126,15 @@ _Shorthand:_ `:string`
 - `:max` - Asserts that input length is at most the given length
 
 ### Struct
-_Module_: `Bliss.Struct`
+_Module_: `Z.Struct`
 
 **Rules**
 - `:cast` - If the input is a Map, try to cast it to the given struct
 
-> Note: Don't use `Bliss.Struct` directly. Instead, define your own struct with `use Bliss.Struct` and a `schema` block
+> Note: Don't use `Z.Struct` directly. Instead, define your own struct with `use Z.Struct` and a `schema` block
 
 ### Time
-_Module_: `Bliss.Time`
+_Module_: `Z.Time`
 _Shorthand:_ `:time`
 
 **Rules**
@@ -148,7 +148,7 @@ _Shorthand:_ `:time`
 _Example_
 ```elixir
 defmodule Money do
-  use Bliss.Struct
+  use Z.Struct
 
   schema do
     field :amount, :float, [:required, :parse, min: 0.0]
@@ -157,7 +157,7 @@ defmodule Money do
 end
 
 defmodule Book do
-  use Bliss.Struct
+  use Z.Struct
 
   schema do
     field :title, :string, [:required]
@@ -168,7 +168,7 @@ defmodule Book do
 end
 ```
 
-In the above example, we are defining two structs by employing `use Bliss.Struct` with a `schema` block where `fields` are defined. When you define a struct in this way, `Bliss.Struct` will call `defstruct` for you and create an Elixir struct with defaults when given. In addition, it will define a `validate` function on your struct module that can be used to validate values at runtime.
+In the above example, we are defining two structs by employing `use Z.Struct` with a `schema` block where `fields` are defined. When you define a struct in this way, `Z.Struct` will call `defstruct` for you and create an Elixir struct with defaults when given. In addition, it will define a `validate` function on your struct module that can be used to validate values at runtime.
 
 The `validate` function uses the fields defined in the `schema` block to automatically assert the type of each value as well as assert that the given rules are being followed.
 
@@ -180,26 +180,26 @@ Validating data is as simple as calling `validate` on the type that you would li
 
 _Examples_
 ```elixir
-Bliss.String.validate("hello world")
+Z.String.validate("hello world")
 {:ok, "hello world"}
 
-Bliss.String.validate("oops", length: 5)
+Z.String.validate("oops", length: 5)
 {:error,
  [
-   %Bliss.Error{
+   %Z.Error{
      code: "invalid_string",
      message: "input does not have correct length",
      path: ["."]
    }
  ]}
  
-Bliss.String.validate(nil, [:required, default: "sleepy bear"])
+Z.String.validate(nil, [:required, default: "sleepy bear"])
 {:ok, "sleepy bear"}
 
 Book.validate(%{title: "I <3 Elixir", price: %{amount: "1.00"}})
 {:error,
  [
-   %Bliss.Error{
+   %Z.Error{
      code: "invalid_type",
      message: "input is not a Book",
      path: ["."]

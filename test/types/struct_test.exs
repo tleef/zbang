@@ -1,10 +1,10 @@
-defmodule Bliss.Struct.Test do
+defmodule Z.Struct.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Error}
+  alias Z.{Error}
 
   defmodule Money do
-    use Bliss.Struct
+    use Z.Struct
 
     schema do
       field(:amount, :string, [:required])
@@ -13,7 +13,7 @@ defmodule Bliss.Struct.Test do
   end
 
   defmodule Book do
-    use Bliss.Struct
+    use Z.Struct
 
     schema do
       field(:title, :string, [
@@ -35,7 +35,7 @@ defmodule Bliss.Struct.Test do
   end
 
   defmodule AllTypes do
-    use Bliss.Struct
+    use Z.Struct
 
     schema do
       field(:my_any, :any, [:required, default: "foo", equals: "foo", enum: ["foo", "bar", "baz"]])
@@ -150,33 +150,33 @@ defmodule Bliss.Struct.Test do
     end
   end
 
-  describe "Book.__bliss__/1" do
-    test "given Book, when __bliss__(:type), returns Book" do
-      assert Book.__bliss__(:type) == Book
+  describe "Book.__z__/1" do
+    test "given Book, when __z__(:type), returns Book" do
+      assert Book.__z__(:type) == Book
     end
 
-    test "given Book, when __bliss__(:options), returns Bliss.Struct options" do
-      assert Book.__bliss__(:options) == [:default, :required, :equals, :enum, :cast]
+    test "given Book, when __z__(:options), returns Z.Struct options" do
+      assert Book.__z__(:options) == [:default, :required, :equals, :enum, :cast]
     end
 
-    test "given Book, when __bliss__(:fields), returns defined fields" do
-      assert Book.__bliss__(:fields) == [
+    test "given Book, when __z__(:fields), returns defined fields" do
+      assert Book.__z__(:fields) == [
                title:
-                 {Bliss.String,
+                 {Z.String,
                   [
                     required: true,
                     trim: true,
                     length: {5, message: ":title must be length 5"}
                   ]},
                author:
-                 {Bliss.Any,
+                 {Z.Any,
                   [
                     required: true,
                     default: "unknown",
                     equals: "unknown"
                   ]},
-               description: {Bliss.String, []},
-               price: {Bliss.Struct.Test.Money, [required: true, cast: true]}
+               description: {Z.String, []},
+               price: {Z.Struct.Test.Money, [required: true, cast: true]}
              ]
     end
   end
@@ -216,7 +216,7 @@ defmodule Bliss.Struct.Test do
 
       assert Enum.member?(errors, %Error{
                code: Error.Codes.invalid_type(),
-               message: "input is not a Bliss.Struct.Test.Book",
+               message: "input is not a Z.Struct.Test.Book",
                path: ["."]
              })
     end

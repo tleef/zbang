@@ -1,9 +1,9 @@
-defmodule Bliss.Boolean.Test do
+defmodule Z.Boolean.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Result, Error, Context, Boolean}
+  alias Z.{Result, Error, Context, Boolean}
 
-  describe "Bliss.Boolean.check(_, :parse, _, _)/4" do
+  describe "Z.Boolean.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -65,7 +65,7 @@ defmodule Bliss.Boolean.Test do
     end
   end
 
-  describe "Bliss.Boolean.check(_, :type, _, _)/4" do
+  describe "Z.Boolean.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
       result =
         Result.new()
@@ -115,7 +115,7 @@ defmodule Bliss.Boolean.Test do
     end
   end
 
-  describe "Bliss.Boolean.validate/3" do
+  describe "Z.Boolean.validate/3" do
     test "given some boolean string value, when :parse, set parsed value" do
       {:ok, true} = Boolean.validate("true", [:parse])
       {:ok, true} = Boolean.validate("True", [:parse])

@@ -1,12 +1,12 @@
-defmodule Bliss.Atom do
+defmodule Z.Atom do
   @moduledoc """
   A module for validating an atom
   """
 
-  alias Bliss.{Result, Error, Any}
+  alias Z.{Result, Error, Any}
 
-  use Bliss.Type,
-    options: Bliss.Any.__bliss__(:options) ++ [:parse]
+  use Z.Type,
+    options: Z.Any.__z__(:options) ++ [:parse]
 
   def check(result, :conversions, rules, context) do
     result

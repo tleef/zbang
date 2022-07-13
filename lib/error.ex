@@ -1,18 +1,18 @@
-defmodule Bliss.Error do
+defmodule Z.Error do
   @moduledoc """
   The Error struct
   """
 
   defstruct [:code, :message, :path]
 
-  @type t :: %Bliss.Error{
+  @type t :: %Z.Error{
           code: String.t(),
           message: String.t(),
           path: [String.t()]
         }
 
   def new(code, message, context) do
-    %Bliss.Error{
+    %Z.Error{
       code: code,
       message: message,
       path: context.path |> Enum.reverse()

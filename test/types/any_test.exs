@@ -1,9 +1,9 @@
-defmodule Bliss.Any.Test do
+defmodule Z.Any.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Result, Error, Context, Any}
+  alias Z.{Result, Error, Context, Any}
 
-  describe "Bliss.Any.check(_, :default, _, _)/4" do
+  describe "Z.Any.check(_, :default, _, _)/4" do
     test "given default, when nil value, returns result with default value" do
       result =
         Result.new()
@@ -23,7 +23,7 @@ defmodule Bliss.Any.Test do
     end
   end
 
-  describe "Bliss.Any.check(_, :required, _, _)/4" do
+  describe "Z.Any.check(_, :required, _, _)/4" do
     test "given empty options, when nil value, returns invalid result with error" do
       result =
         Result.new()
@@ -73,7 +73,7 @@ defmodule Bliss.Any.Test do
     end
   end
 
-  describe "Bliss.Any.check(_, :equals, _, _)/4" do
+  describe "Z.Any.check(_, :equals, _, _)/4" do
     test "given equals, when other value, returns invalid result with error" do
       result =
         Result.new()
@@ -99,7 +99,7 @@ defmodule Bliss.Any.Test do
     end
   end
 
-  describe "Bliss.Any.check(_, :enum, _, _)/4" do
+  describe "Z.Any.check(_, :enum, _, _)/4" do
     test "given string enum, when invalid value, returns invalid result with error" do
       result =
         Result.new()
@@ -149,7 +149,7 @@ defmodule Bliss.Any.Test do
     end
   end
 
-  describe "Bliss.Any.validate/3" do
+  describe "Z.Any.validate/3" do
     test "given nil, when :default value, set default" do
       {:ok, "some"} = Any.validate(nil, default: "some")
     end

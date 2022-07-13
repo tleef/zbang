@@ -1,9 +1,9 @@
-defmodule Bliss.Time.Test do
+defmodule Z.Time.Test do
   use ExUnit.Case, async: true
 
-  alias Bliss.{Result, Error, Context, Time}
+  alias Z.{Result, Error, Context, Time}
 
-  describe "Bliss.Time.check(_, :parse, _, _)/4" do
+  describe "Z.Time.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -89,7 +89,7 @@ defmodule Bliss.Time.Test do
     end
   end
 
-  describe "Bliss.Time.check(_, :type, _, _)/4" do
+  describe "Z.Time.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
       result =
         Result.new()
@@ -139,7 +139,7 @@ defmodule Bliss.Time.Test do
     end
   end
 
-  describe "Bliss.Time.check(_, :trunc, _, _)/4" do
+  describe "Z.Time.check(_, :trunc, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
       result =
         Result.new()
@@ -195,7 +195,7 @@ defmodule Bliss.Time.Test do
     end
   end
 
-  describe "Bliss.Time.check(_, :min, _, _)/4" do
+  describe "Z.Time.check(_, :min, _, _)/4" do
     test "given min Time, when nil, returns valid result" do
       result =
         Result.new()
@@ -254,7 +254,7 @@ defmodule Bliss.Time.Test do
     end
   end
 
-  describe "Bliss.Time.check(_, :max, _, _)/4" do
+  describe "Z.Time.check(_, :max, _, _)/4" do
     test "given min Time, when nil, returns valid result" do
       result =
         Result.new()
@@ -313,7 +313,7 @@ defmodule Bliss.Time.Test do
     end
   end
 
-  describe "Bliss.Time.validate/3" do
+  describe "Z.Time.validate/3" do
     test "given some valid string, when :parse and other rules, set parsed value" do
       {:ok, ~T[00:00:00Z]} = Time.validate("00:00:00Z", [:parse])
 

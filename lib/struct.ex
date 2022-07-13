@@ -1,13 +1,13 @@
-defmodule Bliss.Struct do
+defmodule Z.Struct do
   @moduledoc """
-  A module for defining Bliss structs
+  A module for defining Z structs
   """
 
   defmacro __using__(_) do
     quote do
-      import Bliss.Struct, only: [schema: 1]
+      import Z.Struct, only: [schema: 1]
 
-      Module.register_attribute(__MODULE__, :bliss_fields, accumulate: true)
+      Module.register_attribute(__MODULE__, :z_fields, accumulate: true)
     end
   end
 
@@ -18,16 +18,16 @@ defmodule Bliss.Struct do
   defp __schema__(caller, block) do
     prelude =
       quote do
-        if line = Module.get_attribute(__MODULE__, :bliss_schema_defined) do
+        if line = Module.get_attribute(__MODULE__, :z_schema_defined) do
           raise "schema already defined for #{inspect(__MODULE__)} on line #{line}"
         end
 
-        @bliss_schema_defined unquote(caller.line)
+        @z_schema_defined unquote(caller.line)
 
-        Module.register_attribute(__MODULE__, :bliss_struct_fields, accumulate: true)
+        Module.register_attribute(__MODULE__, :z_struct_fields, accumulate: true)
 
         try do
-          import Bliss.Struct, only: [field: 2, field: 3]
+          import Z.Struct, only: [field: 2, field: 3]
           unquote(block)
         after
           :ok
@@ -36,28 +36,28 @@ defmodule Bliss.Struct do
 
     postlude =
       quote unquote: false do
-        fields = Macro.escape(@bliss_fields) |> Enum.reverse()
+        fields = Macro.escape(@z_fields) |> Enum.reverse()
 
-        defstruct Enum.reverse(@bliss_struct_fields)
+        defstruct Enum.reverse(@z_struct_fields)
 
-        use Bliss.Type, options: unquote(Bliss.Any.__bliss__(:options) ++ [:cast])
+        use Z.Type, options: unquote(Z.Any.__z__(:options) ++ [:cast])
 
-        def __bliss__(:fields), do: unquote(fields)
+        def __z__(:fields), do: unquote(fields)
 
         def check(result, :conversions, rules, context) do
           result
-          |> Bliss.Any.check(:conversions, rules, context)
+          |> Z.Any.check(:conversions, rules, context)
           |> maybe_check(:cast, rules, context)
         end
 
         def check(result, :mutations, rules, context) do
           result
-          |> Bliss.Any.check(:mutations, rules, context)
+          |> Z.Any.check(:mutations, rules, context)
         end
 
         def check(result, :assertions, rules, context) do
           result
-          |> Bliss.Any.check(:assertions, rules, context)
+          |> Z.Any.check(:assertions, rules, context)
           |> check(:fields, rules, context)
         end
 
@@ -75,16 +75,16 @@ defmodule Bliss.Struct do
 
         def check(result, :cast, true, context) do
           result
-          |> Bliss.Result.set_value(struct(__MODULE__, result.value))
+          |> Z.Result.set_value(struct(__MODULE__, result.value))
         end
 
         def check(result, :type, options, context) when not is_struct(result.value, __MODULE__) do
           message = Keyword.get(options, :message, "input is not a #{inspect(__MODULE__)}")
 
           result
-          |> Bliss.Result.add_error(
-            Bliss.Error.new(
-              Bliss.Error.Codes.invalid_type(),
+          |> Z.Result.add_error(
+            Z.Error.new(
+              Z.Error.Codes.invalid_type(),
               message,
               context
             )
@@ -101,18 +101,18 @@ defmodule Bliss.Struct do
         end
 
         def check(result, :fields, options, context) do
-          Enum.reduce(__bliss__(:fields), result, fn {name, {type, rules}}, res ->
+          Enum.reduce(__z__(:fields), result, fn {name, {type, rules}}, res ->
             check_field(res, name, type, rules, context)
           end)
         end
 
         defp check_field(result, name, type, rules, context) do
-          case type.validate(Map.get(result.value, name), rules, Bliss.Context.new(name, context)) do
+          case type.validate(Map.get(result.value, name), rules, Z.Context.new(name, context)) do
             {:ok, value} ->
-              result |> Bliss.Result.set_value(Map.replace(result.value, name, value))
+              result |> Z.Result.set_value(Map.replace(result.value, name, value))
 
             {:error, errors} ->
-              result |> Bliss.Result.add_errors(errors)
+              result |> Z.Result.add_errors(errors)
           end
         end
       end
@@ -125,12 +125,12 @@ defmodule Bliss.Struct do
 
   defmacro field(name, type, rules \\ []) do
     quote do
-      Bliss.Struct.__field__(__MODULE__, unquote(name), unquote(type), unquote(rules))
+      Z.Struct.__field__(__MODULE__, unquote(name), unquote(type), unquote(rules))
     end
   end
 
   def __field__(mod, name, type, rules) do
-    rules = Bliss.Rule.to_keyword_list(rules)
+    rules = Z.Rule.to_keyword_list(rules)
     type = check_field_type!(name, type)
     check_rules!(name, type, rules)
     validate_default!(name, type, rules)
@@ -138,7 +138,7 @@ defmodule Bliss.Struct do
   end
 
   defp check_field_type!(name, type) do
-    case Bliss.Type.resolve(type) do
+    case Z.Type.resolve(type) do
       {:ok, type} ->
         type
 
@@ -148,7 +148,7 @@ defmodule Bliss.Struct do
   end
 
   defp check_rules!(name, type, rules) do
-    case Enum.find(rules, fn {rule, _} -> rule not in type.__bliss__(:options) end) do
+    case Enum.find(rules, fn {rule, _} -> rule not in type.__z__(:options) end) do
       nil ->
         :ok
 
@@ -175,17 +175,17 @@ defmodule Bliss.Struct do
 
   defp define_field(mod, name, type, rules) do
     put_struct_field(mod, name, Keyword.get(rules, :default))
-    Module.put_attribute(mod, :bliss_fields, {name, {type, rules}})
+    Module.put_attribute(mod, :z_fields, {name, {type, rules}})
   end
 
   defp put_struct_field(mod, name, default) do
-    fields = Module.get_attribute(mod, :bliss_struct_fields)
+    fields = Module.get_attribute(mod, :z_struct_fields)
 
     if List.keyfind(fields, name, 0) do
       raise ArgumentError,
             "field #{inspect(name)} already exists on schema, you must either remove the duplication or choose a different name"
     end
 
-    Module.put_attribute(mod, :bliss_struct_fields, {name, default})
+    Module.put_attribute(mod, :z_struct_fields, {name, default})
   end
 end
