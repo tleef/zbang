@@ -1,4 +1,8 @@
 defmodule Bliss.Atom do
+  @moduledoc """
+  A module for validating an atom
+  """
+
   alias Bliss.{Result, Error, Any}
 
   use Bliss.Type,

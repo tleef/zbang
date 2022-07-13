@@ -26,7 +26,7 @@ defmodule Bliss.MixProject do
     [
       # Tools
       {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false},
-      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:credo, ">= 0.0.0", only: [:dev, :test], runtime: false}
     ]
   end
 

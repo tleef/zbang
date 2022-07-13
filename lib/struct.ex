@@ -1,4 +1,8 @@
 defmodule Bliss.Struct do
+  @moduledoc """
+  A module for defining Bliss structs
+  """
+
   defmacro __using__(_) do
     quote do
       import Bliss.Struct, only: [schema: 1]

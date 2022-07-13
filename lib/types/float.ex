@@ -1,4 +1,8 @@
 defmodule Bliss.Float do
+  @moduledoc """
+  A module for validating a float
+  """
+
   alias Bliss.{Result, Error, Any}
 
   use Bliss.Type,

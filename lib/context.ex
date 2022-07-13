@@ -1,4 +1,8 @@
 defmodule Bliss.Context do
+  @moduledoc """
+  The Context struct
+  """
+
   defstruct parent: nil, path: ["."]
 
   @type t :: %Bliss.Context{

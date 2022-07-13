@@ -1,4 +1,8 @@
 defmodule Bliss.Error do
+  @moduledoc """
+  The Error struct
+  """
+
   defstruct [:code, :message, :path]
 
   @type t :: %Bliss.Error{
@@ -16,6 +20,10 @@ defmodule Bliss.Error do
   end
 
   defmodule Codes do
+    @moduledoc """
+    Static error codes
+    """
+
     @invalid_type "invalid_type"
     @invalid_literal "invalid_literal"
     @custom "custom"

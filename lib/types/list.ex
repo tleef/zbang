@@ -1,4 +1,8 @@
 defmodule Bliss.List do
+  @moduledoc """
+  A module for validating a List
+  """
+
   alias Bliss.{Result, Error, Any}
 
   use Bliss.Type,

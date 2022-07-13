@@ -1,4 +1,8 @@
 defmodule Bliss.Date do
+  @moduledoc """
+  A module for validating a Date
+  """
+
   alias Bliss.{Result, Error, Any}
 
   use Bliss.Type,

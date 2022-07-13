@@ -1,4 +1,8 @@
 defmodule Bliss.Time do
+  @moduledoc """
+  A module for validating a Time
+  """
+
   alias Bliss.{Result, Error, Any}
 
   use Bliss.Type,
