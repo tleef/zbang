@@ -5,12 +5,21 @@ defmodule Bliss.Float do
     options:
       Bliss.Any.__bliss__(:options) ++ [:parse, :allow_int, :min, :max, :greater_than, :less_than]
 
-  def check(result, rules, context) do
+  def check(result, :conversions, rules, context) do
     result
-    |> Any.check(rules, context)
+    |> Any.check(:conversions, rules, context)
     |> maybe_check(:parse, rules, context)
     |> maybe_check(:allow_int, rules, context)
-    |> check(:type, rules, context)
+  end
+
+  def check(result, :mutations, rules, context) do
+    result
+    |> Any.check(:mutations, rules, context)
+  end
+
+  def check(result, :assertions, rules, context) do
+    result
+    |> Any.check(:assertions, rules, context)
     |> maybe_check(:min, rules, context)
     |> maybe_check(:max, rules, context)
     |> maybe_check(:greater_than, rules, context)

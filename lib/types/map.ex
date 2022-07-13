@@ -4,11 +4,20 @@ defmodule Bliss.Map do
   use Bliss.Type,
     options: Bliss.Any.__bliss__(:options) ++ [:atomize_keys, :size, :min, :max]
 
-  def check(result, rules, context) do
+  def check(result, :conversions, rules, context) do
     result
-    |> Any.check(rules, context)
-    |> check(:type, rules, context)
+    |> Any.check(:conversions, rules, context)
+  end
+
+  def check(result, :mutations, rules, context) do
+    result
+    |> Any.check(:mutations, rules, context)
     |> maybe_check(:atomize_keys, rules, context)
+  end
+
+  def check(result, :assertions, rules, context) do
+    result
+    |> Any.check(:assertions, rules, context)
     |> maybe_check(:size, rules, context)
     |> maybe_check(:min, rules, context)
     |> maybe_check(:max, rules, context)

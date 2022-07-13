@@ -4,11 +4,20 @@ defmodule Bliss.Boolean do
   use Bliss.Type,
     options: Bliss.Any.__bliss__(:options) ++ [:parse]
 
-  def check(result, rules, context) do
+  def check(result, :conversions, rules, context) do
     result
-    |> Any.check(rules, context)
+    |> Any.check(:conversions, rules, context)
     |> maybe_check(:parse, rules, context)
-    |> check(:type, rules, context)
+  end
+
+  def check(result, :mutations, rules, context) do
+    result
+    |> Any.check(:mutations, rules, context)
+  end
+
+  def check(result, :assertions, rules, context) do
+    result
+    |> Any.check(:assertions, rules, context)
   end
 
   def check(result, _rule, _options, _context) when result.value == nil do

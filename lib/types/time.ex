@@ -4,12 +4,21 @@ defmodule Bliss.Time do
   use Bliss.Type,
     options: Bliss.Any.__bliss__(:options) ++ [:parse, :trunc, :min, :max]
 
-  def check(result, rules, context) do
+  def check(result, :conversions, rules, context) do
     result
-    |> Any.check(rules, context)
+    |> Any.check(:conversions, rules, context)
     |> maybe_check(:parse, rules, context)
-    |> check(:type, rules, context)
+  end
+
+  def check(result, :mutations, rules, context) do
+    result
+    |> Any.check(:mutations, rules, context)
     |> maybe_check(:trunc, rules, context)
+  end
+
+  def check(result, :assertions, rules, context) do
+    result
+    |> Any.check(:assertions, rules, context)
     |> maybe_check(:min, rules, context)
     |> maybe_check(:max, rules, context)
   end

@@ -3,11 +3,20 @@ defmodule Bliss.String do
 
   use Bliss.Type, options: Bliss.Any.__bliss__(:options) ++ [:trim, :length]
 
-  def check(result, rules, context) do
+  def check(result, :conversions, rules, context) do
     result
-    |> Any.check(rules, context)
-    |> check(:type, rules, context)
+    |> Any.check(:conversions, rules, context)
+  end
+
+  def check(result, :mutations, rules, context) do
+    result
+    |> Any.check(:mutations, rules, context)
     |> maybe_check(:trim, rules, context)
+  end
+
+  def check(result, :assertions, rules, context) do
+    result
+    |> Any.check(:assertions, rules, context)
     |> maybe_check(:length, rules, context)
   end
 

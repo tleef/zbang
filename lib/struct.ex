@@ -40,11 +40,20 @@ defmodule Bliss.Struct do
 
         def __bliss__(:fields), do: unquote(fields)
 
-        def check(result, rules, context) do
+        def check(result, :conversions, rules, context) do
           result
-          |> Bliss.Any.check(rules, context)
+          |> Bliss.Any.check(:conversions, rules, context)
           |> maybe_check(:cast, rules, context)
-          |> check(:type, rules, context)
+        end
+
+        def check(result, :mutations, rules, context) do
+          result
+          |> Bliss.Any.check(:mutations, rules, context)
+        end
+
+        def check(result, :assertions, rules, context) do
+          result
+          |> Bliss.Any.check(:assertions, rules, context)
           |> check(:fields, rules, context)
         end
 
