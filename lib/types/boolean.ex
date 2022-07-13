@@ -6,9 +6,26 @@ defmodule Bliss.Boolean do
 
   def check(result, rules, context) do
     result
-    |> Any.check(rules, context)
-    |> maybe_check(:parse, rules, context)
+    |> check(:conversions, rules, context)
     |> check(:type, rules, context)
+    |> check(:mutations, rules, context)
+    |> check(:assertions, rules, context)
+  end
+
+  def check(result, :conversions, rules, context) do
+    result
+    |> Any.check(:conversions, rules, context)
+    |> maybe_check(:parse, rules, context)
+  end
+
+  def check(result, :mutations, rules, context) do
+    result
+    |> Any.check(:mutations, rules, context)
+  end
+
+  def check(result, :assertions, rules, context) do
+    result
+    |> Any.check(:assertions, rules, context)
   end
 
   def check(result, _rule, _options, _context) when result.value == nil do
