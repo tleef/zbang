@@ -1,26 +1,26 @@
-# Z
+# Z!
 
-Z is a schema description and data validation library. 
+Z! is a schema description and data validation library.
 Inspired by libraries like [Joi](https://joi.dev/), [Yup](https://github.com/jquense/yup), and [Zod](https://zod.dev/) from the JavaScript community, 
-Z helps you describe schemas for your structs and validate their data at runtime.
+Z! helps you describe schemas for your structs and validate their data at runtime.
 
 ## Installation
 
-This package can be installed by adding `z` to your list of dependencies in `mix.exs`:
+This package can be installed by adding `z!` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:z, "~> 1.0.0"}
+    {:z!, "~> 1.0.0"}
   ]
 end
 ```
 
-The docs can be found at [https://hexdocs.pm/z](https://hexdocs.pm/z)
+The docs can be found at [https://hexdocs.pm/z!](https://hexdocs.pm/z!)
 
 ## Types
 
-Many types can be validated with Z. Below is a list of built-in primitive types, 
+Many types can be validated with Z!. Below is a list of built-in primitive types,
 but you can also define custom types of your own.
 
 ### Any
