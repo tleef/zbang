@@ -193,7 +193,7 @@ Z.String.validate("oops", length: 5)
        path: ["."]
      }
    ],
-   message: ""
+   message: "invalid"
  }}
  
 Z.String.validate(nil, [:required, default: "sleepy bear"])
@@ -205,7 +205,7 @@ Book.validate(%{title: "I <3 Elixir", price: %{amount: "1.00"}})
    issues: [
      %Z.Issue{code: "invalid_type", message: "input is not a Book", path: ["."]}
    ],
-   message: ""
+   message: "invalid"
  }}
  
 Book.validate(%{title: "I <3 Elixir", price: %{amount: "1.00"}}, [:cast])
