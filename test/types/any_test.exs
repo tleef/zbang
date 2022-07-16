@@ -1,7 +1,7 @@
 defmodule Z.Any.Test do
   use ExUnit.Case, async: true
 
-  alias Z.{Result, Error, Context, Any}
+  alias Z.{Result, Error, Issue, Context, Any}
 
   describe "Z.Any.check(_, :default, _, _)/4" do
     test "given default, when nil value, returns result with default value" do
@@ -32,7 +32,7 @@ defmodule Z.Any.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is required",
                path: ["."]
@@ -47,7 +47,7 @@ defmodule Z.Any.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is required",
                path: ["."]
@@ -82,7 +82,7 @@ defmodule Z.Any.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_literal(),
                message: "input does not equal \"other\"",
                path: ["."]
@@ -108,7 +108,7 @@ defmodule Z.Any.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_enum_value(),
                message: "input is not an allowed value",
                path: ["."]
@@ -132,7 +132,7 @@ defmodule Z.Any.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_enum_value(),
                message: "input is not an allowed value",
                path: ["."]
@@ -155,9 +155,9 @@ defmodule Z.Any.Test do
     end
 
     test "given nil, when :required, check required" do
-      {:error, errors} = Any.validate(nil, [:required])
+      {:error, error} = Any.validate(nil, [:required])
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is required",
                path: ["."]
@@ -174,6 +174,18 @@ defmodule Z.Any.Test do
 
     test "given nil, when value in :enum with :default value, set default and check in enum" do
       {:ok, "some"} = Any.validate(nil, enum: ["some", "thing", "else"], default: "some")
+    end
+  end
+
+  describe "Z.Any.validate!/3" do
+    test "given nil, when :default value, set default" do
+      "some" = Any.validate!("some")
+    end
+
+    test "given nil, when :required, check required" do
+      assert_raise Z.Error, fn ->
+        Any.validate!(nil, [:required])
+      end
     end
   end
 end

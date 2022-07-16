@@ -3,7 +3,7 @@ defmodule Z.Any do
   A module for validating any type
   """
 
-  alias Z.{Result, Error}
+  alias Z.{Result, Error, Issue}
 
   use Z.Type, options: [:default, :required, :equals, :enum]
 
@@ -47,8 +47,8 @@ defmodule Z.Any do
     message = Keyword.get(options, :message, "input is required")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_type(),
         message,
         context
@@ -64,8 +64,8 @@ defmodule Z.Any do
     message = Keyword.get(options, :message, "input does not equal #{inspect(value)}")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_literal(),
         message,
         context
@@ -88,8 +88,8 @@ defmodule Z.Any do
       result
     else
       result
-      |> Result.add_error(
-        Error.new(
+      |> Result.add_issue(
+        Issue.new(
           Error.Codes.invalid_enum_value(),
           message,
           context

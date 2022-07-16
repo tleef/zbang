@@ -3,7 +3,7 @@ defmodule Z.Date do
   A module for validating a Date
   """
 
-  alias Z.{Result, Error, Any}
+  alias Z.{Result, Error, Issue, Any}
 
   use Z.Type,
     options: Z.Any.__z__(:options) ++ [:parse, :trunc, :min, :max]
@@ -47,8 +47,8 @@ defmodule Z.Date do
     message = "unable to parse Date with format: #{inspect(format)}, format must be :iso8601"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -65,8 +65,8 @@ defmodule Z.Date do
         message = "unable to parse input as a Date"
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.invalid_string(),
             message,
             context
@@ -95,8 +95,8 @@ defmodule Z.Date do
     message = Keyword.get(options, :message, "input is not a Date")
 
     result
-    |> Z.Result.add_error(
-      Z.Error.new(
+    |> Z.Result.add_issue(
+      Z.Issue.new(
         Z.Error.Codes.invalid_type(),
         message,
         context
@@ -116,8 +116,8 @@ defmodule Z.Date do
     message = "min value must be a Date"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -131,8 +131,8 @@ defmodule Z.Date do
         message = Keyword.get(options, :message, "input is too early")
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.too_small(),
             message,
             context
@@ -152,8 +152,8 @@ defmodule Z.Date do
     message = "max value must be a Date"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -167,8 +167,8 @@ defmodule Z.Date do
         message = Keyword.get(options, :message, "input is too late")
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.too_big(),
             message,
             context

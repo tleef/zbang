@@ -3,7 +3,7 @@ defmodule Z.Time do
   A module for validating a Time
   """
 
-  alias Z.{Result, Error, Any}
+  alias Z.{Result, Error, Issue, Any}
 
   use Z.Type,
     options: Z.Any.__z__(:options) ++ [:parse, :trunc, :min, :max]
@@ -47,8 +47,8 @@ defmodule Z.Time do
     message = "unable to parse Time with format: #{inspect(format)}, format must be :iso8601"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -65,8 +65,8 @@ defmodule Z.Time do
         message = "unable to parse input as a Time"
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.invalid_string(),
             message,
             context
@@ -79,9 +79,9 @@ defmodule Z.Time do
     message = Keyword.get(options, :message, "input is not a Time")
 
     result
-    |> Z.Result.add_error(
-      Z.Error.new(
-        Z.Error.Codes.invalid_type(),
+    |> Result.add_issue(
+      Issue.new(
+        Error.Codes.invalid_type(),
         message,
         context
       )
@@ -110,8 +110,8 @@ defmodule Z.Time do
       "unable to truncate with precision: #{inspect(precision)}, precision must be :second, :millisecond, or :microsecond"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -127,8 +127,8 @@ defmodule Z.Time do
     message = "min value must be a Time"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -142,8 +142,8 @@ defmodule Z.Time do
         message = Keyword.get(options, :message, "input is too early")
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.too_small(),
             message,
             context
@@ -163,8 +163,8 @@ defmodule Z.Time do
     message = "max value must be a Time"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -178,8 +178,8 @@ defmodule Z.Time do
         message = Keyword.get(options, :message, "input is too late")
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.too_big(),
             message,
             context

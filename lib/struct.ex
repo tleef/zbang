@@ -82,8 +82,8 @@ defmodule Z.Struct do
           message = Keyword.get(options, :message, "input is not a #{inspect(__MODULE__)}")
 
           result
-          |> Z.Result.add_error(
-            Z.Error.new(
+          |> Z.Result.add_issue(
+            Z.Issue.new(
               Z.Error.Codes.invalid_type(),
               message,
               context
@@ -111,8 +111,8 @@ defmodule Z.Struct do
             {:ok, value} ->
               result |> Z.Result.set_value(Map.replace(result.value, name, value))
 
-            {:error, errors} ->
-              result |> Z.Result.add_errors(errors)
+            {:error, error} ->
+              result |> Z.Result.add_issues(error.issues)
           end
         end
       end

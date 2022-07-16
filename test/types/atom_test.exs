@@ -1,7 +1,7 @@
 defmodule Z.Atom.Test do
   use ExUnit.Case, async: true
 
-  alias Z.{Result, Error, Context, Atom}
+  alias Z.{Result, Error, Issue, Context, Atom}
 
   describe "Z.Atom.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
@@ -30,7 +30,7 @@ defmodule Z.Atom.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_string(),
                message: "unable to parse input as an atom",
                path: ["."]
@@ -94,7 +94,7 @@ defmodule Z.Atom.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not an atom",
                path: ["."]

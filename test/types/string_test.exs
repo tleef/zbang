@@ -1,7 +1,7 @@
 defmodule Z.String.Test do
   use ExUnit.Case, async: true
 
-  alias Z.{Result, Error, Context, String}
+  alias Z.{Result, Error, Issue, Context, String}
 
   describe "Z.String.check(_, :type, _, _)/4" do
     test "given empty options, when nil, returns valid result" do
@@ -21,7 +21,7 @@ defmodule Z.String.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a valid string",
                path: ["."]
@@ -45,7 +45,7 @@ defmodule Z.String.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_string(),
                message: "input is not a valid string",
                path: ["."]
@@ -107,7 +107,7 @@ defmodule Z.String.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "unable to trim string with to_trim: 12, to_trim must be a string",
                path: ["."]
@@ -142,7 +142,7 @@ defmodule Z.String.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input does not have correct length",
                path: ["."]
@@ -157,7 +157,7 @@ defmodule Z.String.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input does not have correct length",
                path: ["."]
@@ -181,7 +181,7 @@ defmodule Z.String.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "unable to check length with length: \"4\", length must be an integer",
                path: ["."]
@@ -216,7 +216,7 @@ defmodule Z.String.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input is too short",
                path: ["."]
@@ -240,7 +240,7 @@ defmodule Z.String.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input is too short",
                path: ["."]
@@ -255,7 +255,7 @@ defmodule Z.String.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message:
                  "unable to check min length with length: \"4\", length must be an integer",
@@ -291,7 +291,7 @@ defmodule Z.String.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input is too long",
                path: ["."]
@@ -315,7 +315,7 @@ defmodule Z.String.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message:
                  "unable to check max length with length: \"4\", length must be an integer",
@@ -330,9 +330,9 @@ defmodule Z.String.Test do
     end
 
     test "given long value, when check :length, check length" do
-      {:error, errors} = String.validate("way too long", length: {8, message: "too long"})
+      {:error, error} = String.validate("way too long", length: {8, message: "too long"})
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "too long",
                path: ["."]

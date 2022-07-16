@@ -1,7 +1,7 @@
 defmodule Z.Integer.Test do
   use ExUnit.Case, async: true
 
-  alias Z.{Result, Error, Context, Integer}
+  alias Z.{Result, Error, Issue, Context, Integer}
 
   describe "Z.Integer.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
@@ -66,7 +66,7 @@ defmodule Z.Integer.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "unable to parse integer with base: 42, base must be in 2..36",
                path: ["."]
@@ -81,7 +81,7 @@ defmodule Z.Integer.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_string(),
                message: "unable to parse input as an integer",
                path: ["."]
@@ -154,7 +154,7 @@ defmodule Z.Integer.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not an integer",
                path: ["."]
@@ -169,7 +169,7 @@ defmodule Z.Integer.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not an integer",
                path: ["."]
@@ -204,7 +204,7 @@ defmodule Z.Integer.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input is too small",
                path: ["."]
@@ -239,7 +239,7 @@ defmodule Z.Integer.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input is too big",
                path: ["."]
@@ -274,7 +274,7 @@ defmodule Z.Integer.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input is too small",
                path: ["."]
@@ -309,7 +309,7 @@ defmodule Z.Integer.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input is too big",
                path: ["."]
@@ -327,9 +327,9 @@ defmodule Z.Integer.Test do
     end
 
     test "given small value, when check :min, check min" do
-      {:error, errors} = Integer.validate(20, min: {21, message: "too small"})
+      {:error, error} = Integer.validate(20, min: {21, message: "too small"})
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "too small",
                path: ["."]
@@ -337,9 +337,9 @@ defmodule Z.Integer.Test do
     end
 
     test "given large value, when check :max, check max" do
-      {:error, errors} = Integer.validate(18, max: {17, message: "too great"})
+      {:error, error} = Integer.validate(18, max: {17, message: "too great"})
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "too great",
                path: ["."]
@@ -347,9 +347,9 @@ defmodule Z.Integer.Test do
     end
 
     test "given small value, when check :greater_than, check greater_than" do
-      {:error, errors} = Integer.validate(21, greater_than: {21, message: "not great enough"})
+      {:error, error} = Integer.validate(21, greater_than: {21, message: "not great enough"})
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "not great enough",
                path: ["."]
@@ -357,9 +357,9 @@ defmodule Z.Integer.Test do
     end
 
     test "given large value, when check :less_than, check less_than" do
-      {:error, errors} = Integer.validate(18, less_than: {18, message: "not small enough"})
+      {:error, error} = Integer.validate(18, less_than: {18, message: "not small enough"})
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "not small enough",
                path: ["."]

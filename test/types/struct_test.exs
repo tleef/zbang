@@ -1,7 +1,7 @@
 defmodule Z.Struct.Test do
   use ExUnit.Case, async: true
 
-  alias Z.{Error}
+  alias Z.{Error, Issue}
 
   defmodule Money do
     use Z.Struct
@@ -203,7 +203,7 @@ defmodule Z.Struct.Test do
     end
 
     test "given a valid map, when validating without :cast, returns an invalid result with an error" do
-      {:error, errors} =
+      {:error, error} =
         Book.validate(
           %{
             title: "hello",
@@ -214,7 +214,7 @@ defmodule Z.Struct.Test do
           []
         )
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a Z.Struct.Test.Book",
                path: ["."]
@@ -269,7 +269,7 @@ defmodule Z.Struct.Test do
     end
 
     test "given a map with an invalid key, when validating with :cast, returns an invalid result with an error" do
-      {:error, errors} =
+      {:error, error} =
         Book.validate(
           %{
             title: 123,
@@ -280,7 +280,7 @@ defmodule Z.Struct.Test do
           [:cast]
         )
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a valid string",
                path: [".", :title]
@@ -288,7 +288,7 @@ defmodule Z.Struct.Test do
     end
 
     test "given a map with invalid keys, when validating with :cast, returns an invalid result with errors" do
-      {:error, errors} =
+      {:error, error} =
         Book.validate(
           %{
             title: 123,
@@ -299,13 +299,13 @@ defmodule Z.Struct.Test do
           [:cast]
         )
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a valid string",
                path: [".", :title]
              })
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.invalid_enum_value(),
                message: "input is not an allowed value",
                path: [".", :price, :currency]

@@ -3,7 +3,7 @@ defmodule Z.Float do
   A module for validating a float
   """
 
-  alias Z.{Result, Error, Any}
+  alias Z.{Result, Error, Issue, Any}
 
   use Z.Type,
     options: Z.Any.__z__(:options) ++ [:parse, :allow_int, :min, :max, :greater_than, :less_than]
@@ -50,8 +50,8 @@ defmodule Z.Float do
         message = "unable to parse input as a float"
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.invalid_string(),
             message,
             context
@@ -76,8 +76,8 @@ defmodule Z.Float do
     message = Keyword.get(options, :message, "input is not a float")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_type(),
         message,
         context
@@ -97,8 +97,8 @@ defmodule Z.Float do
     message = "min value must be a float"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -110,8 +110,8 @@ defmodule Z.Float do
     message = Keyword.get(options, :message, "input is too small")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_small(),
         message,
         context
@@ -131,8 +131,8 @@ defmodule Z.Float do
     message = "max value must be a float"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -144,8 +144,8 @@ defmodule Z.Float do
     message = Keyword.get(options, :message, "input is too big")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_big(),
         message,
         context
@@ -165,8 +165,8 @@ defmodule Z.Float do
     message = "greater_than value must be a float"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -178,8 +178,8 @@ defmodule Z.Float do
     message = Keyword.get(options, :message, "input is too small")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_small(),
         message,
         context
@@ -199,8 +199,8 @@ defmodule Z.Float do
     message = "less_than value must be a float"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -212,8 +212,8 @@ defmodule Z.Float do
     message = Keyword.get(options, :message, "input is too big")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_big(),
         message,
         context

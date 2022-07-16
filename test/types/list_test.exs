@@ -1,7 +1,7 @@
 defmodule Z.List.Test do
   use ExUnit.Case, async: true
 
-  alias Z.{Result, Error, Context, List}
+  alias Z.{Result, Error, Issue, Context, List}
 
   defmodule Book do
     use Z.Struct
@@ -30,7 +30,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a list",
                path: ["."]
@@ -101,7 +101,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input does not have correct length",
                path: ["."]
@@ -116,7 +116,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input does not have correct length",
                path: ["."]
@@ -140,7 +140,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "unable to check length with length: \"3\", length must be an integer",
                path: ["."]
@@ -175,7 +175,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input is too short",
                path: ["."]
@@ -199,7 +199,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message:
                  "unable to check min length with length: \"1\", length must be an integer",
@@ -235,7 +235,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input is too long",
                path: ["."]
@@ -259,7 +259,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message:
                  "unable to check max length with length: \"3\", length must be an integer",
@@ -304,7 +304,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is required",
                path: [".", 1]
@@ -319,7 +319,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input does not have correct length",
                path: [".", 2]
@@ -351,13 +351,13 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is required",
                path: [".", 1, :title]
              })
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a Z.List.Test.Book",
                path: [".", 2]
@@ -391,7 +391,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "unable to check items of type: :unknown, unknown type",
                path: ["."]
@@ -406,7 +406,7 @@ defmodule Z.List.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "unable to check items of type: \"string\", type must be an atom",
                path: ["."]
