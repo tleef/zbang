@@ -13,6 +13,15 @@ defmodule Z.Any.Test do
       assert result.value == "some"
     end
 
+    test "given default func, when nil value, returns result with default value" do
+      result =
+        Result.new()
+        |> Result.set_value(nil)
+        |> Any.check(:default, fn -> 1 + 1 end, Context.new("."))
+
+      assert result.value == 2
+    end
+
     test "given default, when some value, returns result with original value" do
       result =
         Result.new()
@@ -166,6 +175,10 @@ defmodule Z.Any.Test do
 
     test "given nil, when :required with :default value, set default value and check required" do
       {:ok, "some"} = Any.validate(nil, [:required, default: "some"])
+    end
+
+    test "given nil, when :required with :default func, set default value and check required" do
+      {:ok, 2} = Any.validate(nil, [:required, default: fn -> 1 + 1 end])
     end
 
     test "given nil, when :equals some value with :default value, set default and check equals" do
