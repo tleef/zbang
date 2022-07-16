@@ -3,7 +3,7 @@ defmodule Z.Map do
   A module for validating a Map
   """
 
-  alias Z.{Result, Error, Any}
+  alias Z.{Result, Error, Issue, Any}
 
   use Z.Type,
     options: Z.Any.__z__(:options) ++ [:atomize_keys, :size, :min, :max]
@@ -35,8 +35,8 @@ defmodule Z.Map do
     message = Keyword.get(options, :message, "input is not a Map")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_type(),
         message,
         context
@@ -69,8 +69,8 @@ defmodule Z.Map do
     message = "atomize_keys mode must be :existing_only or :dangerously_allow_non_existing"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -102,8 +102,8 @@ defmodule Z.Map do
     message = "unable to check size with size: #{inspect(size)}, size must be an integer"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -115,8 +115,8 @@ defmodule Z.Map do
     message = Keyword.get(options, :message, "input does not have correct size")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_small(),
         message,
         context
@@ -128,8 +128,8 @@ defmodule Z.Map do
     message = Keyword.get(options, :message, "input does not have correct size")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_big(),
         message,
         context
@@ -149,8 +149,8 @@ defmodule Z.Map do
     message = "unable to check min size with size: #{inspect(size)}, size must be an integer"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -162,8 +162,8 @@ defmodule Z.Map do
     message = Keyword.get(options, :message, "input is too small")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_small(),
         message,
         context
@@ -183,8 +183,8 @@ defmodule Z.Map do
     message = "unable to check max size with size: #{inspect(size)}, size must be an integer"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -196,8 +196,8 @@ defmodule Z.Map do
     message = Keyword.get(options, :message, "input is too big")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_big(),
         message,
         context
@@ -223,8 +223,8 @@ defmodule Z.Map do
 
         result =
           result
-          |> Result.add_error(
-            Error.new(
+          |> Result.add_issue(
+            Issue.new(
               Error.Codes.invalid_string(),
               message,
               Z.Context.new(k, context)

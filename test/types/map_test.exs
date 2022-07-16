@@ -1,7 +1,7 @@
 defmodule Z.Map.Test do
   use ExUnit.Case, async: true
 
-  alias Z.{Result, Error, Context, Map}
+  alias Z.{Result, Error, Issue, Context, Map}
 
   defmodule Book do
     use Z.Struct
@@ -30,7 +30,7 @@ defmodule Z.Map.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a Map",
                path: ["."]
@@ -92,7 +92,7 @@ defmodule Z.Map.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_string(),
                message: "unable to atomize key",
                path: [".", "oops"]
@@ -154,7 +154,7 @@ defmodule Z.Map.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input does not have correct size",
                path: ["."]
@@ -169,7 +169,7 @@ defmodule Z.Map.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input does not have correct size",
                path: ["."]
@@ -193,7 +193,7 @@ defmodule Z.Map.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "unable to check size with size: \"3\", size must be an integer",
                path: ["."]
@@ -228,7 +228,7 @@ defmodule Z.Map.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input is too small",
                path: ["."]
@@ -252,7 +252,7 @@ defmodule Z.Map.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "unable to check min size with size: \"1\", size must be an integer",
                path: ["."]
@@ -287,7 +287,7 @@ defmodule Z.Map.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input is too big",
                path: ["."]
@@ -311,7 +311,7 @@ defmodule Z.Map.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "unable to check max size with size: \"3\", size must be an integer",
                path: ["."]

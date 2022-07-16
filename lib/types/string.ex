@@ -3,7 +3,7 @@ defmodule Z.String do
   A module for validating a string
   """
 
-  alias Z.{Result, Error, Any}
+  alias Z.{Result, Error, Issue, Any}
 
   use Z.Type, options: Z.Any.__z__(:options) ++ [:trim, :length]
 
@@ -32,8 +32,8 @@ defmodule Z.String do
     message = Keyword.get(options, :message, "input is not a valid string")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_type(),
         message,
         context
@@ -48,8 +48,8 @@ defmodule Z.String do
       message = Keyword.get(options, :message, "input is not a valid string")
 
       result
-      |> Result.add_error(
-        Error.new(
+      |> Result.add_issue(
+        Issue.new(
           Error.Codes.invalid_string(),
           message,
           context
@@ -74,8 +74,8 @@ defmodule Z.String do
     message = "unable to trim string with to_trim: #{inspect(to_trim)}, to_trim must be a string"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -91,8 +91,8 @@ defmodule Z.String do
     message = "unable to check length with length: #{inspect(length)}, length must be an integer"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -106,8 +106,8 @@ defmodule Z.String do
         message = Keyword.get(options, :message, "input does not have correct length")
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.too_small(),
             message,
             context
@@ -118,8 +118,8 @@ defmodule Z.String do
         message = Keyword.get(options, :message, "input does not have correct length")
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.too_big(),
             message,
             context
@@ -140,8 +140,8 @@ defmodule Z.String do
       "unable to check min length with length: #{inspect(length)}, length must be an integer"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -156,8 +156,8 @@ defmodule Z.String do
       result
     else
       result
-      |> Result.add_error(
-        Error.new(
+      |> Result.add_issue(
+        Issue.new(
           Error.Codes.too_small(),
           message,
           context
@@ -175,8 +175,8 @@ defmodule Z.String do
       "unable to check max length with length: #{inspect(length)}, length must be an integer"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -191,8 +191,8 @@ defmodule Z.String do
       result
     else
       result
-      |> Result.add_error(
-        Error.new(
+      |> Result.add_issue(
+        Issue.new(
           Error.Codes.too_big(),
           message,
           context

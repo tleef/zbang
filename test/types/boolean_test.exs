@@ -1,7 +1,7 @@
 defmodule Z.Boolean.Test do
   use ExUnit.Case, async: true
 
-  alias Z.{Result, Error, Context, Boolean}
+  alias Z.{Result, Error, Issue, Context, Boolean}
 
   describe "Z.Boolean.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
@@ -57,7 +57,7 @@ defmodule Z.Boolean.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_string(),
                message: "unable to parse input as a boolean",
                path: ["."]
@@ -92,7 +92,7 @@ defmodule Z.Boolean.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a boolean",
                path: ["."]
@@ -107,7 +107,7 @@ defmodule Z.Boolean.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a boolean",
                path: ["."]

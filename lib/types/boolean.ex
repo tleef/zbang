@@ -3,7 +3,7 @@ defmodule Z.Boolean do
   A module for validating a boolean
   """
 
-  alias Z.{Result, Error, Any}
+  alias Z.{Result, Error, Issue, Any}
 
   use Z.Type,
     options: Z.Any.__z__(:options) ++ [:parse]
@@ -48,8 +48,8 @@ defmodule Z.Boolean do
         message = "unable to parse input as a boolean"
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.invalid_string(),
             message,
             context
@@ -62,8 +62,8 @@ defmodule Z.Boolean do
     message = Keyword.get(options, :message, "input is not a boolean")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_type(),
         message,
         context

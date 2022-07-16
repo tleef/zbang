@@ -3,12 +3,12 @@ defmodule Z.Result do
   The Result struct
   """
 
-  defstruct status: :valid, value: nil, errors: []
+  defstruct status: :valid, value: nil, issues: []
 
   @type t :: %Z.Result{
           status: :valid | :invalid,
           value: any,
-          errors: [Z.Error.t()]
+          issues: [Z.Issue.t()]
         }
 
   def new do
@@ -23,20 +23,20 @@ defmodule Z.Result do
     %{result | value: value}
   end
 
-  def add_error(result, error) do
+  def add_issue(result, issue) do
     result = set_status(result, :invalid)
-    %{result | errors: [error | result.errors]}
+    %{result | issues: [issue | result.issues]}
   end
 
-  def add_errors(result, errors) do
-    Enum.reduce(errors, result, fn err, res -> add_error(res, err) end)
+  def add_issues(result, issues) do
+    Enum.reduce(issues, result, fn err, res -> add_issue(res, err) end)
   end
 
   def to_tuple(%Z.Result{status: :valid, value: value}) do
     {:ok, value}
   end
 
-  def to_tuple(%Z.Result{status: :invalid, errors: errors}) do
-    {:error, errors}
+  def to_tuple(%Z.Result{status: :invalid, issues: issues}) do
+    {:error, %Z.Error{issues: issues}}
   end
 end

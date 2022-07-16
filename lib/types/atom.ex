@@ -3,7 +3,7 @@ defmodule Z.Atom do
   A module for validating an atom
   """
 
-  alias Z.{Result, Error, Any}
+  alias Z.{Result, Error, Issue, Any}
 
   use Z.Type,
     options: Z.Any.__z__(:options) ++ [:parse]
@@ -45,8 +45,8 @@ defmodule Z.Atom do
     message = "parse mode must be :existing_only or :dangerously_allow_non_existing"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -65,8 +65,8 @@ defmodule Z.Atom do
         message = "unable to parse input as an atom"
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.invalid_string(),
             message,
             context
@@ -83,8 +83,8 @@ defmodule Z.Atom do
     message = Keyword.get(options, :message, "input is not an atom")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_type(),
         message,
         context

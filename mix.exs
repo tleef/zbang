@@ -4,7 +4,7 @@ defmodule Z.MixProject do
   @app :zbang
   @version "1.0.0"
   @elixir_version "~> 1.13"
-  @source_url "https://github.com/tleef/z-elixir"
+  @source_url "https://github.com/tleef/zbang"
 
   def project do
     [

@@ -1,23 +1,35 @@
-defmodule Z.Error do
+defmodule Z.Issue do
   @moduledoc """
-  The Error struct
+  The Issue struct
   """
 
   defstruct [:code, :message, :path]
 
-  @type t :: %Z.Error{
+  @type t :: %Z.Issue{
           code: String.t(),
           message: String.t(),
           path: [String.t()]
         }
 
   def new(code, message, context) do
-    %Z.Error{
+    %Z.Issue{
       code: code,
       message: message,
       path: context.path |> Enum.reverse()
     }
   end
+end
+
+defmodule Z.Error do
+  @moduledoc """
+  The Error struct
+  """
+
+  defexception message: "invalid", issues: []
+
+  @type t :: %Z.Error{
+          issues: [Z.Issue.t()]
+        }
 
   defmodule Codes do
     @moduledoc """

@@ -3,7 +3,7 @@ defmodule Z.List do
   A module for validating a List
   """
 
-  alias Z.{Result, Error, Any}
+  alias Z.{Result, Error, Issue, Any}
 
   use Z.Type,
     options: Z.Any.__z__(:options) ++ [:length, :min, :max, :items]
@@ -35,8 +35,8 @@ defmodule Z.List do
     message = Keyword.get(options, :message, "input is not a list")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_type(),
         message,
         context
@@ -56,8 +56,8 @@ defmodule Z.List do
     message = "unable to check length with length: #{inspect(length)}, length must be an integer"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -69,8 +69,8 @@ defmodule Z.List do
     message = Keyword.get(options, :message, "input does not have correct length")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_small(),
         message,
         context
@@ -82,8 +82,8 @@ defmodule Z.List do
     message = Keyword.get(options, :message, "input does not have correct length")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_big(),
         message,
         context
@@ -104,8 +104,8 @@ defmodule Z.List do
       "unable to check min length with length: #{inspect(length)}, length must be an integer"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -117,8 +117,8 @@ defmodule Z.List do
     message = Keyword.get(options, :message, "input is too short")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_small(),
         message,
         context
@@ -139,8 +139,8 @@ defmodule Z.List do
       "unable to check max length with length: #{inspect(length)}, length must be an integer"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -152,8 +152,8 @@ defmodule Z.List do
     message = Keyword.get(options, :message, "input is too long")
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.too_big(),
         message,
         context
@@ -173,8 +173,8 @@ defmodule Z.List do
     message = "unable to check items of type: #{inspect(type)}, type must be an atom"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -191,8 +191,8 @@ defmodule Z.List do
         message = "unable to check items of type: #{inspect(type)}, unknown type"
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.invalid_arguments(),
             message,
             context
@@ -222,8 +222,8 @@ defmodule Z.List do
       {:ok, value} ->
         {value, result}
 
-      {:error, errors} ->
-        {item, result |> Result.add_errors(errors)}
+      {:error, error} ->
+        {item, result |> Result.add_issues(error.issues)}
     end
   end
 

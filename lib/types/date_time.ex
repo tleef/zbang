@@ -3,7 +3,7 @@ defmodule Z.DateTime do
   A module for validating a DateTime
   """
 
-  alias Z.{Result, Error, Any}
+  alias Z.{Result, Error, Issue, Any}
 
   use Z.Type,
     options: Z.Any.__z__(:options) ++ [:parse, :allow_int, :shift, :trunc, :min, :max]
@@ -49,8 +49,8 @@ defmodule Z.DateTime do
     message = "unable to parse DateTime with format: #{inspect(format)}, format must be :iso8601"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -67,8 +67,8 @@ defmodule Z.DateTime do
         message = "unable to parse input as a DateTime"
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.invalid_string(),
             message,
             context
@@ -94,8 +94,8 @@ defmodule Z.DateTime do
       "unable to convert to DateTime with mode: #{inspect(mode)}, mode must be :unix or :gregorian"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -117,9 +117,9 @@ defmodule Z.DateTime do
     message = Keyword.get(options, :message, "input is not a DateTime")
 
     result
-    |> Z.Result.add_error(
-      Z.Error.new(
-        Z.Error.Codes.invalid_type(),
+    |> Result.add_issue(
+      Issue.new(
+        Error.Codes.invalid_type(),
         message,
         context
       )
@@ -138,8 +138,8 @@ defmodule Z.DateTime do
     message = "timezone must be a string"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -156,8 +156,8 @@ defmodule Z.DateTime do
         message = "unable to shift input to #{inspect(zone)} timezone"
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.invalid_arguments(),
             message,
             context
@@ -180,8 +180,8 @@ defmodule Z.DateTime do
       "unable to truncate with precision: #{inspect(precision)}, precision must be :second, :millisecond, or :microsecond"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -197,8 +197,8 @@ defmodule Z.DateTime do
     message = "min value must be a DateTime"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -212,8 +212,8 @@ defmodule Z.DateTime do
         message = Keyword.get(options, :message, "input is too early")
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.too_small(),
             message,
             context
@@ -233,8 +233,8 @@ defmodule Z.DateTime do
     message = "max value must be a DateTime"
 
     result
-    |> Result.add_error(
-      Error.new(
+    |> Result.add_issue(
+      Issue.new(
         Error.Codes.invalid_arguments(),
         message,
         context
@@ -248,8 +248,8 @@ defmodule Z.DateTime do
         message = Keyword.get(options, :message, "input is too late")
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.too_big(),
             message,
             context
@@ -274,8 +274,8 @@ defmodule Z.DateTime do
         message = "unable to convert unix input to a DateTime"
 
         result
-        |> Result.add_error(
-          Error.new(
+        |> Result.add_issue(
+          Issue.new(
             Error.Codes.invalid_date(),
             message,
             context

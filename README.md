@@ -185,26 +185,28 @@ Z.String.validate("hello world")
 
 Z.String.validate("oops", length: 5)
 {:error,
- [
-   %Z.Error{
-     code: "invalid_string",
-     message: "input does not have correct length",
-     path: ["."]
-   }
- ]}
+ %Z.Error{
+   issues: [
+     %Z.Issue{
+       code: "too_small",
+       message: "input does not have correct length",
+       path: ["."]
+     }
+   ],
+   message: ""
+ }}
  
 Z.String.validate(nil, [:required, default: "sleepy bear"])
 {:ok, "sleepy bear"}
 
 Book.validate(%{title: "I <3 Elixir", price: %{amount: "1.00"}})
 {:error,
- [
-   %Z.Error{
-     code: "invalid_type",
-     message: "input is not a Book",
-     path: ["."]
-   }
- ]}
+ %Z.Error{
+   issues: [
+     %Z.Issue{code: "invalid_type", message: "input is not a Book", path: ["."]}
+   ],
+   message: ""
+ }}
  
 Book.validate(%{title: "I <3 Elixir", price: %{amount: "1.00"}}, [:cast])
 {:ok,

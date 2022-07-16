@@ -1,7 +1,7 @@
 defmodule Z.Date.Test do
   use ExUnit.Case, async: true
 
-  alias Z.{Result, Error, Context, Date}
+  alias Z.{Result, Error, Issue, Context, Date}
 
   describe "Z.Date.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
@@ -57,7 +57,7 @@ defmodule Z.Date.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "unable to parse Date with format: :invalid, format must be :iso8601",
                path: ["."]
@@ -72,7 +72,7 @@ defmodule Z.Date.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_string(),
                message: "unable to parse input as a Date",
                path: ["."]
@@ -154,7 +154,7 @@ defmodule Z.Date.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a Date",
                path: ["."]
@@ -169,7 +169,7 @@ defmodule Z.Date.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a Date",
                path: ["."]
@@ -213,7 +213,7 @@ defmodule Z.Date.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input is too early",
                path: ["."]
@@ -228,7 +228,7 @@ defmodule Z.Date.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "min value must be a Date",
                path: ["."]
@@ -272,7 +272,7 @@ defmodule Z.Date.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input is too late",
                path: ["."]
@@ -287,7 +287,7 @@ defmodule Z.Date.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_arguments(),
                message: "max value must be a Date",
                path: ["."]

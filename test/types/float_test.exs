@@ -1,7 +1,7 @@
 defmodule Z.Float.Test do
   use ExUnit.Case, async: true
 
-  alias Z.{Result, Error, Context, Float}
+  alias Z.{Result, Error, Issue, Context, Float}
 
   describe "Z.Float.check(_, :parse, _, _)/4" do
     test "given `true`, when nil, returns valid result" do
@@ -57,7 +57,7 @@ defmodule Z.Float.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_string(),
                message: "unable to parse input as a float",
                path: ["."]
@@ -130,7 +130,7 @@ defmodule Z.Float.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a float",
                path: ["."]
@@ -145,7 +145,7 @@ defmodule Z.Float.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.invalid_type(),
                message: "input is not a float",
                path: ["."]
@@ -180,7 +180,7 @@ defmodule Z.Float.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input is too small",
                path: ["."]
@@ -215,7 +215,7 @@ defmodule Z.Float.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input is too big",
                path: ["."]
@@ -250,7 +250,7 @@ defmodule Z.Float.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "input is too small",
                path: ["."]
@@ -285,7 +285,7 @@ defmodule Z.Float.Test do
 
       assert result.status == :invalid
 
-      assert Enum.member?(result.errors, %Error{
+      assert Enum.member?(result.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "input is too big",
                path: ["."]
@@ -303,9 +303,9 @@ defmodule Z.Float.Test do
     end
 
     test "given small value, when check :min, check min" do
-      {:error, errors} = Float.validate(20.9, min: {21.0, message: "too small"})
+      {:error, error} = Float.validate(20.9, min: {21.0, message: "too small"})
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "too small",
                path: ["."]
@@ -313,9 +313,9 @@ defmodule Z.Float.Test do
     end
 
     test "given large value, when check :max, check max" do
-      {:error, errors} = Float.validate(17.1, max: {17.0, message: "too great"})
+      {:error, error} = Float.validate(17.1, max: {17.0, message: "too great"})
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "too great",
                path: ["."]
@@ -323,9 +323,9 @@ defmodule Z.Float.Test do
     end
 
     test "given small value, when check :greater_than, check greater_than" do
-      {:error, errors} = Float.validate(21.0, greater_than: {21.0, message: "not great enough"})
+      {:error, error} = Float.validate(21.0, greater_than: {21.0, message: "not great enough"})
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.too_small(),
                message: "not great enough",
                path: ["."]
@@ -333,9 +333,9 @@ defmodule Z.Float.Test do
     end
 
     test "given large value, when check :less_than, check less_than" do
-      {:error, errors} = Float.validate(18.0, less_than: {18.0, message: "not small enough"})
+      {:error, error} = Float.validate(18.0, less_than: {18.0, message: "not small enough"})
 
-      assert Enum.member?(errors, %Error{
+      assert Enum.member?(error.issues, %Issue{
                code: Error.Codes.too_big(),
                message: "not small enough",
                path: ["."]
