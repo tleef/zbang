@@ -23,12 +23,16 @@ defmodule Z.Any do
     |> maybe_check(:enum, rules, context)
   end
 
-  def check(result, :default, value, _) when result.value == nil do
-    result |> Result.set_value(value)
+  def check(result, :default, _value, _context) when result.value != nil do
+    result
   end
 
-  def check(result, :default, _value, _context) do
-    result
+  def check(result, :default, func, context) when is_function(func, 0) do
+    check(result, :default, func.(), context)
+  end
+
+  def check(result, :default, value, _) do
+    result |> Result.set_value(value)
   end
 
   def check(result, :type, _options, _context) do
