@@ -177,6 +177,10 @@ defmodule Z.Any.Test do
       {:ok, "some"} = Any.validate(nil, [:required, default: "some"])
     end
 
+    test "given nil, when :required with :default func, set default value and check required" do
+      {:ok, 2} = Any.validate(nil, [:required, default: fn -> 1 + 1 end])
+    end
+
     test "given nil, when :equals some value with :default value, set default and check equals" do
       {:ok, "some"} = Any.validate(nil, equals: "some", default: "some")
     end
