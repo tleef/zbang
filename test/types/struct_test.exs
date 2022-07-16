@@ -312,4 +312,109 @@ defmodule Z.Struct.Test do
              })
     end
   end
+
+  describe "Book.new/1" do
+    test "given a valid keyword list, when new, returns a valid result" do
+      {:ok, value} =
+        Book.new(
+          title: "hello",
+          author: "unknown",
+          description: "world",
+          price: %{amount: "1.00", currency: "USD"}
+        )
+
+      assert value == %Book{
+               title: "hello",
+               author: "unknown",
+               description: "world",
+               price: %Money{amount: "1.00", currency: "USD"}
+             }
+    end
+
+    test "given a valid map, when new, returns a valid result" do
+      {:ok, value} =
+        Book.new(%{
+          title: "hello",
+          author: "unknown",
+          description: "world",
+          price: %{amount: "1.00", currency: "USD"}
+        })
+
+      assert value == %Book{
+               title: "hello",
+               author: "unknown",
+               description: "world",
+               price: %Money{amount: "1.00", currency: "USD"}
+             }
+    end
+
+    test "given a keyword list with invalid keys, when new, returns an invalid result with errors" do
+      {:error, error} =
+        Book.new(
+          title: 123,
+          author: "unknown",
+          description: "world",
+          price: %{amount: "1.00", currency: "$"}
+        )
+
+      assert Enum.member?(error.issues, %Issue{
+               code: Error.Codes.invalid_type(),
+               message: "input is not a valid string",
+               path: [".", :title]
+             })
+
+      assert Enum.member?(error.issues, %Issue{
+               code: Error.Codes.invalid_enum_value(),
+               message: "input is not an allowed value",
+               path: [".", :price, :currency]
+             })
+    end
+  end
+
+  describe "Book.new!/1" do
+    test "given a valid keyword list, when new!, returns a valid result" do
+      value =
+        Book.new!(
+          title: "hello",
+          author: "unknown",
+          description: "world",
+          price: %{amount: "1.00", currency: "USD"}
+        )
+
+      assert value == %Book{
+               title: "hello",
+               author: "unknown",
+               description: "world",
+               price: %Money{amount: "1.00", currency: "USD"}
+             }
+    end
+
+    test "given a valid map, when new!, returns a valid result" do
+      value =
+        Book.new!(%{
+          title: "hello",
+          author: "unknown",
+          description: "world",
+          price: %{amount: "1.00", currency: "USD"}
+        })
+
+      assert value == %Book{
+               title: "hello",
+               author: "unknown",
+               description: "world",
+               price: %Money{amount: "1.00", currency: "USD"}
+             }
+    end
+
+    test "given a keyword list with invalid keys, when new!, returns an invalid result with errors" do
+      assert_raise Z.Error, fn ->
+        Book.new!(
+          title: 123,
+          author: "unknown",
+          description: "world",
+          price: %{amount: "1.00", currency: "$"}
+        )
+      end
+    end
+  end
 end
