@@ -176,4 +176,16 @@ defmodule Z.Any.Test do
       {:ok, "some"} = Any.validate(nil, enum: ["some", "thing", "else"], default: "some")
     end
   end
+
+  describe "Z.Any.validate!/3" do
+    test "given nil, when :default value, set default" do
+      "some" = Any.validate!("some")
+    end
+
+    test "given nil, when :required, check required" do
+      assert_raise Z.Error, fn ->
+        Any.validate!(nil, [:required])
+      end
+    end
+  end
 end

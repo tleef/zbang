@@ -20,6 +20,13 @@ defmodule Z.Type do
         |> Z.Result.to_tuple()
       end
 
+      def validate!(input, rules \\ [], context \\ Z.Context.new(".")) do
+        case validate(input, rules, context) do
+          {:ok, value} -> value
+          {:error, error} -> raise(error)
+        end
+      end
+
       defp check(result, rules, context) do
         result
         |> check(:conversions, rules, context)
