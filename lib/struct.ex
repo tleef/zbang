@@ -44,6 +44,18 @@ defmodule Z.Struct do
 
         def __z__(:fields), do: unquote(fields)
 
+        def new(enum) do
+          struct(__MODULE__, enum)
+          |> validate()
+        end
+
+        def new!(enum) do
+          case new(enum) do
+            {:ok, value} -> value
+            {:error, error} -> raise error
+          end
+        end
+
         def check(result, :conversions, rules, context) do
           result
           |> Z.Any.check(:conversions, rules, context)
