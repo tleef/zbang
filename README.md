@@ -11,7 +11,7 @@ This package can be installed by adding `zbang` to your list of dependencies in 
 ```elixir
 def deps do
   [
-    {:zbang, "~> 1.0.0"}
+    {:zbang, "~> 1.1.0"}
   ]
 end
 ```
@@ -164,6 +164,7 @@ defmodule Book do
     field :author, :string, [:required, default: "Unknown"]
     field :description, :string
     field :price, Money, [:required, :cast]
+    field :read_at, :datetime, [default: &DateTime.utc_now/0]
   end
 end
 ```
@@ -173,6 +174,8 @@ In the above example, we are defining two structs by employing `use Z.Struct` wi
 The `validate` function uses the fields defined in the `schema` block to automatically assert the type of each value as well as assert that the given rules are being followed.
 
 Each `field` takes a `name`, `type` and optional `rules`. The `name` must be an atom. The `type` must also be an atom and can either be a built-in type or a custom type e.g. the `Money` type used by the `:price` field in the example above. The `rules` vary depending on the `type` given. See [here](#types) for a list of all rules per type.
+
+All `:required` fields will be added to `@enforce_keys` by default. If you don't want to enforce a required field at compile time, you may opt out of this behavior with `required: [enforce: false]`
 
 ## Validation
 
