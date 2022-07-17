@@ -24,6 +24,7 @@ defmodule Z.Struct do
 
         @z_schema_defined unquote(caller.line)
 
+        Module.register_attribute(__MODULE__, :z_enforced_fields, accumulate: true)
         Module.register_attribute(__MODULE__, :z_struct_fields, accumulate: true)
 
         try do
@@ -38,18 +39,19 @@ defmodule Z.Struct do
       quote unquote: false do
         fields = Macro.escape(@z_fields) |> Enum.reverse()
 
+        @enforce_keys Enum.reverse(@z_enforced_fields)
         defstruct Enum.reverse(@z_struct_fields)
 
         use Z.Type, options: unquote(Z.Any.__z__(:options) ++ [:cast])
 
         def __z__(:fields), do: unquote(fields)
 
-        def new(enum) do
+        def new(enum \\ []) do
           struct(__MODULE__, enum)
           |> validate()
         end
 
-        def new!(enum) do
+        def new!(enum \\ []) do
           case new(enum) do
             {:ok, value} -> value
             {:error, error} -> raise error
@@ -187,6 +189,7 @@ defmodule Z.Struct do
 
   defp define_field(mod, name, type, rules) do
     put_struct_field(mod, name, Keyword.get(rules, :default))
+    put_enforced_field(mod, name, Keyword.get(rules, :required))
     Module.put_attribute(mod, :z_fields, {name, {type, rules}})
   end
 
@@ -199,5 +202,25 @@ defmodule Z.Struct do
     end
 
     Module.put_attribute(mod, :z_struct_fields, {name, default})
+  end
+
+  defp put_enforced_field(mod, name, options) when is_list(options) do
+    if options[:enforced] != false do
+      put_enforced_field(mod, name, true)
+    end
+  end
+
+  defp put_enforced_field(mod, name, true) do
+    fields = Module.get_attribute(mod, :z_enforced_fields)
+
+    if List.keyfind(fields, name, 0) do
+      raise ArgumentError,
+            "field #{inspect(name)} already exists on schema, you must either remove the duplication or choose a different name"
+    end
+
+    Module.put_attribute(mod, :z_enforced_fields, name)
+  end
+
+  defp put_enforced_field(_mod, _name, _options) do
   end
 end

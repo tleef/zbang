@@ -7,8 +7,8 @@ defmodule Z.List.Test do
     use Z.Struct
 
     schema do
-      field(:title, :string, [:required])
-      field(:author, :string, [:required, default: "unknown"])
+      field(:title, :string, required: [enforced: false])
+      field(:author, :string, required: [enforced: false], default: "unknown")
     end
   end
 
