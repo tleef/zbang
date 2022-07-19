@@ -3,6 +3,10 @@ defmodule Z.Struct.Test do
 
   alias Z.{Error, Issue}
 
+  def utc_now do
+    ~U[2016-05-24 13:26:08Z]
+  end
+
   defmodule Money do
     use Z.Struct
 
@@ -31,6 +35,8 @@ defmodule Z.Struct.Test do
       field(:description, :string)
 
       field(:price, Money, [:required, :cast])
+
+      field(:read_at, :datetime, default: &Z.Struct.Test.utc_now/0)
     end
   end
 
@@ -176,7 +182,8 @@ defmodule Z.Struct.Test do
                     equals: "unknown"
                   ]},
                description: {Z.String, []},
-               price: {Z.Struct.Test.Money, [required: true, cast: true]}
+               price: {Z.Struct.Test.Money, [required: true, cast: true]},
+               read_at: {Z.DateTime, [default: &Z.Struct.Test.utc_now/0]}
              ]
     end
   end
@@ -198,7 +205,8 @@ defmodule Z.Struct.Test do
                title: "hello",
                author: "unknown",
                description: "world",
-               price: %Money{amount: "1.00", currency: "USD"}
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
              }
     end
 
@@ -238,7 +246,8 @@ defmodule Z.Struct.Test do
                title: "hello",
                author: "unknown",
                description: "world",
-               price: %Money{amount: "1.00", currency: "USD"}
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
              }
     end
 
@@ -250,7 +259,8 @@ defmodule Z.Struct.Test do
                title: "hello",
                author: "unknown",
                description: "world",
-               price: %Money{amount: "1.00", currency: "USD"}
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
              }
     end
 
@@ -264,7 +274,8 @@ defmodule Z.Struct.Test do
       assert value == %Book{
                title: "hello",
                author: "unknown",
-               price: %Money{amount: "1.00", currency: "USD"}
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
              }
     end
 
@@ -327,7 +338,8 @@ defmodule Z.Struct.Test do
                title: "hello",
                author: "unknown",
                description: "world",
-               price: %Money{amount: "1.00", currency: "USD"}
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
              }
     end
 
@@ -344,7 +356,8 @@ defmodule Z.Struct.Test do
                title: "hello",
                author: "unknown",
                description: "world",
-               price: %Money{amount: "1.00", currency: "USD"}
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
              }
     end
 
@@ -385,7 +398,8 @@ defmodule Z.Struct.Test do
                title: "hello",
                author: "unknown",
                description: "world",
-               price: %Money{amount: "1.00", currency: "USD"}
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
              }
     end
 
@@ -402,7 +416,8 @@ defmodule Z.Struct.Test do
                title: "hello",
                author: "unknown",
                description: "world",
-               price: %Money{amount: "1.00", currency: "USD"}
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
              }
     end
 

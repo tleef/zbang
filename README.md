@@ -11,7 +11,7 @@ This package can be installed by adding `zbang` to your list of dependencies in 
 ```elixir
 def deps do
   [
-    {:zbang, "~> 1.0.0"}
+    {:zbang, "~> 1.1.0"}
   ]
 end
 ```
@@ -29,6 +29,8 @@ _Shorthand:_ `:any`
 
 **Rules**
 - `:default` - If the input is `nil`, sets input to given value
+  - You may set the default to any literal value. When defined on a struct field, the value will be validated against the field type and all other field rules at compile time.
+  - You may also set the default to any function with an arity of zero. The function will be evaluated at validation time and the returned value will be used as the default value. When defined on a struct field, the function must be a named function and will not be evaluated or validated at compile time.
 - `:required` - Asserts that input is not `nil`
 - `:equals` - Asserts that input is equal to given value
 - `:enum` - Asserts that input is in list of given values
@@ -164,19 +166,26 @@ defmodule Book do
     field :author, :string, [:required, default: "Unknown"]
     field :description, :string
     field :price, Money, [:required, :cast]
+    field :read_at, :datetime, [default: &DateTime.utc_now/0]
   end
 end
 ```
 
-In the above example, we are defining two structs by employing `use Z.Struct` with a `schema` block where `fields` are defined. When you define a struct in this way, `Z.Struct` will call `defstruct` for you and create an Elixir struct with defaults when given. In addition, it will define a `validate` function on your struct module that can be used to validate values at runtime.
+In the above example, we are defining two structs by employing `use Z.Struct` with a `schema` block where `fields` are defined. When you define a struct in this way, `Z.Struct` will call `defstruct` for you and create an Elixir struct with defaults when given. In addition, it will define a `validate/3` function on your struct module that can be used to validate values at runtime.
 
-The `validate` function uses the fields defined in the `schema` block to automatically assert the type of each value as well as assert that the given rules are being followed.
+The `validate/3` function uses the fields defined in the `schema` block to automatically assert the type of each value as well as assert that the given rules are being followed.
+
+In addition to the `validate/3` function, `new/1` and `new!/1` functions are also added for instantiating your structs from a keyword list or any other key-value enumerable. These functions will also validate your newly created struct.
 
 Each `field` takes a `name`, `type` and optional `rules`. The `name` must be an atom. The `type` must also be an atom and can either be a built-in type or a custom type e.g. the `Money` type used by the `:price` field in the example above. The `rules` vary depending on the `type` given. See [here](#types) for a list of all rules per type.
 
+All `:required` fields will be added to `@enforce_keys` by default. If you don't want to enforce a required field at compile time, you may opt out of this behavior with `required: [enforce: false]`
+
 ## Validation
 
-Validating data is as simple as calling `validate` on the type that you would like to assert and passing in optional rules. The validate function will return either `{:ok, value}` or `{:error, errors}`.
+Validating data is as simple as calling `validate/3` on the type that you would like to assert and passing in optional rules. The `validate/3` function will return either `{:ok, value}` or `{:error, error}`.
+
+Alternatively, you can use `validate!/3` which has the same signature as `validate/3` but returns the validated `value` instead of the `{:ok, value}` tuple. If there are issues during validation, `validate!/3` will raise a `Z.Error`
 
 _Examples_
 ```elixir
@@ -214,6 +223,7 @@ Book.validate(%{title: "I <3 Elixir", price: %{amount: "1.00"}}, [:cast])
    author: "Unknown",
    description: nil,
    price: %Money{amount: 1.0, currency: "USD"},
+   read_at: ~U[2022-07-19 04:14:58.979221Z],
    title: "I <3 Elixir"
  }}
 ```

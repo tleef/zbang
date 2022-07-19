@@ -176,13 +176,15 @@ defmodule Z.Struct do
     if Keyword.has_key?(rules, :default) do
       value = Keyword.fetch!(rules, :default)
 
-      case type.validate(value, Keyword.delete(rules, :default)) do
-        {:ok, _} ->
-          :ok
+      if !is_function(value, 0) do
+        case type.validate(value, Keyword.delete(rules, :default)) do
+          {:ok, _} ->
+            :ok
 
-        _ ->
-          raise ArgumentError,
-                "default value #{inspect(value)} is invalid for type #{inspect(type)} of field #{inspect(name)}"
+          _ ->
+            raise ArgumentError,
+                  "default value #{inspect(value)} is invalid for type #{inspect(type)} of field #{inspect(name)}"
+        end
       end
     end
   end
@@ -201,7 +203,11 @@ defmodule Z.Struct do
             "field #{inspect(name)} already exists on schema, you must either remove the duplication or choose a different name"
     end
 
-    Module.put_attribute(mod, :z_struct_fields, {name, default})
+    if is_function(default, 0) do
+      Module.put_attribute(mod, :z_struct_fields, {name, nil})
+    else
+      Module.put_attribute(mod, :z_struct_fields, {name, default})
+    end
   end
 
   defp put_enforced_field(mod, name, options) when is_list(options) do
