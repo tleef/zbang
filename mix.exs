@@ -48,7 +48,8 @@ defmodule Z.MixProject do
       main: "readme",
       source_ref: "#{@version}",
       extras: [
-        "README.md"
+        "README.md",
+        "CHANGELOG.md"
       ]
     ]
   end
@@ -60,7 +61,8 @@ defmodule Z.MixProject do
         ".formatter.exs",
         "mix.exs",
         "README*",
-        "LICENSE*"
+        "LICENSE*",
+        "CHANGELOG*"
       ],
       maintainers: ["Thomas Lee"],
       licenses: ["MIT"],
