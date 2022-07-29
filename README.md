@@ -11,7 +11,7 @@ This package can be installed by adding `zbang` to your list of dependencies in 
 ```elixir
 def deps do
   [
-    {:zbang, "~> 1.1.0"}
+    {:zbang, "~> 1.1.1"}
   ]
 end
 ```
