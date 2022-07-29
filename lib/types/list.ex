@@ -218,7 +218,7 @@ defmodule Z.List do
   end
 
   defp check_item(result, item, index, type, rules, context) do
-    case type.validate(item, rules, Z.Context.new(index, context)) do
+    case type.validate(item, rules, Z.Context.new(type, index, context)) do
       {:ok, value} ->
         {value, result}
 

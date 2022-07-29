@@ -8,7 +8,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> DateTime.check(:parse, true, Context.new("."))
+        |> DateTime.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -17,7 +17,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2016-05-24 13:26:08Z])
-        |> DateTime.check(:parse, true, Context.new("."))
+        |> DateTime.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -26,7 +26,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value("2015-01-23T23:50:07Z")
-        |> DateTime.check(:parse, true, Context.new("."))
+        |> DateTime.check(:parse, true, Context.new())
 
       assert result.value == ~U[2015-01-23 23:50:07Z]
     end
@@ -35,7 +35,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value("2015-01-23T23:50:07.123+02:30")
-        |> DateTime.check(:parse, true, Context.new("."))
+        |> DateTime.check(:parse, true, Context.new())
 
       assert result.value == ~U[2015-01-23 21:20:07.123Z]
     end
@@ -44,7 +44,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value("2015-01-23T23:50:07Z")
-        |> DateTime.check(:parse, false, Context.new("."))
+        |> DateTime.check(:parse, false, Context.new())
 
       assert result.value == "2015-01-23T23:50:07Z"
     end
@@ -53,7 +53,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value("2015-01-23T23:50:07Z")
-        |> DateTime.check(:parse, :iso8601, Context.new("."))
+        |> DateTime.check(:parse, :iso8601, Context.new())
 
       assert result.value == ~U[2015-01-23 23:50:07Z]
     end
@@ -62,7 +62,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value("2015-01-23T23:50:07Z")
-        |> DateTime.check(:parse, :invalid, Context.new("."))
+        |> DateTime.check(:parse, :invalid, Context.new())
 
       assert result.status == :invalid
 
@@ -77,7 +77,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value("2015-01-23T23:50:07")
-        |> DateTime.check(:parse, true, Context.new("."))
+        |> DateTime.check(:parse, true, Context.new())
 
       assert result.status == :invalid
 
@@ -94,7 +94,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> DateTime.check(:allow_int, true, Context.new("."))
+        |> DateTime.check(:allow_int, true, Context.new())
 
       assert result.status == :valid
     end
@@ -103,7 +103,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2016-05-24 13:26:08Z])
-        |> DateTime.check(:allow_int, true, Context.new("."))
+        |> DateTime.check(:allow_int, true, Context.new())
 
       assert result.status == :valid
     end
@@ -112,7 +112,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(1_464_096_368)
-        |> DateTime.check(:allow_int, true, Context.new("."))
+        |> DateTime.check(:allow_int, true, Context.new())
 
       assert result.value == ~U[2016-05-24 13:26:08Z]
     end
@@ -121,7 +121,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(1_464_096_368)
-        |> DateTime.check(:allow_int, :unix, Context.new("."))
+        |> DateTime.check(:allow_int, :unix, Context.new())
 
       assert result.value == ~U[2016-05-24 13:26:08Z]
     end
@@ -130,7 +130,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(253_402_300_800)
-        |> DateTime.check(:allow_int, :unix, Context.new("."))
+        |> DateTime.check(:allow_int, :unix, Context.new())
 
       assert result.status == :invalid
 
@@ -145,7 +145,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(63_755_511_991)
-        |> DateTime.check(:allow_int, :gregorian, Context.new("."))
+        |> DateTime.check(:allow_int, :gregorian, Context.new())
 
       assert result.value == ~U[2020-05-01 00:26:31Z]
     end
@@ -154,7 +154,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(1_464_096_368)
-        |> DateTime.check(:allow_int, false, Context.new("."))
+        |> DateTime.check(:allow_int, false, Context.new())
 
       assert result.value == 1_464_096_368
     end
@@ -165,7 +165,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> DateTime.check(:type, [], Context.new("."))
+        |> DateTime.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -174,7 +174,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2020-05-01 00:26:31Z])
-        |> DateTime.check(:type, [], Context.new("."))
+        |> DateTime.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -183,7 +183,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> DateTime.check(:type, [], Context.new("."))
+        |> DateTime.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -198,7 +198,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~N[2000-01-01 23:00:07])
-        |> DateTime.check(:type, [], Context.new("."))
+        |> DateTime.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -215,7 +215,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> DateTime.check(:shift, "Etc/UTC", Context.new("."))
+        |> DateTime.check(:shift, "Etc/UTC", Context.new())
 
       assert result.status == :valid
     end
@@ -224,7 +224,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> DateTime.check(:shift, "Etc/UTC", Context.new("."))
+        |> DateTime.check(:shift, "Etc/UTC", Context.new())
 
       assert result.status == :valid
     end
@@ -245,7 +245,7 @@ defmodule Z.DateTime.Test do
           std_offset: 0,
           time_zone: "Europe/Warsaw"
         })
-        |> DateTime.check(:shift, "Etc/UTC", Context.new("."))
+        |> DateTime.check(:shift, "Etc/UTC", Context.new())
 
       assert result.value == ~U[2000-02-29 22:00:07Z]
     end
@@ -254,7 +254,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2020-05-01 00:26:31Z])
-        |> DateTime.check(:shift, "Europe/Warsaw", Context.new("."))
+        |> DateTime.check(:shift, "Europe/Warsaw", Context.new())
 
       assert result.status == :invalid
 
@@ -271,7 +271,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> DateTime.check(:trunc, true, Context.new("."))
+        |> DateTime.check(:trunc, true, Context.new())
 
       assert result.status == :valid
     end
@@ -280,7 +280,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> DateTime.check(:trunc, true, Context.new("."))
+        |> DateTime.check(:trunc, true, Context.new())
 
       assert result.status == :valid
     end
@@ -289,7 +289,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2020-05-01 00:26:31.123456Z])
-        |> DateTime.check(:trunc, true, Context.new("."))
+        |> DateTime.check(:trunc, true, Context.new())
 
       assert result.value == ~U[2020-05-01 00:26:31Z]
     end
@@ -298,7 +298,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2020-05-01 00:26:31.123456Z])
-        |> DateTime.check(:trunc, :second, Context.new("."))
+        |> DateTime.check(:trunc, :second, Context.new())
 
       assert result.value == ~U[2020-05-01 00:26:31Z]
     end
@@ -307,7 +307,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2020-05-01 00:26:31.123456Z])
-        |> DateTime.check(:trunc, :millisecond, Context.new("."))
+        |> DateTime.check(:trunc, :millisecond, Context.new())
 
       assert result.value == ~U[2020-05-01 00:26:31.123Z]
     end
@@ -316,7 +316,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2020-05-01 00:26:31.123456789Z])
-        |> DateTime.check(:trunc, :microsecond, Context.new("."))
+        |> DateTime.check(:trunc, :microsecond, Context.new())
 
       assert result.value == ~U[2020-05-01 00:26:31.123456Z]
     end
@@ -327,7 +327,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new("."))
+        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -336,7 +336,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new("."))
+        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -345,7 +345,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2000-01-01 00:00:00Z])
-        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new("."))
+        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -354,7 +354,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[1999-12-31 23:59:59Z])
-        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new("."))
+        |> DateTime.check(:min, ~U[2000-01-01 00:00:00Z], Context.new())
 
       assert result.status == :invalid
 
@@ -369,7 +369,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2000-01-01 00:00:00Z])
-        |> DateTime.check(:min, "2000-01-01 00:00:00Z", Context.new("."))
+        |> DateTime.check(:min, "2000-01-01 00:00:00Z", Context.new())
 
       assert result.status == :invalid
 
@@ -386,7 +386,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new("."))
+        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -395,7 +395,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new("."))
+        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -404,7 +404,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2000-01-01 00:00:00Z])
-        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new("."))
+        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -413,7 +413,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2000-01-01 00:00:01Z])
-        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new("."))
+        |> DateTime.check(:max, ~U[2000-01-01 00:00:00Z], Context.new())
 
       assert result.status == :invalid
 
@@ -428,7 +428,7 @@ defmodule Z.DateTime.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2000-01-01 00:00:00Z])
-        |> DateTime.check(:max, "2000-01-01T00:00:00Z", Context.new("."))
+        |> DateTime.check(:max, "2000-01-01T00:00:00Z", Context.new())
 
       assert result.status == :invalid
 

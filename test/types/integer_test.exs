@@ -8,7 +8,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Integer.check(:parse, true, Context.new("."))
+        |> Integer.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -17,7 +17,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(10)
-        |> Integer.check(:parse, true, Context.new("."))
+        |> Integer.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -26,7 +26,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value("10")
-        |> Integer.check(:parse, true, Context.new("."))
+        |> Integer.check(:parse, true, Context.new())
 
       assert result.value == 10
     end
@@ -35,7 +35,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value("10.5")
-        |> Integer.check(:parse, true, Context.new("."))
+        |> Integer.check(:parse, true, Context.new())
 
       assert result.value == 10
     end
@@ -44,7 +44,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value("10")
-        |> Integer.check(:parse, false, Context.new("."))
+        |> Integer.check(:parse, false, Context.new())
 
       assert result.value == "10"
     end
@@ -53,7 +53,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value("f4")
-        |> Integer.check(:parse, 16, Context.new("."))
+        |> Integer.check(:parse, 16, Context.new())
 
       assert result.value == 244
     end
@@ -62,7 +62,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value("10")
-        |> Integer.check(:parse, 42, Context.new("."))
+        |> Integer.check(:parse, 42, Context.new())
 
       assert result.status == :invalid
 
@@ -77,7 +77,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value("oops")
-        |> Integer.check(:parse, true, Context.new("."))
+        |> Integer.check(:parse, true, Context.new())
 
       assert result.status == :invalid
 
@@ -94,7 +94,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Integer.check(:trunc, true, Context.new("."))
+        |> Integer.check(:trunc, true, Context.new())
 
       assert result.status == :valid
     end
@@ -103,7 +103,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(10)
-        |> Integer.check(:trunc, true, Context.new("."))
+        |> Integer.check(:trunc, true, Context.new())
 
       assert result.status == :valid
     end
@@ -112,7 +112,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(32.5)
-        |> Integer.check(:trunc, true, Context.new("."))
+        |> Integer.check(:trunc, true, Context.new())
 
       assert result.value == 32
     end
@@ -121,7 +121,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(32.5)
-        |> Integer.check(:trunc, false, Context.new("."))
+        |> Integer.check(:trunc, false, Context.new())
 
       assert result.value == 32.5
     end
@@ -132,7 +132,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Integer.check(:type, [], Context.new("."))
+        |> Integer.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -141,7 +141,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Integer.check(:type, [], Context.new("."))
+        |> Integer.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -150,7 +150,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value("123")
-        |> Integer.check(:type, [], Context.new("."))
+        |> Integer.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -165,7 +165,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(34.5)
-        |> Integer.check(:type, [], Context.new("."))
+        |> Integer.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -182,7 +182,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(3.5)
-        |> Integer.check(:min, 11, Context.new("."))
+        |> Integer.check(:min, 11, Context.new())
 
       assert result.status == :valid
     end
@@ -191,7 +191,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(11)
-        |> Integer.check(:min, 11, Context.new("."))
+        |> Integer.check(:min, 11, Context.new())
 
       assert result.status == :valid
     end
@@ -200,7 +200,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(5)
-        |> Integer.check(:min, 6, Context.new("."))
+        |> Integer.check(:min, 6, Context.new())
 
       assert result.status == :invalid
 
@@ -217,7 +217,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(13.5)
-        |> Integer.check(:max, 11, Context.new("."))
+        |> Integer.check(:max, 11, Context.new())
 
       assert result.status == :valid
     end
@@ -226,7 +226,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(11)
-        |> Integer.check(:max, 11, Context.new("."))
+        |> Integer.check(:max, 11, Context.new())
 
       assert result.status == :valid
     end
@@ -235,7 +235,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(7)
-        |> Integer.check(:max, 6, Context.new("."))
+        |> Integer.check(:max, 6, Context.new())
 
       assert result.status == :invalid
 
@@ -252,7 +252,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(8.5)
-        |> Integer.check(:greater_than, 11, Context.new("."))
+        |> Integer.check(:greater_than, 11, Context.new())
 
       assert result.status == :valid
     end
@@ -261,7 +261,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(12)
-        |> Integer.check(:greater_than, 11, Context.new("."))
+        |> Integer.check(:greater_than, 11, Context.new())
 
       assert result.status == :valid
     end
@@ -270,7 +270,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(6)
-        |> Integer.check(:greater_than, 6, Context.new("."))
+        |> Integer.check(:greater_than, 6, Context.new())
 
       assert result.status == :invalid
 
@@ -287,7 +287,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(12.5)
-        |> Integer.check(:less_than, 11, Context.new("."))
+        |> Integer.check(:less_than, 11, Context.new())
 
       assert result.status == :valid
     end
@@ -296,7 +296,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(10)
-        |> Integer.check(:less_than, 11, Context.new("."))
+        |> Integer.check(:less_than, 11, Context.new())
 
       assert result.status == :valid
     end
@@ -305,7 +305,7 @@ defmodule Z.Integer.Test do
       result =
         Result.new()
         |> Result.set_value(6)
-        |> Integer.check(:less_than, 6, Context.new("."))
+        |> Integer.check(:less_than, 6, Context.new())
 
       assert result.status == :invalid
 

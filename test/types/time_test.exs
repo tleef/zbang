@@ -8,7 +8,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Time.check(:parse, true, Context.new("."))
+        |> Time.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -17,7 +17,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[23:50:07])
-        |> Time.check(:parse, true, Context.new("."))
+        |> Time.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -26,7 +26,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value("23:50:07")
-        |> Time.check(:parse, true, Context.new("."))
+        |> Time.check(:parse, true, Context.new())
 
       assert result.value == ~T[23:50:07]
     end
@@ -35,7 +35,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value("23:50:07.0123456")
-        |> Time.check(:parse, true, Context.new("."))
+        |> Time.check(:parse, true, Context.new())
 
       assert result.value == ~T[23:50:07.012345]
     end
@@ -44,7 +44,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value("23:50:07")
-        |> Time.check(:parse, false, Context.new("."))
+        |> Time.check(:parse, false, Context.new())
 
       assert result.value == "23:50:07"
     end
@@ -53,7 +53,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value("23:50:07")
-        |> Time.check(:parse, :iso8601, Context.new("."))
+        |> Time.check(:parse, :iso8601, Context.new())
 
       assert result.value == ~T[23:50:07]
     end
@@ -62,7 +62,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value("23:50:07")
-        |> Time.check(:parse, :invalid, Context.new("."))
+        |> Time.check(:parse, :invalid, Context.new())
 
       assert result.status == :invalid
 
@@ -77,7 +77,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value("23:50:61")
-        |> Time.check(:parse, true, Context.new("."))
+        |> Time.check(:parse, true, Context.new())
 
       assert result.status == :invalid
 
@@ -94,7 +94,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Time.check(:type, [], Context.new("."))
+        |> Time.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -103,7 +103,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[23:50:07.123])
-        |> Time.check(:type, [], Context.new("."))
+        |> Time.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -112,7 +112,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Time.check(:type, [], Context.new("."))
+        |> Time.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -127,7 +127,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~N[2000-01-01 23:00:07])
-        |> Time.check(:type, [], Context.new("."))
+        |> Time.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -144,7 +144,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Time.check(:trunc, true, Context.new("."))
+        |> Time.check(:trunc, true, Context.new())
 
       assert result.status == :valid
     end
@@ -153,7 +153,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Time.check(:trunc, true, Context.new("."))
+        |> Time.check(:trunc, true, Context.new())
 
       assert result.status == :valid
     end
@@ -162,7 +162,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[00:26:31.123456Z])
-        |> Time.check(:trunc, true, Context.new("."))
+        |> Time.check(:trunc, true, Context.new())
 
       assert result.value == ~T[00:26:31Z]
     end
@@ -171,7 +171,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[00:26:31.123456Z])
-        |> Time.check(:trunc, :second, Context.new("."))
+        |> Time.check(:trunc, :second, Context.new())
 
       assert result.value == ~T[00:26:31Z]
     end
@@ -180,7 +180,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[00:26:31.123456Z])
-        |> Time.check(:trunc, :millisecond, Context.new("."))
+        |> Time.check(:trunc, :millisecond, Context.new())
 
       assert result.value == ~T[00:26:31.123Z]
     end
@@ -189,7 +189,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[00:26:31.123456789Z])
-        |> Time.check(:trunc, :microsecond, Context.new("."))
+        |> Time.check(:trunc, :microsecond, Context.new())
 
       assert result.value == ~T[00:26:31.123456Z]
     end
@@ -200,7 +200,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Time.check(:min, ~T[00:00:00Z], Context.new("."))
+        |> Time.check(:min, ~T[00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -209,7 +209,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Time.check(:min, ~T[00:00:00Z], Context.new("."))
+        |> Time.check(:min, ~T[00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -218,7 +218,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[00:00:00Z])
-        |> Time.check(:min, ~T[00:00:00Z], Context.new("."))
+        |> Time.check(:min, ~T[00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -227,7 +227,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[00:59:59Z])
-        |> Time.check(:min, ~T[01:00:00Z], Context.new("."))
+        |> Time.check(:min, ~T[01:00:00Z], Context.new())
 
       assert result.status == :invalid
 
@@ -242,7 +242,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[00:00:00Z])
-        |> Time.check(:min, "00:00:00Z", Context.new("."))
+        |> Time.check(:min, "00:00:00Z", Context.new())
 
       assert result.status == :invalid
 
@@ -259,7 +259,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Time.check(:max, ~T[00:00:00Z], Context.new("."))
+        |> Time.check(:max, ~T[00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -268,7 +268,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Time.check(:max, ~T[00:00:00Z], Context.new("."))
+        |> Time.check(:max, ~T[00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -277,7 +277,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[00:00:00Z])
-        |> Time.check(:max, ~T[00:00:00Z], Context.new("."))
+        |> Time.check(:max, ~T[00:00:00Z], Context.new())
 
       assert result.status == :valid
     end
@@ -286,7 +286,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[00:00:01Z])
-        |> Time.check(:max, ~T[00:00:00Z], Context.new("."))
+        |> Time.check(:max, ~T[00:00:00Z], Context.new())
 
       assert result.status == :invalid
 
@@ -301,7 +301,7 @@ defmodule Z.Time.Test do
       result =
         Result.new()
         |> Result.set_value(~T[00:00:00Z])
-        |> Time.check(:max, "00:00:00Z", Context.new("."))
+        |> Time.check(:max, "00:00:00Z", Context.new())
 
       assert result.status == :invalid
 

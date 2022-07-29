@@ -8,6 +8,8 @@ defmodule Z.Struct do
       import Z.Struct, only: [schema: 1]
 
       Module.register_attribute(__MODULE__, :z_fields, accumulate: true)
+      Module.register_attribute(__MODULE__, :z_enforced_fields, accumulate: true)
+      Module.register_attribute(__MODULE__, :z_struct_fields, accumulate: true)
     end
   end
 
@@ -16,133 +18,140 @@ defmodule Z.Struct do
   end
 
   defp __schema__(caller, block) do
-    prelude =
-      quote do
-        if line = Module.get_attribute(__MODULE__, :z_schema_defined) do
-          raise "schema already defined for #{inspect(__MODULE__)} on line #{line}"
-        end
-
-        @z_schema_defined unquote(caller.line)
-
-        Module.register_attribute(__MODULE__, :z_enforced_fields, accumulate: true)
-        Module.register_attribute(__MODULE__, :z_struct_fields, accumulate: true)
-
-        try do
-          import Z.Struct, only: [field: 2, field: 3]
-          unquote(block)
-        after
-          :ok
-        end
-      end
-
-    postlude =
-      quote unquote: false do
-        fields = Macro.escape(@z_fields) |> Enum.reverse()
-
-        @enforce_keys Enum.reverse(@z_enforced_fields)
-        defstruct Enum.reverse(@z_struct_fields)
-
-        use Z.Type, options: unquote(Z.Any.__z__(:options) ++ [:cast])
-
-        def __z__(:fields), do: unquote(fields)
-
-        def new(enum \\ []) do
-          struct(__MODULE__, enum)
-          |> validate()
-        end
-
-        def new!(enum \\ []) do
-          case new(enum) do
-            {:ok, value} -> value
-            {:error, error} -> raise error
-          end
-        end
-
-        def check(result, :conversions, rules, context) do
-          result
-          |> Z.Any.check(:conversions, rules, context)
-          |> maybe_check(:cast, rules, context)
-        end
-
-        def check(result, :mutations, rules, context) do
-          result
-          |> Z.Any.check(:mutations, rules, context)
-        end
-
-        def check(result, :assertions, rules, context) do
-          result
-          |> Z.Any.check(:assertions, rules, context)
-          |> check(:fields, rules, context)
-        end
-
-        def check(result, _rule, _options, _context) when result.value == nil do
-          result
-        end
-
-        def check(result, :cast, _enabled, _context) when not is_map(result.value) do
-          result
-        end
-
-        def check(result, :cast, _enabled, _context) when is_struct(result.value, __MODULE__) do
-          result
-        end
-
-        def check(result, :cast, false, _context) do
-          result
-        end
-
-        def check(result, :cast, true, context) when is_struct(result.value) do
-          result
-          |> Z.Result.set_value(struct(__MODULE__, Map.from_struct(result.value)))
-        end
-
-        def check(result, :cast, true, context) do
-          result
-          |> Z.Result.set_value(struct(__MODULE__, result.value))
-        end
-
-        def check(result, :type, options, context) when not is_struct(result.value, __MODULE__) do
-          message = Keyword.get(options, :message, "input is not a #{inspect(__MODULE__)}")
-
-          result
-          |> Z.Result.add_issue(
-            Z.Issue.new(
-              Z.Error.Codes.invalid_type(),
-              message,
-              context
-            )
-          )
-        end
-
-        def check(result, :type, _options, _context) do
-          result
-        end
-
-        def check(result, _rule, _options, _context)
-            when not is_struct(result.value, __MODULE__) do
-          result
-        end
-
-        def check(result, :fields, options, context) do
-          Enum.reduce(__z__(:fields), result, fn {name, {type, rules}}, res ->
-            check_field(res, name, type, rules, context)
-          end)
-        end
-
-        defp check_field(result, name, type, rules, context) do
-          case type.validate(Map.get(result.value, name), rules, Z.Context.new(name, context)) do
-            {:ok, value} ->
-              result |> Z.Result.set_value(Map.replace(result.value, name, value))
-
-            {:error, error} ->
-              result |> Z.Result.add_issues(error.issues)
-          end
-        end
-      end
-
     quote do
-      unquote(prelude)
-      unquote(postlude)
+      unquote(define_schema(caller, block))
+      unquote(define_struct())
+    end
+  end
+
+  defp define_schema(caller, block) do
+    quote do
+      if line = Module.get_attribute(__MODULE__, :z_schema_defined) do
+        raise "schema already defined for #{inspect(__MODULE__)} on line #{line}"
+      end
+
+      @z_schema_defined unquote(caller.line)
+
+      try do
+        import Z.Struct, only: [field: 2, field: 3]
+        unquote(block)
+      after
+        :ok
+      end
+    end
+  end
+
+  defp define_struct() do
+    quote unquote: false do
+      fields = Macro.escape(@z_fields) |> Enum.reverse()
+
+      @enforce_keys Enum.reverse(@z_enforced_fields)
+      defstruct Enum.reverse(@z_struct_fields)
+
+      use Z.Type, options: unquote(Z.Any.__z__(:options) ++ [:cast])
+
+      def __z__(:fields), do: unquote(fields)
+
+      def new(enum \\ []) do
+        struct(__MODULE__, enum)
+        |> validate()
+      end
+
+      def new!(enum \\ []) do
+        case new(enum) do
+          {:ok, value} -> value
+          {:error, error} -> raise error
+        end
+      end
+
+      def check(result, :conversions, rules, context) do
+        result
+        |> Z.Any.check(:conversions, rules, context)
+        |> maybe_check(:cast, rules, context)
+      end
+
+      def check(result, :mutations, rules, context) do
+        result
+        |> Z.Any.check(:mutations, rules, context)
+      end
+
+      def check(result, :assertions, rules, context) do
+        result
+        |> Z.Any.check(:assertions, rules, context)
+        |> check(:fields, rules, context)
+      end
+
+      def check(result, rule, options, context) do
+        Z.Struct.__check__(result, rule, options, context)
+      end
+    end
+  end
+
+  def __check__(result, rule, options, context) do
+    check(result, rule, options, context)
+  end
+
+  defp check(result, _rule, _options, _context) when result.value == nil do
+    result
+  end
+
+  defp check(result, :cast, _enabled, _context) when not is_map(result.value) do
+    result
+  end
+
+  defp check(result, :cast, _enabled, context) when is_struct(result.value, context.type) do
+    result
+  end
+
+  defp check(result, :cast, false, _context) do
+    result
+  end
+
+  defp check(result, :cast, true, context) when is_struct(result.value) do
+    result
+    |> Z.Result.set_value(struct(context.type, Map.from_struct(result.value)))
+  end
+
+  defp check(result, :cast, true, context) do
+    result
+    |> Z.Result.set_value(struct(context.type, result.value))
+  end
+
+  defp check(result, :type, options, context) when not is_struct(result.value, context.type) do
+    message = Keyword.get(options, :message, "input is not a #{inspect(context.type)}")
+
+    result
+    |> Z.Result.add_issue(
+      Z.Issue.new(
+        Z.Error.Codes.invalid_type(),
+        message,
+        context
+      )
+    )
+  end
+
+  defp check(result, :type, _options, _context) do
+    result
+  end
+
+  defp check(result, _rule, _options, context)
+       when not is_struct(result.value, context.type) do
+    result
+  end
+
+  defp check(result, :fields, _options, context) do
+    Enum.reduce(context.type.__z__(:fields), result, fn {name, {type, rules}}, res ->
+      check_field(res, name, type, rules, context)
+    end)
+  end
+
+  defp check_field(result, name, type, rules, context) do
+    case type.validate(Map.get(result.value, name), rules, Z.Context.new(type, name, context)) do
+      {:ok, value} ->
+        result |> Z.Result.set_value(Map.replace(result.value, name, value))
+
+      {:error, error} ->
+        result |> Z.Result.add_issues(error.issues)
     end
   end
 

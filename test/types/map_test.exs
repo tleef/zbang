@@ -17,7 +17,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Map.check(:type, [], Context.new("."))
+        |> Map.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -26,7 +26,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value("Im a map")
-        |> Map.check(:type, [], Context.new("."))
+        |> Map.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -41,7 +41,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%Book{})
-        |> Map.check(:type, [], Context.new("."))
+        |> Map.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -50,7 +50,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
-        |> Map.check(:type, [], Context.new("."))
+        |> Map.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -59,7 +59,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{})
-        |> Map.check(:type, [], Context.new("."))
+        |> Map.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -70,7 +70,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Map.check(:atomize_keys, true, Context.new("."))
+        |> Map.check(:atomize_keys, true, Context.new())
 
       assert result.status == :valid
     end
@@ -79,7 +79,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Map.check(:atomize_keys, true, Context.new("."))
+        |> Map.check(:atomize_keys, true, Context.new())
 
       assert result.status == :valid
     end
@@ -88,7 +88,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{"oops" => "doesn't exist"})
-        |> Map.check(:atomize_keys, true, Context.new("."))
+        |> Map.check(:atomize_keys, true, Context.new())
 
       assert result.status == :invalid
 
@@ -106,7 +106,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{"foo" => "hello", "bar" => "world"})
-        |> Map.check(:atomize_keys, true, Context.new("."))
+        |> Map.check(:atomize_keys, true, Context.new())
 
       assert result.status == :valid
 
@@ -119,7 +119,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{"foo" => "foo", 2 => "two", bar: "bar"})
-        |> Map.check(:atomize_keys, true, Context.new("."))
+        |> Map.check(:atomize_keys, true, Context.new())
 
       assert result.status == :valid
 
@@ -132,7 +132,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Map.check(:size, 6, Context.new("."))
+        |> Map.check(:size, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -141,7 +141,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value("Im a map")
-        |> Map.check(:size, 6, Context.new("."))
+        |> Map.check(:size, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -150,7 +150,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
-        |> Map.check(:size, 4, Context.new("."))
+        |> Map.check(:size, 4, Context.new())
 
       assert result.status == :invalid
 
@@ -165,7 +165,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
-        |> Map.check(:size, 2, Context.new("."))
+        |> Map.check(:size, 2, Context.new())
 
       assert result.status == :invalid
 
@@ -180,7 +180,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
-        |> Map.check(:size, 3, Context.new("."))
+        |> Map.check(:size, 3, Context.new())
 
       assert result.status == :valid
     end
@@ -189,7 +189,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
-        |> Map.check(:size, "3", Context.new("."))
+        |> Map.check(:size, "3", Context.new())
 
       assert result.status == :invalid
 
@@ -206,7 +206,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Map.check(:min, 6, Context.new("."))
+        |> Map.check(:min, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -215,7 +215,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Map.check(:min, 6, Context.new("."))
+        |> Map.check(:min, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -224,7 +224,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
-        |> Map.check(:min, 4, Context.new("."))
+        |> Map.check(:min, 4, Context.new())
 
       assert result.status == :invalid
 
@@ -239,7 +239,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
-        |> Map.check(:min, 3, Context.new("."))
+        |> Map.check(:min, 3, Context.new())
 
       assert result.status == :valid
     end
@@ -248,7 +248,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
-        |> Map.check(:min, "1", Context.new("."))
+        |> Map.check(:min, "1", Context.new())
 
       assert result.status == :invalid
 
@@ -265,7 +265,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Map.check(:max, 6, Context.new("."))
+        |> Map.check(:max, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -274,7 +274,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Map.check(:max, 6, Context.new("."))
+        |> Map.check(:max, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -283,7 +283,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
-        |> Map.check(:max, 2, Context.new("."))
+        |> Map.check(:max, 2, Context.new())
 
       assert result.status == :invalid
 
@@ -298,7 +298,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
-        |> Map.check(:max, 3, Context.new("."))
+        |> Map.check(:max, 3, Context.new())
 
       assert result.status == :valid
     end
@@ -307,7 +307,7 @@ defmodule Z.Map.Test do
       result =
         Result.new()
         |> Result.set_value(%{foo: "one", bar: "two", baz: "three"})
-        |> Map.check(:max, "3", Context.new("."))
+        |> Map.check(:max, "3", Context.new())
 
       assert result.status == :invalid
 

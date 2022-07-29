@@ -8,7 +8,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> String.check(:type, [], Context.new("."))
+        |> String.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -17,7 +17,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> String.check(:type, [], Context.new("."))
+        |> String.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -32,7 +32,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("")
-        |> String.check(:type, [], Context.new("."))
+        |> String.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -41,7 +41,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value(<<0xFFFF::16>>)
-        |> String.check(:type, [], Context.new("."))
+        |> String.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -58,7 +58,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> String.check(:trim, true, Context.new("."))
+        |> String.check(:trim, true, Context.new())
 
       assert result.status == :valid
     end
@@ -67,7 +67,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> String.check(:trim, true, Context.new("."))
+        |> String.check(:trim, true, Context.new())
 
       assert result.status == :valid
     end
@@ -76,7 +76,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("\n  some\n  ")
-        |> String.check(:trim, true, Context.new("."))
+        |> String.check(:trim, true, Context.new())
 
       assert result.value == "some"
     end
@@ -85,7 +85,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("\n  some\n  ")
-        |> String.check(:trim, false, Context.new("."))
+        |> String.check(:trim, false, Context.new())
 
       assert result.value == "\n  some\n  "
     end
@@ -94,7 +94,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("a  some  a")
-        |> String.check(:trim, "a", Context.new("."))
+        |> String.check(:trim, "a", Context.new())
 
       assert result.value == "  some  "
     end
@@ -103,7 +103,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("a  some  a")
-        |> String.check(:trim, 12, Context.new("."))
+        |> String.check(:trim, 12, Context.new())
 
       assert result.status == :invalid
 
@@ -120,7 +120,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> String.check(:length, 6, Context.new("."))
+        |> String.check(:length, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -129,7 +129,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> String.check(:length, 6, Context.new("."))
+        |> String.check(:length, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -138,7 +138,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("short")
-        |> String.check(:length, 6, Context.new("."))
+        |> String.check(:length, 6, Context.new())
 
       assert result.status == :invalid
 
@@ -153,7 +153,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("too long")
-        |> String.check(:length, 6, Context.new("."))
+        |> String.check(:length, 6, Context.new())
 
       assert result.status == :invalid
 
@@ -168,7 +168,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("correct")
-        |> String.check(:length, 7, Context.new("."))
+        |> String.check(:length, 7, Context.new())
 
       assert result.status == :valid
     end
@@ -177,7 +177,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> String.check(:length, "4", Context.new("."))
+        |> String.check(:length, "4", Context.new())
 
       assert result.status == :invalid
 
@@ -194,7 +194,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> String.check(:min, 6, Context.new("."))
+        |> String.check(:min, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -203,7 +203,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> String.check(:min, 6, Context.new("."))
+        |> String.check(:min, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -212,7 +212,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("short")
-        |> String.check(:min, 6, Context.new("."))
+        |> String.check(:min, 6, Context.new())
 
       assert result.status == :invalid
 
@@ -227,7 +227,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("long enough")
-        |> String.check(:min, 11, Context.new("."))
+        |> String.check(:min, 11, Context.new())
 
       assert result.status == :valid
     end
@@ -236,7 +236,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("")
-        |> String.check(:min, 1, Context.new("."))
+        |> String.check(:min, 1, Context.new())
 
       assert result.status == :invalid
 
@@ -251,7 +251,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> String.check(:min, "4", Context.new("."))
+        |> String.check(:min, "4", Context.new())
 
       assert result.status == :invalid
 
@@ -269,7 +269,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> String.check(:max, 6, Context.new("."))
+        |> String.check(:max, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -278,7 +278,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> String.check(:max, 6, Context.new("."))
+        |> String.check(:max, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -287,7 +287,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("too long")
-        |> String.check(:max, 7, Context.new("."))
+        |> String.check(:max, 7, Context.new())
 
       assert result.status == :invalid
 
@@ -302,7 +302,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("short enough")
-        |> String.check(:max, 12, Context.new("."))
+        |> String.check(:max, 12, Context.new())
 
       assert result.status == :valid
     end
@@ -311,7 +311,7 @@ defmodule Z.String.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> String.check(:max, "4", Context.new("."))
+        |> String.check(:max, "4", Context.new())
 
       assert result.status == :invalid
 
