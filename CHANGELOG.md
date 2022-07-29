@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.1.1
+
+### Enhancements
+
+- Allow imperative field definition on structs ([#60](https://github.com/tleef/zbang/issues/60)).
+
+### Fixes
+
+- Fix casting for structs ([#58](https://github.com/tleef/zbang/issues/58)).
+
 ## 1.1.0
 
 ### Enhancements
