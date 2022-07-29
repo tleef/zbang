@@ -16,6 +16,10 @@ defmodule Z.Struct.Test do
     end
   end
 
+  defmodule NotMoney do
+    defstruct amount: nil, currency: "USD"
+  end
+
   defmodule Book do
     use Z.Struct
 
@@ -189,6 +193,94 @@ defmodule Z.Struct.Test do
   end
 
   describe "Book.validate/3" do
+    test "given a valid struct, when validating with :cast, returns a valid result" do
+      {:ok, value} =
+        Book.validate(
+          %Book{
+            title: "hello",
+            author: "unknown",
+            description: "world",
+            price: %Money{amount: "1.00", currency: "USD"},
+            read_at: ~U[2016-05-24 13:26:08Z]
+          },
+          [:cast]
+        )
+
+      assert value == %Book{
+               title: "hello",
+               author: "unknown",
+               description: "world",
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
+             }
+    end
+
+    test "given a valid struct, when validating without :cast, returns a valid result" do
+      {:ok, value} =
+        Book.validate(
+          %Book{
+            title: "hello",
+            author: "unknown",
+            description: "world",
+            price: %Money{amount: "1.00", currency: "USD"},
+            read_at: ~U[2016-05-24 13:26:08Z]
+          },
+          []
+        )
+
+      assert value == %Book{
+               title: "hello",
+               author: "unknown",
+               description: "world",
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
+             }
+    end
+
+    test "given a invalid struct, when validating with :cast, returns a valid result" do
+      {:ok, value} =
+        Money.validate(
+          %NotMoney{amount: "1.00", currency: "USD"},
+          [:cast]
+        )
+
+      assert value == %Money{amount: "1.00", currency: "USD"}
+    end
+
+    test "given a un-castable invalid struct, when validating with :cast, returns a valid result" do
+      {:error, error} =
+        Book.validate(
+          %NotMoney{amount: "1.00", currency: "USD"},
+          [:cast]
+        )
+
+      assert Enum.member?(error.issues, %Z.Issue{
+               code: "invalid_type",
+               message: "input is required",
+               path: [".", :title]
+             })
+
+      assert Enum.member?(error.issues, %Z.Issue{
+               code: "invalid_type",
+               message: "input is required",
+               path: [".", :price]
+             })
+    end
+
+    test "given a invalid struct, when validating without :cast, returns an invalid result with an error" do
+      {:error, error} =
+        Money.validate(
+          %NotMoney{amount: "1.00", currency: "USD"},
+          []
+        )
+
+      assert Enum.member?(error.issues, %Issue{
+               code: Error.Codes.invalid_type(),
+               message: "input is not a Z.Struct.Test.Money",
+               path: ["."]
+             })
+    end
+
     test "given a valid map, when validating with :cast, returns a valid result" do
       {:ok, value} =
         Book.validate(
@@ -197,6 +289,48 @@ defmodule Z.Struct.Test do
             author: "unknown",
             description: "world",
             price: %{amount: "1.00", currency: "USD"}
+          },
+          [:cast]
+        )
+
+      assert value == %Book{
+               title: "hello",
+               author: "unknown",
+               description: "world",
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
+             }
+    end
+
+    test "given a valid map with struct values, when validating with :cast, returns a valid result" do
+      {:ok, value} =
+        Book.validate(
+          %{
+            title: "hello",
+            author: "unknown",
+            description: "world",
+            price: %Money{amount: "1.00", currency: "USD"}
+          },
+          [:cast]
+        )
+
+      assert value == %Book{
+               title: "hello",
+               author: "unknown",
+               description: "world",
+               price: %Money{amount: "1.00", currency: "USD"},
+               read_at: ~U[2016-05-24 13:26:08Z]
+             }
+    end
+
+    test "given a valid map with invalid struct values, when validating with :cast, returns a valid result" do
+      {:ok, value} =
+        Book.validate(
+          %{
+            title: "hello",
+            author: "unknown",
+            description: "world",
+            price: %NotMoney{amount: "1.00", currency: "USD"}
           },
           [:cast]
         )
@@ -229,7 +363,7 @@ defmodule Z.Struct.Test do
              })
     end
 
-    test "given a map with extra keys, when validating with :cast, ignores keys and returns valid result" do
+    test "given a valid map with extra keys, when validating with :cast, ignores keys and returns valid result" do
       {:ok, value} =
         Book.validate(
           %{
@@ -251,7 +385,7 @@ defmodule Z.Struct.Test do
              }
     end
 
-    test "given a map missing keys with defaults, when validating with :cast, defaults the keys and returns valid result" do
+    test "given a valid map missing keys with defaults, when validating with :cast, defaults the keys and returns valid result" do
       {:ok, value} =
         Book.validate(%{title: "hello", description: "world", price: %{amount: "1.00"}}, [:cast])
 
@@ -264,7 +398,7 @@ defmodule Z.Struct.Test do
              }
     end
 
-    test "given a map missing non-required keys without defaults, when validating with :cast, ignores the missing keys and returns valid result" do
+    test "given a valid map missing non-required keys without defaults, when validating with :cast, ignores the missing keys and returns valid result" do
       {:ok, value} =
         Book.validate(
           %{title: "hello", author: "unknown", price: %{amount: "1.00", currency: "USD"}},
@@ -279,7 +413,7 @@ defmodule Z.Struct.Test do
              }
     end
 
-    test "given a map with an invalid key, when validating with :cast, returns an invalid result with an error" do
+    test "given a invalid map with an invalid key, when validating with :cast, returns an invalid result with an error" do
       {:error, error} =
         Book.validate(
           %{
@@ -298,7 +432,7 @@ defmodule Z.Struct.Test do
              })
     end
 
-    test "given a map with invalid keys, when validating with :cast, returns an invalid result with errors" do
+    test "given a invalid map with invalid keys, when validating with :cast, returns an invalid result with errors" do
       {:error, error} =
         Book.validate(
           %{

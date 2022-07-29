@@ -83,8 +83,17 @@ defmodule Z.Struct do
           result
         end
 
+        def check(result, :cast, _enabled, _context) when is_struct(result.value, __MODULE__) do
+          result
+        end
+
         def check(result, :cast, false, _context) do
           result
+        end
+
+        def check(result, :cast, true, context) when is_struct(result.value) do
+          result
+          |> Z.Result.set_value(struct(__MODULE__, Map.from_struct(result.value)))
         end
 
         def check(result, :cast, true, context) do
