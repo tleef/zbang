@@ -13,14 +13,14 @@ defmodule Z.Type do
       def __z__(:type), do: __MODULE__
       def __z__(:options), do: unquote(options)
 
-      def validate(input, rules \\ [], context \\ Z.Context.new(".")) do
+      def validate(input, rules \\ [], context \\ Z.Context.new(__MODULE__)) do
         Z.Result.new()
         |> Z.Result.set_value(input)
         |> check(rules |> Z.Rule.to_keyword_list(), context)
         |> Z.Result.to_tuple()
       end
 
-      def validate!(input, rules \\ [], context \\ Z.Context.new(".")) do
+      def validate!(input, rules \\ [], context \\ Z.Context.new(__MODULE__)) do
         case validate(input, rules, context) do
           {:ok, value} -> value
           {:error, error} -> raise(error)

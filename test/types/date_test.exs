@@ -8,7 +8,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Date.check(:parse, true, Context.new("."))
+        |> Date.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -17,7 +17,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~D[2015-01-23])
-        |> Date.check(:parse, true, Context.new("."))
+        |> Date.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -26,7 +26,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value("2015-01-23")
-        |> Date.check(:parse, true, Context.new("."))
+        |> Date.check(:parse, true, Context.new())
 
       assert result.value == ~D[2015-01-23]
     end
@@ -35,7 +35,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value("2015-01-23")
-        |> Date.check(:parse, false, Context.new("."))
+        |> Date.check(:parse, false, Context.new())
 
       assert result.value == "2015-01-23"
     end
@@ -44,7 +44,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value("2015-01-23")
-        |> Date.check(:parse, :iso8601, Context.new("."))
+        |> Date.check(:parse, :iso8601, Context.new())
 
       assert result.value == ~D[2015-01-23]
     end
@@ -53,7 +53,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value("2015-01-23")
-        |> Date.check(:parse, :invalid, Context.new("."))
+        |> Date.check(:parse, :invalid, Context.new())
 
       assert result.status == :invalid
 
@@ -68,7 +68,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value("2015-01-32")
-        |> Date.check(:parse, true, Context.new("."))
+        |> Date.check(:parse, true, Context.new())
 
       assert result.status == :invalid
 
@@ -85,7 +85,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Date.check(:trunc, true, Context.new("."))
+        |> Date.check(:trunc, true, Context.new())
 
       assert result.status == :valid
     end
@@ -94,7 +94,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~D[2015-01-23])
-        |> Date.check(:trunc, true, Context.new("."))
+        |> Date.check(:trunc, true, Context.new())
 
       assert result.status == :valid
     end
@@ -103,7 +103,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~U[2018-07-16 10:00:00Z])
-        |> Date.check(:trunc, true, Context.new("."))
+        |> Date.check(:trunc, true, Context.new())
 
       assert result.value == ~D[2018-07-16]
     end
@@ -112,7 +112,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~N[2016-04-16 01:23:45])
-        |> Date.check(:trunc, true, Context.new("."))
+        |> Date.check(:trunc, true, Context.new())
 
       assert result.value == ~D[2016-04-16]
     end
@@ -121,7 +121,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~N[2016-04-16 01:23:45])
-        |> Date.check(:trunc, false, Context.new("."))
+        |> Date.check(:trunc, false, Context.new())
 
       assert result.value == ~N[2016-04-16 01:23:45]
     end
@@ -132,7 +132,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Date.check(:type, [], Context.new("."))
+        |> Date.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -141,7 +141,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~D[2018-07-16])
-        |> Date.check(:type, [], Context.new("."))
+        |> Date.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -150,7 +150,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Date.check(:type, [], Context.new("."))
+        |> Date.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -165,7 +165,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~N[2000-01-01 23:00:07])
-        |> Date.check(:type, [], Context.new("."))
+        |> Date.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -182,7 +182,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Date.check(:min, ~D[2000-01-01], Context.new("."))
+        |> Date.check(:min, ~D[2000-01-01], Context.new())
 
       assert result.status == :valid
     end
@@ -191,7 +191,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Date.check(:min, ~D[2000-01-01], Context.new("."))
+        |> Date.check(:min, ~D[2000-01-01], Context.new())
 
       assert result.status == :valid
     end
@@ -200,7 +200,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~D[2000-01-01])
-        |> Date.check(:min, ~D[2000-01-01], Context.new("."))
+        |> Date.check(:min, ~D[2000-01-01], Context.new())
 
       assert result.status == :valid
     end
@@ -209,7 +209,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~D[1999-12-31])
-        |> Date.check(:min, ~D[2000-01-01], Context.new("."))
+        |> Date.check(:min, ~D[2000-01-01], Context.new())
 
       assert result.status == :invalid
 
@@ -224,7 +224,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~D[2000-01-01])
-        |> Date.check(:min, "2000-01-01", Context.new("."))
+        |> Date.check(:min, "2000-01-01", Context.new())
 
       assert result.status == :invalid
 
@@ -241,7 +241,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Date.check(:max, ~D[2000-01-01], Context.new("."))
+        |> Date.check(:max, ~D[2000-01-01], Context.new())
 
       assert result.status == :valid
     end
@@ -250,7 +250,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Date.check(:max, ~D[2000-01-01], Context.new("."))
+        |> Date.check(:max, ~D[2000-01-01], Context.new())
 
       assert result.status == :valid
     end
@@ -259,7 +259,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~D[2000-01-01])
-        |> Date.check(:max, ~D[2000-01-01], Context.new("."))
+        |> Date.check(:max, ~D[2000-01-01], Context.new())
 
       assert result.status == :valid
     end
@@ -268,7 +268,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~D[2000-01-02])
-        |> Date.check(:max, ~D[2000-01-01], Context.new("."))
+        |> Date.check(:max, ~D[2000-01-01], Context.new())
 
       assert result.status == :invalid
 
@@ -283,7 +283,7 @@ defmodule Z.Date.Test do
       result =
         Result.new()
         |> Result.set_value(~D[2000-01-01])
-        |> Date.check(:max, "2000-01-01", Context.new("."))
+        |> Date.check(:max, "2000-01-01", Context.new())
 
       assert result.status == :invalid
 

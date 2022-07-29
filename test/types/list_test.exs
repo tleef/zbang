@@ -17,7 +17,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> List.check(:type, [], Context.new("."))
+        |> List.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -26,7 +26,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value("Im a list")
-        |> List.check(:type, [], Context.new("."))
+        |> List.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -41,7 +41,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value('Im a list')
-        |> List.check(:type, [], Context.new("."))
+        |> List.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -50,7 +50,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:type, [], Context.new("."))
+        |> List.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -59,7 +59,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value([%{foo: "foo"}, %{bar: "bar"}, %{baz: "baz"}])
-        |> List.check(:type, [], Context.new("."))
+        |> List.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -68,7 +68,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value([])
-        |> List.check(:type, [], Context.new("."))
+        |> List.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -79,7 +79,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> List.check(:length, 6, Context.new("."))
+        |> List.check(:length, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -88,7 +88,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value("Im a list")
-        |> List.check(:length, 6, Context.new("."))
+        |> List.check(:length, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -97,7 +97,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:length, 4, Context.new("."))
+        |> List.check(:length, 4, Context.new())
 
       assert result.status == :invalid
 
@@ -112,7 +112,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:length, 2, Context.new("."))
+        |> List.check(:length, 2, Context.new())
 
       assert result.status == :invalid
 
@@ -127,7 +127,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:length, 3, Context.new("."))
+        |> List.check(:length, 3, Context.new())
 
       assert result.status == :valid
     end
@@ -136,7 +136,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:length, "3", Context.new("."))
+        |> List.check(:length, "3", Context.new())
 
       assert result.status == :invalid
 
@@ -153,7 +153,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> List.check(:min, 6, Context.new("."))
+        |> List.check(:min, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -162,7 +162,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> List.check(:min, 6, Context.new("."))
+        |> List.check(:min, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -171,7 +171,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:min, 4, Context.new("."))
+        |> List.check(:min, 4, Context.new())
 
       assert result.status == :invalid
 
@@ -186,7 +186,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:min, 3, Context.new("."))
+        |> List.check(:min, 3, Context.new())
 
       assert result.status == :valid
     end
@@ -195,7 +195,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:min, "1", Context.new("."))
+        |> List.check(:min, "1", Context.new())
 
       assert result.status == :invalid
 
@@ -213,7 +213,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> List.check(:max, 6, Context.new("."))
+        |> List.check(:max, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -222,7 +222,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> List.check(:max, 6, Context.new("."))
+        |> List.check(:max, 6, Context.new())
 
       assert result.status == :valid
     end
@@ -231,7 +231,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:max, 2, Context.new("."))
+        |> List.check(:max, 2, Context.new())
 
       assert result.status == :invalid
 
@@ -246,7 +246,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:max, 3, Context.new("."))
+        |> List.check(:max, 3, Context.new())
 
       assert result.status == :valid
     end
@@ -255,7 +255,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:max, "3", Context.new("."))
+        |> List.check(:max, "3", Context.new())
 
       assert result.status == :invalid
 
@@ -273,7 +273,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> List.check(:items, :string, Context.new("."))
+        |> List.check(:items, :string, Context.new())
 
       assert result.status == :valid
     end
@@ -282,7 +282,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> List.check(:items, :string, Context.new("."))
+        |> List.check(:items, :string, Context.new())
 
       assert result.status == :valid
     end
@@ -291,7 +291,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "baz"])
-        |> List.check(:items, :string, Context.new("."))
+        |> List.check(:items, :string, Context.new())
 
       assert result.status == :valid
     end
@@ -300,7 +300,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", nil, "buzz"])
-        |> List.check(:items, {:string, [:required]}, Context.new("."))
+        |> List.check(:items, {:string, [:required]}, Context.new())
 
       assert result.status == :invalid
 
@@ -315,7 +315,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "buzz"])
-        |> List.check(:items, {:string, [length: 3]}, Context.new("."))
+        |> List.check(:items, {:string, [length: 3]}, Context.new())
 
       assert result.status == :invalid
 
@@ -334,7 +334,7 @@ defmodule Z.List.Test do
           %Book{title: "bar"},
           %Book{title: "baz"}
         ])
-        |> List.check(:items, Book, Context.new("."))
+        |> List.check(:items, Book, Context.new())
 
       assert result.status == :valid
     end
@@ -347,7 +347,7 @@ defmodule Z.List.Test do
           %Book{},
           %{title: "baz"}
         ])
-        |> List.check(:items, Book, Context.new("."))
+        |> List.check(:items, Book, Context.new())
 
       assert result.status == :invalid
 
@@ -372,7 +372,7 @@ defmodule Z.List.Test do
           %{title: "bar"},
           %{title: "baz"}
         ])
-        |> List.check(:items, {Book, [:cast]}, Context.new("."))
+        |> List.check(:items, {Book, [:cast]}, Context.new())
 
       assert result.status == :valid
 
@@ -387,7 +387,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "buzz"])
-        |> List.check(:items, :unknown, Context.new("."))
+        |> List.check(:items, :unknown, Context.new())
 
       assert result.status == :invalid
 
@@ -402,7 +402,7 @@ defmodule Z.List.Test do
       result =
         Result.new()
         |> Result.set_value(["foo", "bar", "buzz"])
-        |> List.check(:items, "string", Context.new("."))
+        |> List.check(:items, "string", Context.new())
 
       assert result.status == :invalid
 

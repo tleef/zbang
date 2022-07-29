@@ -8,7 +8,7 @@ defmodule Z.Atom.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Atom.check(:parse, true, Context.new("."))
+        |> Atom.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -17,7 +17,7 @@ defmodule Z.Atom.Test do
       result =
         Result.new()
         |> Result.set_value(:hello)
-        |> Atom.check(:parse, true, Context.new("."))
+        |> Atom.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -26,7 +26,7 @@ defmodule Z.Atom.Test do
       result =
         Result.new()
         |> Result.set_value("oops")
-        |> Atom.check(:parse, true, Context.new("."))
+        |> Atom.check(:parse, true, Context.new())
 
       assert result.status == :invalid
 
@@ -43,7 +43,7 @@ defmodule Z.Atom.Test do
       result =
         Result.new()
         |> Result.set_value("hello")
-        |> Atom.check(:parse, true, Context.new("."))
+        |> Atom.check(:parse, true, Context.new())
 
       assert result.value == :hello
     end
@@ -52,7 +52,7 @@ defmodule Z.Atom.Test do
       result =
         Result.new()
         |> Result.set_value("goodbye")
-        |> Atom.check(:parse, :dangerously_allow_non_existing, Context.new("."))
+        |> Atom.check(:parse, :dangerously_allow_non_existing, Context.new())
 
       assert result.value == :goodbye
     end
@@ -61,7 +61,7 @@ defmodule Z.Atom.Test do
       result =
         Result.new()
         |> Result.set_value("hello")
-        |> Atom.check(:parse, false, Context.new("."))
+        |> Atom.check(:parse, false, Context.new())
 
       assert result.value == "hello"
     end
@@ -72,7 +72,7 @@ defmodule Z.Atom.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Atom.check(:type, [], Context.new("."))
+        |> Atom.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -81,7 +81,7 @@ defmodule Z.Atom.Test do
       result =
         Result.new()
         |> Result.set_value(:hello)
-        |> Atom.check(:type, [], Context.new("."))
+        |> Atom.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -90,7 +90,7 @@ defmodule Z.Atom.Test do
       result =
         Result.new()
         |> Result.set_value("oops")
-        |> Atom.check(:type, [], Context.new("."))
+        |> Atom.check(:type, [], Context.new())
 
       assert result.status == :invalid
 

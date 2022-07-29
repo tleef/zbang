@@ -8,7 +8,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Any.check(:default, "some", Context.new("."))
+        |> Any.check(:default, "some", Context.new())
 
       assert result.value == "some"
     end
@@ -17,7 +17,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Any.check(:default, fn -> 1 + 1 end, Context.new("."))
+        |> Any.check(:default, fn -> 1 + 1 end, Context.new())
 
       assert result.value == 2
     end
@@ -26,7 +26,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> Any.check(:default, "other", Context.new("."))
+        |> Any.check(:default, "other", Context.new())
 
       assert result.value == "some"
     end
@@ -37,7 +37,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Any.check(:required, [], Context.new("."))
+        |> Any.check(:required, [], Context.new())
 
       assert result.status == :invalid
 
@@ -52,7 +52,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Any.check(:required, true, Context.new("."))
+        |> Any.check(:required, true, Context.new())
 
       assert result.status == :invalid
 
@@ -67,7 +67,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Any.check(:required, false, Context.new("."))
+        |> Any.check(:required, false, Context.new())
 
       assert result.status == :valid
     end
@@ -76,7 +76,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> Any.check(:required, [], Context.new("."))
+        |> Any.check(:required, [], Context.new())
 
       assert result.status == :valid
     end
@@ -87,7 +87,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> Any.check(:equals, "other", Context.new("."))
+        |> Any.check(:equals, "other", Context.new())
 
       assert result.status == :invalid
 
@@ -102,7 +102,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> Any.check(:equals, "some", Context.new("."))
+        |> Any.check(:equals, "some", Context.new())
 
       assert result.status == :valid
     end
@@ -113,7 +113,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value("some")
-        |> Any.check(:enum, ["one", "two", "three"], Context.new("."))
+        |> Any.check(:enum, ["one", "two", "three"], Context.new())
 
       assert result.status == :invalid
 
@@ -128,7 +128,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value("one")
-        |> Any.check(:enum, ["one", "two", "three"], Context.new("."))
+        |> Any.check(:enum, ["one", "two", "three"], Context.new())
 
       assert result.status == :valid
     end
@@ -137,7 +137,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value(123)
-        |> Any.check(:enum, [1, 2, 3], Context.new("."))
+        |> Any.check(:enum, [1, 2, 3], Context.new())
 
       assert result.status == :invalid
 
@@ -152,7 +152,7 @@ defmodule Z.Any.Test do
       result =
         Result.new()
         |> Result.set_value(1)
-        |> Any.check(:enum, [1, 2, 3], Context.new("."))
+        |> Any.check(:enum, [1, 2, 3], Context.new())
 
       assert result.status == :valid
     end

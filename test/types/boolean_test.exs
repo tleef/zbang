@@ -8,7 +8,7 @@ defmodule Z.Boolean.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Boolean.check(:parse, true, Context.new("."))
+        |> Boolean.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -17,7 +17,7 @@ defmodule Z.Boolean.Test do
       result =
         Result.new()
         |> Result.set_value(true)
-        |> Boolean.check(:parse, true, Context.new("."))
+        |> Boolean.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -26,7 +26,7 @@ defmodule Z.Boolean.Test do
       result =
         Result.new()
         |> Result.set_value("true")
-        |> Boolean.check(:parse, true, Context.new("."))
+        |> Boolean.check(:parse, true, Context.new())
 
       assert result.value == true
     end
@@ -35,7 +35,7 @@ defmodule Z.Boolean.Test do
       result =
         Result.new()
         |> Result.set_value("FALSE")
-        |> Boolean.check(:parse, true, Context.new("."))
+        |> Boolean.check(:parse, true, Context.new())
 
       assert result.value == false
     end
@@ -44,7 +44,7 @@ defmodule Z.Boolean.Test do
       result =
         Result.new()
         |> Result.set_value("TRUE")
-        |> Boolean.check(:parse, false, Context.new("."))
+        |> Boolean.check(:parse, false, Context.new())
 
       assert result.value == "TRUE"
     end
@@ -53,7 +53,7 @@ defmodule Z.Boolean.Test do
       result =
         Result.new()
         |> Result.set_value("oops")
-        |> Boolean.check(:parse, true, Context.new("."))
+        |> Boolean.check(:parse, true, Context.new())
 
       assert result.status == :invalid
 
@@ -70,7 +70,7 @@ defmodule Z.Boolean.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Boolean.check(:type, [], Context.new("."))
+        |> Boolean.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -79,7 +79,7 @@ defmodule Z.Boolean.Test do
       result =
         Result.new()
         |> Result.set_value(true)
-        |> Boolean.check(:type, [], Context.new("."))
+        |> Boolean.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -88,7 +88,7 @@ defmodule Z.Boolean.Test do
       result =
         Result.new()
         |> Result.set_value("true")
-        |> Boolean.check(:type, [], Context.new("."))
+        |> Boolean.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -103,7 +103,7 @@ defmodule Z.Boolean.Test do
       result =
         Result.new()
         |> Result.set_value(1)
-        |> Boolean.check(:type, [], Context.new("."))
+        |> Boolean.check(:type, [], Context.new())
 
       assert result.status == :invalid
 

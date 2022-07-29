@@ -227,7 +227,7 @@ defmodule Z.Map do
             Issue.new(
               Error.Codes.invalid_string(),
               message,
-              Z.Context.new(k, context)
+              Z.Context.new(nil, k, context)
             )
           )
 

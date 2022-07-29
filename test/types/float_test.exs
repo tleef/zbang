@@ -8,7 +8,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Float.check(:parse, true, Context.new("."))
+        |> Float.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -17,7 +17,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(10.5)
-        |> Float.check(:parse, true, Context.new("."))
+        |> Float.check(:parse, true, Context.new())
 
       assert result.status == :valid
     end
@@ -26,7 +26,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value("10.5")
-        |> Float.check(:parse, true, Context.new("."))
+        |> Float.check(:parse, true, Context.new())
 
       assert result.value == 10.5
     end
@@ -35,7 +35,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value("10")
-        |> Float.check(:parse, true, Context.new("."))
+        |> Float.check(:parse, true, Context.new())
 
       assert result.value == 10.0
     end
@@ -44,7 +44,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value("10.5")
-        |> Float.check(:parse, false, Context.new("."))
+        |> Float.check(:parse, false, Context.new())
 
       assert result.value == "10.5"
     end
@@ -53,7 +53,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value("oops")
-        |> Float.check(:parse, true, Context.new("."))
+        |> Float.check(:parse, true, Context.new())
 
       assert result.status == :invalid
 
@@ -70,7 +70,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Float.check(:allow_int, true, Context.new("."))
+        |> Float.check(:allow_int, true, Context.new())
 
       assert result.status == :valid
     end
@@ -79,7 +79,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(32.5)
-        |> Float.check(:allow_int, true, Context.new("."))
+        |> Float.check(:allow_int, true, Context.new())
 
       assert result.status == :valid
     end
@@ -88,7 +88,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(10)
-        |> Float.check(:allow_int, true, Context.new("."))
+        |> Float.check(:allow_int, true, Context.new())
 
       assert result.value == 10.0
     end
@@ -97,7 +97,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(32)
-        |> Float.check(:allow_int, false, Context.new("."))
+        |> Float.check(:allow_int, false, Context.new())
 
       assert result.value == 32
     end
@@ -108,7 +108,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(nil)
-        |> Float.check(:type, [], Context.new("."))
+        |> Float.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -117,7 +117,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(123.4)
-        |> Float.check(:type, [], Context.new("."))
+        |> Float.check(:type, [], Context.new())
 
       assert result.status == :valid
     end
@@ -126,7 +126,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value("123.4")
-        |> Float.check(:type, [], Context.new("."))
+        |> Float.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -141,7 +141,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(34)
-        |> Float.check(:type, [], Context.new("."))
+        |> Float.check(:type, [], Context.new())
 
       assert result.status == :invalid
 
@@ -158,7 +158,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(3)
-        |> Float.check(:min, 11, Context.new("."))
+        |> Float.check(:min, 11, Context.new())
 
       assert result.status == :valid
     end
@@ -167,7 +167,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(11.0)
-        |> Float.check(:min, 11.0, Context.new("."))
+        |> Float.check(:min, 11.0, Context.new())
 
       assert result.status == :valid
     end
@@ -176,7 +176,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(5.9)
-        |> Float.check(:min, 6.0, Context.new("."))
+        |> Float.check(:min, 6.0, Context.new())
 
       assert result.status == :invalid
 
@@ -193,7 +193,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(13)
-        |> Float.check(:max, 11.0, Context.new("."))
+        |> Float.check(:max, 11.0, Context.new())
 
       assert result.status == :valid
     end
@@ -202,7 +202,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(11.0)
-        |> Float.check(:max, 11.0, Context.new("."))
+        |> Float.check(:max, 11.0, Context.new())
 
       assert result.status == :valid
     end
@@ -211,7 +211,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(6.1)
-        |> Float.check(:max, 6.0, Context.new("."))
+        |> Float.check(:max, 6.0, Context.new())
 
       assert result.status == :invalid
 
@@ -228,7 +228,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(8)
-        |> Float.check(:greater_than, 11.0, Context.new("."))
+        |> Float.check(:greater_than, 11.0, Context.new())
 
       assert result.status == :valid
     end
@@ -237,7 +237,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(11.1)
-        |> Float.check(:greater_than, 11.0, Context.new("."))
+        |> Float.check(:greater_than, 11.0, Context.new())
 
       assert result.status == :valid
     end
@@ -246,7 +246,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(6.0)
-        |> Float.check(:greater_than, 6.0, Context.new("."))
+        |> Float.check(:greater_than, 6.0, Context.new())
 
       assert result.status == :invalid
 
@@ -263,7 +263,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(12)
-        |> Float.check(:less_than, 11.0, Context.new("."))
+        |> Float.check(:less_than, 11.0, Context.new())
 
       assert result.status == :valid
     end
@@ -272,7 +272,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(10.9)
-        |> Float.check(:less_than, 11.0, Context.new("."))
+        |> Float.check(:less_than, 11.0, Context.new())
 
       assert result.status == :valid
     end
@@ -281,7 +281,7 @@ defmodule Z.Float.Test do
       result =
         Result.new()
         |> Result.set_value(6.0)
-        |> Float.check(:less_than, 6.0, Context.new("."))
+        |> Float.check(:less_than, 6.0, Context.new())
 
       assert result.status == :invalid
 
